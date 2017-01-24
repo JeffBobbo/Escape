@@ -25,9 +25,26 @@ struct Shape
 };
 
 std::vector<Shape*> shapes;
+int window = -1;
+uint64_t frame = 0, elapsed, timebase = 0;
 
 void draw()
 {
+  ++frame;
+  elapsed = glutGet(GLUT_ELAPSED_TIME);
+
+  if (elapsed - timebase > 1000)
+  {
+    double fps = frame * 1000.0 / (elapsed - timebase);
+    timebase = elapsed;
+    frame = 0;
+    char buf[50];
+    sprintf(buf, "%s - FPS: %4.2f", title, fps);
+    glutSetWindowTitle(buf);
+    timebase = elapsed;
+    frame = 0;
+  }
+
   glClear(GL_COLOR_BUFFER_BIT);
 
   // background is grey
@@ -70,15 +87,15 @@ int main(int argc, char** argv)
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
   glutInitWindowSize(500, 500);
   glutInitWindowPosition(100, 100);
-  glutCreateWindow(title);
+  window = glutCreateWindow(title);
 
-  Shape* s = new Shape();
+  Shape* s = new Shape(0xFF0000FF, 2);
   s->v.push_back(new Vec2D( 0.0, -0.5));
   s->v.push_back(new Vec2D(-0.5,  0.0));
   s->v.push_back(new Vec2D( 0.0,  0.5));
   s->v.push_back(new Vec2D( 0.5,  0.0));
   shapes.push_back(s);
-  s = new Shape(0x0000FFFF, -30);
+  s = new Shape(0x0000FFFF, -2.5);
   s->v.push_back(new Vec2D( 0.0, -0.25));
   s->v.push_back(new Vec2D(-0.25,  0.0));
   s->v.push_back(new Vec2D( 0.0,  0.25));
