@@ -12,7 +12,7 @@ all: $(MAIN)
 	$(CXX) $(CXXFLAGS) $(MAIN) -o $(EXEC) $(LDFLAGS)
 
 # compile for release, optimisations, no debug etc
-release: CFLAGS+=-O3 -DNDEBUG
+release: CPPFLAGS+=-O3 -DNDEBUG
 release: all
 
 %.o : %.cpp
