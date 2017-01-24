@@ -21,7 +21,7 @@ std::string commify(const int64_t n)
   bool neg = n < 0;
   std::string s = std::to_string(std::abs(n));
   const std::string::size_type len = s.length();
-  std::size_t pos = (len % 3);
+  std::string::size_type pos = (len % 3);
   while (pos < len)
   {
     s.replace(pos, 0, 1, ',');
