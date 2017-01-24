@@ -6,21 +6,9 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
+#include "util.h"
+
 const char* const title = "Shifter";
-
-const double BG_R = 1.0;
-const double BG_G = 1.0;
-const double BG_B = 1.0;
-const double BG_A = 1.0;
-
-constexpr double Pi() { return std::atan2(0.0, -1.0); }
-
-struct Vec2D
-{
-  Vec2D(double u, double v) : x(u), y(v) {};
-  double x;
-  double y;
-};
 
 struct Shape
 {
@@ -41,33 +29,34 @@ std::vector<Shape*> shapes;
 void draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  glClearColor(BG_R, BG_G, BG_B, BG_A);
+
+  // background is grey
+  glClearColor(0.5, 0.5, 0.5, 1.0);
 
   for (auto s : shapes)
   {
     glLoadIdentity(); // clear any transformations
+
+    // apply any needed transformations
     glTranslatef(0.0, 0.0, 0.0);
-    // rotate the state
     glRotatef(s->a, 0.0, 0.0, 1.0);
 
+    // move this into the object's move/idle function
     s->a += s->r; // roughly 60rpm
     while (s->a > 360.0)
       s->a -= 360.0;
 
     glBegin(GL_POLYGON);
-
     // set the colour
     glColor3f(
       ((s->col >> 16) & 255) / 255.0,
       ((s->col >> 8 ) & 255) / 255.0,
       ((s->col      ) & 255) / 255.0
     );
-
     for (auto v : s->v)
       glVertex2f(v->x, v->y);
     glEnd();
   }
-  glFlush();
   glutSwapBuffers();
 }
 
