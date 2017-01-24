@@ -1,5 +1,3 @@
-// g++ main.cpp -Wall -Wextra -std=c++11 -lglut -lGL -o main.out
-
 #include <iostream>
 #include <stdint.h>
 #include <vector>
@@ -8,14 +6,14 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
-const char* const title = "OpenGL Playing";
+const char* const title = "Shifter";
 
 const double BG_R = 1.0;
 const double BG_G = 1.0;
 const double BG_B = 1.0;
 const double BG_A = 1.0;
 
-constexpr double Pi() { return std::atan2(0.0, -1.0); };
+constexpr double Pi() { return std::atan2(0.0, -1.0); }
 
 struct Vec2D
 {

@@ -1,0 +1,6 @@
+# compilation stuff
+*.o
+*.out
+
+# sublime text
+*.sublime-*
