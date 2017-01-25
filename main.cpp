@@ -1,45 +1,25 @@
+#include "main.h"
+
 #include <iostream>
-#include <stdint.h>
-#include <vector>
 #include <cmath>
 
-#include "GL/freeglut.h"
-#include "GL/gl.h"
+#include <GL/freeglut.h>
+#include <GL/gl.h>
 
 #include "util.h"
 
-const char* const title = "Shifter";
+#include "visage/polygon.h"
 
-struct Shape
-{
-  Shape(uint32_t c = 0xFF0000FF, double s = 360/120.)
-  {
-    col = c;
-    a = 0.0;
-    r = s;
-  }
-  ~Shape()
-  {
-    for (Vec2D* p : v)
-      delete p;
-  }
-  uint32_t col;
-  double a;
-  double r;
-  double x;
-  double y;
-  std::vector<Vec2D* > v;
-};
+// extern stuff
+uint64_t frame = 0, elapsed = 0, timebase = 0, last, delta;
+bool keys[255] = {0};
+std::vector<Object* > objects;
+Player* player;
 
-std::vector<Shape*> shapes;
-int window = -1;
-uint64_t frame = 0, elapsed, timebase = 0;
 
 void draw()
 {
   ++frame;
-  elapsed = glutGet(GLUT_ELAPSED_TIME);
-
   if (elapsed - timebase > 1000)
   {
     double fps = frame * 1000.0 / (elapsed - timebase);
@@ -54,39 +34,40 @@ void draw()
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  // background is grey
+  // background is black
   glClearColor(0.0, 0.0, 0.0, 1.0);
 
-  for (auto s : shapes)
+  for (auto obj : objects)
   {
     glLoadIdentity(); // clear any transformations
 
-    // apply any needed transformations
-    glTranslatef(s->x, s->y, 0.0);
-    glRotatef(s->a, 0.0, 0.0, 1.0);
-
-    // move this into the object's move/idle function
-    s->a += s->r; // roughly 60rpm
-    while (s->a > 360.0)
-      s->a -= 360.0;
-
-    glBegin(GL_POLYGON);
-    // set the colour
-    glColor4f(
-      ((s->col >> 24) & 255) / 255.0, // r
-      ((s->col >> 16) & 255) / 255.0, // g
-      ((s->col >> 8 ) & 255) / 255.0, // b
-      ((s->col      ) & 255) / 255.0  // a
-    );
-    for (auto v : s->v)
-      glVertex3f(v->x, v->y, 0.0);
-    glEnd();
+    obj->draw();
   }
+  player->move();
+  player->draw();
   glutSwapBuffers();
 }
 
 void update()
 {
+  last = elapsed;
+  elapsed = glutGet(GLUT_ELAPSED_TIME);
+  delta = elapsed - last;
+  glutPostRedisplay();
+}
+
+void mouse(const int button, const int state, const int x, const int y)
+{
+}
+
+
+void keyboard(const unsigned char key, const int x, const int y)
+{
+  keys[key] = true;
+}
+void release(const unsigned char key, const int x, const int y)
+{
+  keys[key] = false;
 }
 
 int main(int argc, char** argv)
@@ -94,10 +75,10 @@ int main(int argc, char** argv)
   seed();
 
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+  glutInitWindowPosition(-1, -1);
   glutInitWindowSize(500, 500);
-  glutInitWindowPosition(100, 100);
-  window = glutCreateWindow(title);
+  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+  glutCreateWindow(title);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -106,50 +87,65 @@ int main(int argc, char** argv)
   glLineWidth(1.5);
   glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 
-  Shape* s = new Shape(0x7f7f7fFF, 0.0);
-  s->v.push_back(new Vec2D(0.0, 0.0));
-  s->v.push_back(new Vec2D(2.0, 0.0));
-  s->v.push_back(new Vec2D(2.0, 0.25));
-  s->v.push_back(new Vec2D(0.0, 0.25));
-  s->x = -1;
-  s->y = -1;
-  shapes.push_back(s);
-  s = new Shape(0xFF00007F, 2.5);
-  s->v.push_back(new Vec2D( 0.0, -0.2));
-  s->v.push_back(new Vec2D(-0.2,  0.0));
-  s->v.push_back(new Vec2D( 0.0,  0.2));
-  s->v.push_back(new Vec2D( 0.2,  0.0));
-  shapes.push_back(s);
-  s->x = -0.75;
-  s->y =  0.75;
-  s = new Shape(0x00BCFF7F, 0.0);
-  s->v.push_back(new Vec2D(0.0, 0.0));
-  s->v.push_back(new Vec2D(1.0, 0.0));
-  s->v.push_back(new Vec2D(1.0, 1.0));
-  s->v.push_back(new Vec2D(0.0, 1.0));
-  s->x = 0.2;
-  s->y = -1.0;
-  shapes.push_back(s);
-  s = new Shape(0xBC00007F, 0.0);
-  s->v.push_back(new Vec2D(0.0, 0.0));
-  s->v.push_back(new Vec2D(1.0, 0.0));
-  s->v.push_back(new Vec2D(1.0, 1.0));
-  s->v.push_back(new Vec2D(0.0, 1.0));
-  s->x = -0.4;
-  s->y = -1.0;
-  shapes.push_back(s);
+  // create objects
+  {
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::rectangle(2.0, 0.3);
+    vp->setColour(0x7f7f7fFF);
+    o->setVisage(vp);
+    o->x = 0.0;
+    o->y = -0.85;
+    objects.push_back(o);
+  }
+  {
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::square(0.2);
+    vp->setColour(0xFF00007F);
+    o->setVisage(vp);
+    o->rotation = 180.0;
+    o->x = -0.75;
+    o->y = 0.75;
+    objects.push_back(o);
+  }
+  {
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::square(1.0);
+    vp->setColour(0x00BCFF7F);
+    o->setVisage(vp);
+    o->x = 1/3.0;
+    o->y = -0.5;
+    objects.push_back(o);
+  }
+  {
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::square(1.0);
+    vp->setColour(0xBC00007F);
+    o->setVisage(vp);
+    o->x = -1/3.0;
+    o->y = -0.5;
+    objects.push_back(o);
+  }
+  player = new Player();
 
 
   // set the display function callback
   glutDisplayFunc(draw);
   // set the idle (update) callback
-  glutIdleFunc(draw);
+  glutIdleFunc(update);
+
+  // kb stuff
+  glutIgnoreKeyRepeat(1);
+  glutKeyboardFunc(keyboard);
+  glutKeyboardUpFunc(release);
+
+  // mouse stuff
+  glutMouseFunc(mouse);
 
   // begin glut loop
   glutMainLoop();
 
   // cleanup
-  for (Shape* s : shapes)
+  for (Object* s : objects)
     delete s;
   return 0;
 }

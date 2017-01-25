@@ -1,6 +1,5 @@
 #ifndef UTIL_H_INCLUDE
 #define UTIL_H_INCLUDE
-#pragma once
 
 #include <string>
 #include <algorithm> // std::transform
@@ -17,7 +16,7 @@ inline void toLower(std::string& s)
   std::transform(s.begin(), s.end(), s.begin(), tolower);
 }
 
-static std::string commify(const int64_t n)
+inline std::string commify(const int64_t n)
 {
   bool neg = n < 0;
   std::string s = std::to_string(std::abs(n));
