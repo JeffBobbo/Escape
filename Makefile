@@ -1,6 +1,6 @@
 EXEC:=Shifter.out
 
-MAIN := main.o
+MAIN := main.o util.o
 
 # general compiler settings
 CPPFLAGS=

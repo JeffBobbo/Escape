@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm> // std::transform
 #include <cctype> // std::toupper
+#include <random>
 
 // string stuff
 inline void toUpper(std::string& s)
@@ -16,7 +17,7 @@ inline void toLower(std::string& s)
   std::transform(s.begin(), s.end(), s.begin(), tolower);
 }
 
-std::string commify(const int64_t n)
+static std::string commify(const int64_t n)
 {
   bool neg = n < 0;
   std::string s = std::to_string(std::abs(n));
@@ -50,6 +51,20 @@ inline double degrees(const double radians)
 template <typename T> inline T linearInterpolate(const T& a, const T& b, const T& p)
 {
   return (b - a) * p + a;
+}
+
+void seed(uint64_t s);
+inline void seed() { seed(0); }
+std::mt19937& getMT();
+template <typename T> inline T random(const T min, const T max)
+{
+  std::uniform_int_distribution<T> dist(min, max);
+  return dist(getMT());
+}
+template <> inline double random<double>(const double min, const double max)
+{
+  std::uniform_real_distribution<double> dist(min, max);
+  return dist(getMT());
 }
 
 class Vec2D
