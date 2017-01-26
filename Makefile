@@ -7,13 +7,16 @@ CPPFLAGS=
 CXXFLAGS=-Wall -Wextra -Wpedantic -std=c++11
 LDFLAGS=-lglut -lGL
 
-# putting this first makes it the default
-all: $(MAIN)
-	$(CXX) $(CXXFLAGS) $(MAIN) -o $(EXEC) $(LDFLAGS)
+debug: CXXFLAGS+=-O0 -ggdb
+debug: all
 
 # compile for release, optimisations, no debug etc
-release: CPPFLAGS+=-O3 -DNDEBUG
+release: CPPFLAGS+=-O3
+release: CXXFLAGS+=-DNDEBUG
 release: all
+
+all: $(MAIN)
+	$(CXX) $(CXXFLAGS) $(MAIN) -o $(EXEC) $(LDFLAGS)
 
 %.o : %.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
