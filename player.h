@@ -4,18 +4,13 @@
 #include "main.h"
 #include "object.h"
 
-#include "visage/polygon.h"
+#include "visage/allvisage.h"
+#include "visage/animatrix.h"
 
 class Player
 {
 public:
-  Player()
-  {
-    object = new Object();
-    VisagePolygon* vp = VisagePolygon::rectangle(0.2, 0.5);
-    vp->setColour(0xFFFFFFFF);
-    object->setVisage(vp);
-  }
+  Player();
   ~Player()
   {
     delete object;

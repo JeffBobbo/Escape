@@ -43,6 +43,15 @@ public:
 
   virtual void draw()
   {
+    double offsetX = 0.0;
+    double offsetY = 0.0;
+    for (const Animatrix* const a : animatrices)
+    {
+      if (!a->isActive())
+        continue;
+      offsetX += a->startX;
+      offsetY += a->startY;
+    }
     glBegin(GL_POLYGON);
     // set the colour
     glColor4f(
@@ -52,7 +61,7 @@ public:
       ((colour      ) & 255) / 255.0  // a
     );
     for (const Vec2D* const v : vertices)
-      glVertex3f(v->x, v->y, 0.0);
+      glVertex3f(v->x+offsetX, v->y+offsetY, 0.0);
     glEnd();
 
   }

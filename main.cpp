@@ -15,7 +15,7 @@ uint64_t frame = 0, elapsed = 0, timebase = 0, last, delta;
 bool keys[255] = {0};
 std::vector<Object* > objects;
 Player* player;
-
+int window;
 
 void draw()
 {
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
   glutInitWindowPosition(-1, -1);
   glutInitWindowSize(500, 500);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-  glutCreateWindow(title);
+  window = glutCreateWindow(title);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -127,6 +127,9 @@ int main(int argc, char** argv)
   }
   player = new Player();
 
+  // tell glut to return from glutMainLoop when closing the application
+  // this lets us do proper clean up
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
   // set the display function callback
   glutDisplayFunc(draw);
@@ -147,5 +150,6 @@ int main(int argc, char** argv)
   // cleanup
   for (Object* s : objects)
     delete s;
+
   return 0;
 }

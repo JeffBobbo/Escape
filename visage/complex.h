@@ -15,6 +15,8 @@ public:
       delete v;
   }
 
+  inline void add(Visage* const v) { visages.push_back(v); }
+
   virtual void draw()
   {
     for (Visage* const v : visages)

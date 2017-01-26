@@ -10,11 +10,16 @@ class Visage
 {
 public:
   Visage() {}
-  virtual ~Visage() {}
+  virtual ~Visage()
+  {
+    for (Animatrix* a : animatrices)
+      delete a;
+  }
 
   virtual void draw() = 0;
+  virtual void addAnimatrix(Animatrix* const a) { animatrices.push_back(a); }
 
-private:
+protected:
   std::vector<Animatrix* > animatrices;
 };
 
