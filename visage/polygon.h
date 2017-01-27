@@ -20,7 +20,8 @@ public:
 
   static VisagePolygon* rectangle(double u, double v);
   static VisagePolygon* square(double u);
-  static VisagePolygon* triangle(double width, double height);
+  static VisagePolygon* triangle(double width, double height, double offset = 0.5);
+  static VisagePolygon* circle(double radius, uint32_t points);
   virtual void draw();
 
   inline const uint32_t& getColour() const { return colour; }
