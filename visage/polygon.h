@@ -22,10 +22,12 @@ public:
   static VisagePolygon* square(double u);
   static VisagePolygon* triangle(double width, double height, double offset = 0.5);
   static VisagePolygon* circle(double radius, uint32_t points);
-  virtual void draw();
 
+  virtual inline Type type() const { return Type::POLYGON; }
   inline const uint32_t& getColour() const { return colour; }
   inline void setColour(uint32_t c) { colour = c; }
+
+  virtual void draw();
 
 private:
   std::vector<Vec2D* > vertices;

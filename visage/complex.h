@@ -15,6 +15,8 @@ public:
       delete v;
   }
 
+  virtual inline Type type() const { return Type::COMPLEX; }
+
   inline void add(Visage* const v) { visages.push_back(v); }
 
   virtual void draw()
