@@ -35,8 +35,9 @@ void draw()
   glClear(GL_COLOR_BUFFER_BIT);
 
   // background is black
-  glClearColor(0.0, 0.0, 0.0, 1.0);
-
+  //glClearColor(0.0, 0.0, 0.0, 1.0);
+  // background is now sky!
+  glClearColor(0x43 / 255.0, 0xC5 / 255.0, 0xF0 / 255.0, 255.0);
   for (auto obj : objects)
     obj->draw();
 
@@ -93,13 +94,6 @@ int main(int argc, char** argv)
   glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 
   // create objects
-  {
-    Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::square(2.0);
-    vp->setColour(0x00AFFFFF);
-    o->setVisage(vp);
-    objects.push_back(o);
-  }
   {
     Object* o = new Object();
     VisagePolygon* vp = VisagePolygon::triangle(1.6, 0.6, 0.0);
