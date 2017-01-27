@@ -7,6 +7,12 @@
 class Object
 {
 public:
+  enum class Type
+  {
+    OBJECT = 0,
+    WALL
+  };
+
   Object()
   {
     angle = 0.0;
@@ -23,11 +29,11 @@ public:
     delete visage;
   }
 
+  virtual inline Type type() const { return Type::OBJECT; }
   inline void setVisage(Visage* v) { delete visage; visage = v; }
   virtual void draw();
 
   virtual inline bool isSolid() const { return false; }
-
 
   double angle;
   double rotation;
@@ -51,6 +57,7 @@ public:
     width = w;
     height = h;
   }
+  virtual inline Type type() const { return Type::WALL; }
   virtual inline bool isSolid() const { return true; }
 };
 
