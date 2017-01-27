@@ -38,11 +38,8 @@ void draw()
   glClearColor(0.0, 0.0, 0.0, 1.0);
 
   for (auto obj : objects)
-  {
-    glLoadIdentity(); // clear any transformations
-
     obj->draw();
-  }
+
   player->move();
   player->draw();
   glutSwapBuffers();
@@ -58,15 +55,20 @@ void update()
 
 void mouse(const int button, const int state, const int x, const int y)
 {
+  // setup mouse event register
 }
 
 
 void keyboard(const unsigned char key, const int x, const int y)
 {
+  (void)x;
+  (void)y;
   keys[key] = true;
 }
 void release(const unsigned char key, const int x, const int y)
 {
+  (void)x;
+  (void)y;
   keys[key] = false;
 }
 
@@ -89,12 +91,7 @@ int main(int argc, char** argv)
 
   // create objects
   {
-    Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::rectangle(2.0, 0.3);
-    vp->setColour(0x7f7f7fFF);
-    o->setVisage(vp);
-    o->x = 0.0;
-    o->y = -0.85;
+    Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
     objects.push_back(o);
   }
   {

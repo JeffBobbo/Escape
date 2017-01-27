@@ -25,13 +25,35 @@ Player::Player()
 }
 
 void Player::move()
-  {
+{
+  double nx = object->x;
+  double ny = object->y;
+
   if (keys['w'])
-    object->y += 0.5 * (delta / 1000.0);
+    ny += 0.5 * (delta / 1000.0);
   if (keys['s'])
-    object->y -= 0.5 * (delta / 1000.0);
+    ny -= 0.5 * (delta / 1000.0);
   if (keys['a'])
-    object->x -= 0.5 * (delta / 1000.0);
+    nx -= 0.5 * (delta / 1000.0);
   if (keys['d'])
-    object->x += 0.5 * (delta / 1000.0);
+    nx += 0.5 * (delta / 1000.0);
+
+  bool good = true;
+  // make sure we can move here
+  for (const Object* const o : objects)
+  {
+    if (!o->isSolid()) // skip non-solids
+      continue;
+    if (nx > o->x - o->width/2.0 && nx < o->x + o->width/2.0 && ny > o->y - o->height/2.0 && ny < o->y + o->height/2.0)
+    {
+      good = false;
+      break;
+    }
+  }
+
+  if (good)
+  {
+    object->x = nx;
+    object->y = ny;
+  }
 }

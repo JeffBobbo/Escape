@@ -20,7 +20,9 @@ public:
   virtual void draw()
   {
     for (Visage* const v : visages)
+    {
       v->draw();
+    }
   }
 
 private:
