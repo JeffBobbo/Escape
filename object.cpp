@@ -19,5 +19,6 @@ void Object::draw()
   while (angle > 360.0)
     angle -= 360.0;
 
-  visage->draw();
+  if (visage)
+    visage->draw();
 }
