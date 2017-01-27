@@ -40,7 +40,7 @@ void Player::move()
 
   bool good = true;
   // make sure we can move here
-  for (const Object* const o : objects)
+  for (const Object* const o : graph->foreground())
   {
     if (!o->isSolid()) // skip non-solids
       continue;

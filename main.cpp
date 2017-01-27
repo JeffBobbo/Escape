@@ -13,7 +13,7 @@
 // extern stuff
 uint64_t frame = 0, elapsed = 0, timebase = 0, last, delta;
 bool keys[255] = {0};
-std::vector<Object* > objects;
+SceneGraph* graph;
 Player* player;
 int window;
 
@@ -32,17 +32,10 @@ void draw()
     frame = 0;
   }
 
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  // background is black
-  //glClearColor(0.0, 0.0, 0.0, 1.0);
-  // background is now sky!
-  glClearColor(0x43 / 255.0, 0xC5 / 255.0, 0xF0 / 255.0, 255.0);
-  for (auto obj : objects)
-    obj->draw();
-
   player->move();
+  graph->draw();
   player->draw();
+
   glutSwapBuffers();
 }
 
@@ -93,6 +86,7 @@ int main(int argc, char** argv)
   glLineWidth(1.5);
   glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 
+  graph = new SceneGraph();
   // create objects
   {
     Object* o = new Object();
@@ -101,7 +95,7 @@ int main(int argc, char** argv)
     o->setVisage(vp);
     o->x = -0.2;
     o->y = -(1.0 - 0.3 - 0.3);
-    objects.push_back(o);
+    graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
     Object* o = new Object();
@@ -109,7 +103,7 @@ int main(int argc, char** argv)
     vp->setColour(0x00FF1FFF);
     o->setVisage(vp);
     o->y = -(1.0 - 0.3 - 0.3);
-    objects.push_back(o);
+    graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
     Object* o = new Object();
@@ -117,7 +111,7 @@ int main(int argc, char** argv)
     vp->setColour(0x00AF1FFF);
     o->setVisage(vp);
     o->y = -(1.0 - 0.3 - 0.2);
-    objects.push_back(o);
+    graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
     Object* o = new Object();
@@ -141,11 +135,11 @@ int main(int argc, char** argv)
     //o->rotation = 180.0;
     o->x = -0.75;
     o->y = 0.75;
-    objects.push_back(o);
+    graph->insert(SceneGraph::Level::BACKGROUND, o);
   }
   {
     Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
-    objects.push_back(o);
+    graph->insert(SceneGraph::Level::FOREGROUND, o);
   }
   {
     Object* o = new Object();
@@ -154,7 +148,7 @@ int main(int argc, char** argv)
     o->setVisage(vp);
     o->x = 1/3.0;
     o->y = -0.5;
-    objects.push_back(o);
+    graph->insert(SceneGraph::Level::NPC, o);
   }
   {
     Object* o = new Object();
@@ -163,7 +157,7 @@ int main(int argc, char** argv)
     o->setVisage(vp);
     o->x = -1/3.0;
     o->y = -0.5;
-    objects.push_back(o);
+    graph->insert(SceneGraph::Level::EFFECTS, o);
   }
   player = new Player();
 
@@ -188,8 +182,7 @@ int main(int argc, char** argv)
   glutMainLoop();
 
   // cleanup
-  for (Object* s : objects)
-    delete s;
+  delete graph;
 
   return 0;
 }
