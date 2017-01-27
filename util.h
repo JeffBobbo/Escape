@@ -30,6 +30,14 @@ inline std::string commify(const int64_t n)
   return neg ? "-" + s : s;
 }
 
+// time stuff
+extern uint64_t frame;
+extern uint64_t elapsed;
+extern uint64_t timebase;
+extern uint64_t last;
+extern uint64_t delta;
+static inline uint64_t tickCount() { return elapsed; }
+
 // math stuff
 constexpr double Pi()
 {
@@ -47,7 +55,7 @@ inline double degrees(const double radians)
   return radians * ratio;
 }
 
-template <typename T> inline T linearInterpolate(const T& a, const T& b, const T& p)
+template <typename T> inline T interpolate(const T& a, const T& b, const double& p)
 {
   return (b - a) * p + a;
 }

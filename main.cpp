@@ -55,7 +55,10 @@ void update()
 
 void mouse(const int button, const int state, const int x, const int y)
 {
-  // setup mouse event register
+  (void)button;
+  (void)state;
+  (void)x;
+  (void)y;
 }
 
 
@@ -91,17 +94,63 @@ int main(int argc, char** argv)
 
   // create objects
   {
-    Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::square(2.0);
+    vp->setColour(0x00AFFFFF);
+    o->setVisage(vp);
     objects.push_back(o);
   }
   {
     Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::square(0.2);
-    vp->setColour(0xFF00007F);
+    VisagePolygon* vp = VisagePolygon::triangle(1.6, 0.6, 0.0);
+    vp->setColour(0x007F00FF);
     o->setVisage(vp);
-    o->rotation = 180.0;
+    o->x = -0.2;
+    o->y = -(1.0 - 0.3 - 0.3);
+    objects.push_back(o);
+  }
+  {
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::triangle(2.0, 0.6, 1.0);
+    vp->setColour(0x00FF1FFF);
+    o->setVisage(vp);
+    o->y = -(1.0 - 0.3 - 0.3);
+    objects.push_back(o);
+  }
+  {
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::triangle(2.0, 0.4, 0.4);
+    vp->setColour(0x00AF1FFF);
+    o->setVisage(vp);
+    o->y = -(1.0 - 0.3 - 0.2);
+    objects.push_back(o);
+  }
+  {
+    Object* o = new Object();
+    VisagePolygon* vp = VisagePolygon::circle(0.1, 32);
+    vp->setColour(0xFFFFFFFF);
+    Animatrix* oflash0 = new Animatrix();
+    oflash0->start = 0;
+    oflash0->end = 500;
+    oflash0->loop = 1000;
+    oflash0->startColour = 0xFF0000FF;
+    oflash0->endColour = 0xFFFF00FF;
+    vp->addAnimatrix(oflash0);
+    Animatrix* oflash1 = new Animatrix();
+    oflash1->start = 500;
+    oflash1->end = 1000;
+    oflash1->loop = 1000;
+    oflash1->startColour = 0xFFFF00FF;
+    oflash1->endColour = 0xFF0000FF;
+    vp->addAnimatrix(oflash1);
+    o->setVisage(vp);
+    //o->rotation = 180.0;
     o->x = -0.75;
     o->y = 0.75;
+    objects.push_back(o);
+  }
+  {
+    Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
     objects.push_back(o);
   }
   {
