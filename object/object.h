@@ -1,8 +1,8 @@
 #ifndef OBJECT_H_INCLUDE
 #define OBJECT_H_INCLUDE
 
-#include "visage/visage.h"
-#include "visage/polygon.h"
+#include "../visage/visage.h"
+#include "../visage/polygon.h"
 
 class Object
 {

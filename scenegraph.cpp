@@ -68,7 +68,10 @@ void SceneGraph::idle()
   for (auto it : graph)
   {
     for (Object* const o : it.second)
+    {
       o->idle();
+      o->move();
+    }
   }
 }
 void SceneGraph::draw()

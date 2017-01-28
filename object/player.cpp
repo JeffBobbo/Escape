@@ -1,6 +1,8 @@
 #include "player.h"
 
-#include "main.h"
+#include "../main.h" // keys
+#include "../visage/allvisage.h"
+#include "../visage/animatrix.h"
 
 Player::Player()
 {

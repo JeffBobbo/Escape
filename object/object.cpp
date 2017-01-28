@@ -1,6 +1,6 @@
 #include "object.h"
 
-#include "main.h"
+#include "../main.h"
 
 #include <GL/gl.h>
 #include <GL/freeglut.h>

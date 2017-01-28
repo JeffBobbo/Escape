@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <vector>
 
-#include "object.h"
+#include "object/object.h"
 #include "scenegraph.h"
 
 const char* const title = "Shifter";

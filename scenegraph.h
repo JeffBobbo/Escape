@@ -4,7 +4,7 @@
 #include <map>
 #include <set>
 
-#include "object.h"
+#include "object/object.h"
 
 class SceneGraph
 {
