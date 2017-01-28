@@ -79,11 +79,18 @@ class Vec2D
 public:
   Vec2D(const double u, const double v) : x(u), y(v) {}
   Vec2D(const double d) : x(d), y(d) {}
+  Vec2D(Vec2D&& v) : x(v.x), y(v.y) {}
 
   Vec2D& operator=(const double d)
   {
     x = d;
     y = d;
+    return *this;
+  }
+  Vec2D& operator=(Vec2D&& v)
+  {
+    x = v.x;
+    y = v.y;
     return *this;
   }
   Vec2D operator+(const Vec2D& v) const
