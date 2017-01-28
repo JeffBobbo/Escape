@@ -10,15 +10,23 @@
 #include "object/player.h"
 
 #include "visage/polygon.h"
+#include "visage/particle.h"
 
 // extern stuff
-uint64_t frame = 0, elapsed = 0, timebase = 0, last, delta;
+int64_t frame = 0, elapsed = 0, timebase = 0, last, delta;
 bool keys[255] = {0};
 SceneGraph* graph;
 int window;
 
 void draw()
 {
+  // apparently this is good to have
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-1,1,-1,1,-1,1);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
   ++frame;
   if (elapsed - timebase > 1000)
   {
@@ -32,7 +40,6 @@ void draw()
     frame = 0;
   }
 
-  graph->idle();
   graph->draw();
 
   glutSwapBuffers();
@@ -43,6 +50,7 @@ void update()
   last = elapsed;
   elapsed = glutGet(GLUT_ELAPSED_TIME);
   delta = elapsed - last;
+  graph->idle();
   glutPostRedisplay();
 }
 
@@ -80,7 +88,9 @@ int main(int argc, char** argv)
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   glShadeModel(GL_FLAT);
+
   glEnable(GL_LINE_SMOOTH);
   glLineWidth(1.5);
   glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
@@ -156,6 +166,14 @@ int main(int argc, char** argv)
     o->setVisage(vp);
     o->x = -1/3.0;
     o->y = -0.5;
+    graph->insert(SceneGraph::Level::EFFECTS, o);
+  }
+  {
+    Object* o = new Object();
+    ParticleSystem* ps = new ParticleSystem(1000);
+    o->setVisage(ps);
+    o->x = -0.75;
+    o->y = 0.75;
     graph->insert(SceneGraph::Level::EFFECTS, o);
   }
   graph->insert(SceneGraph::Level::PLAYER, new Player());

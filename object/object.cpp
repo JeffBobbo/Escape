@@ -3,7 +3,6 @@
 #include "../main.h"
 
 #include <GL/gl.h>
-#include <GL/freeglut.h>
 
 void Object::idle()
 {

@@ -1,6 +1,6 @@
 EXEC:=Shifter.out
 
-MAIN := main.o util.o scenegraph.o object/object.o object/player.o visage/polygon.o
+MAIN := main.o util.o scenegraph.o object/object.o object/player.o visage/polygon.o visage/particle.o
 
 # general compiler settings
 CPPFLAGS=

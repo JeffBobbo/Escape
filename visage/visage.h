@@ -12,7 +12,8 @@ public:
   enum class Type
   {
     POLYGON = 0,
-    COMPLEX
+    COMPLEX,
+    PARTICLE
   };
 
   Visage() {}
