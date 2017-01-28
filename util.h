@@ -31,11 +31,11 @@ inline std::string commify(const int64_t n)
 }
 
 // time stuff
-extern uint64_t frame;
-extern uint64_t elapsed;
-extern uint64_t timebase;
-extern uint64_t last;
-extern uint64_t delta;
+extern int64_t frame;
+extern int64_t elapsed;
+extern int64_t timebase;
+extern int64_t last;
+extern int64_t delta;
 static inline uint64_t tickCount() { return elapsed; }
 
 // math stuff
@@ -66,6 +66,11 @@ std::mt19937& getMT();
 template <typename T> inline T random(const T min, const T max)
 {
   std::uniform_int_distribution<T> dist(min, max);
+  return dist(getMT());
+}
+template <> inline float random<float>(const float min, const float max)
+{
+  std::uniform_real_distribution<float> dist(min, max);
   return dist(getMT());
 }
 template <> inline double random<double>(const double min, const double max)
