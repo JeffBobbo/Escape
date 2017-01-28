@@ -12,8 +12,10 @@ Particle::Particle()
   pos[2] = 0.0f;
 
   // create random direction
-  vel[0] = random(-0.1f, 0.1f);
-  vel[1] = random(-0.1f, 0.1f);
+  double dir = random(-Pi(), Pi());
+  double speed = random(-0.1f, 0.1f);
+  vel[0] = speed * std::cos(dir);
+  vel[1] = speed * std::sin(dir);
   vel[2] = 0.0;
 
   // create random colour
@@ -25,7 +27,7 @@ Particle::Particle()
   size = 2.5;
 
   // set a random lifespan
-  life = random(750, 1000);
+  life = random(1000, 1500);
 }
 
 void ParticleSystem::add()
