@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 
 #include "util.h"
+#include "player.h"
 
 #include "visage/polygon.h"
 
@@ -14,7 +15,6 @@
 uint64_t frame = 0, elapsed = 0, timebase = 0, last, delta;
 bool keys[255] = {0};
 SceneGraph* graph;
-Player* player;
 int window;
 
 void draw()
@@ -32,9 +32,8 @@ void draw()
     frame = 0;
   }
 
-  player->move();
+  graph->idle();
   graph->draw();
-  player->draw();
 
   glutSwapBuffers();
 }
@@ -159,7 +158,7 @@ int main(int argc, char** argv)
     o->y = -0.5;
     graph->insert(SceneGraph::Level::EFFECTS, o);
   }
-  player = new Player();
+  graph->insert(SceneGraph::Level::PLAYER, new Player());
 
   // tell glut to return from glutMainLoop when closing the application
   // this lets us do proper clean up

@@ -10,7 +10,8 @@ public:
   enum class Type
   {
     OBJECT = 0,
-    WALL
+    WALL,
+    PLAYER
   };
 
   Object()
@@ -31,6 +32,7 @@ public:
 
   virtual inline Type type() const { return Type::OBJECT; }
   inline void setVisage(Visage* v) { delete visage; visage = v; }
+  virtual void idle() {};
   virtual void draw();
 
   virtual inline bool isSolid() const { return false; }

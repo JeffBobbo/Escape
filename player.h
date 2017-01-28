@@ -7,20 +7,17 @@
 #include "visage/allvisage.h"
 #include "visage/animatrix.h"
 
-class Player
+class Player : public Object
 {
 public:
   Player();
-  ~Player()
+  virtual ~Player()
   {
-    delete object;
   }
 
-  void move();
-  void draw() { object->draw(); }
-
-private:
-  Object* object;
+  virtual inline Type type() const { return Type::PLAYER; }
+  virtual void idle() { move(); }
+  virtual void move();
 };
 
 #endif

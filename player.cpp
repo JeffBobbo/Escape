@@ -4,7 +4,6 @@
 
 Player::Player()
 {
-  object = new Object();
   VisageComplex* vc = new VisageComplex();
   VisagePolygon* body = VisagePolygon::rectangle(0.2, 0.35);
   body->setColour(0xFFFFFFFF);
@@ -21,13 +20,13 @@ Player::Player()
   vc->add(hat);
   vc->add(head);
   vc->add(body);
-  object->setVisage(vc);
+  setVisage(vc);
 }
 
 void Player::move()
 {
-  double nx = object->x;
-  double ny = object->y;
+  double nx = x;
+  double ny = y;
 
   if (keys['w'])
     ny += 0.5 * (delta / 1000.0);
@@ -53,7 +52,7 @@ void Player::move()
 
   if (good)
   {
-    object->x = nx;
-    object->y = ny;
+    x = nx;
+    y = ny;
   }
 }

@@ -24,8 +24,11 @@ public:
   void insert(const SceneGraph::Level level, Object* object);
   bool remove(Object* const object);
   void clear();
+
+  void idle();
   void draw();
 
+  inline const std::set<Object*>& level(const SceneGraph::Level level) const { return graph.at(level); }
   inline const std::set<Object*>& foreground() const { return graph.at(Level::FOREGROUND); }
 
 private:

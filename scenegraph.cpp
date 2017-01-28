@@ -63,6 +63,14 @@ void SceneGraph::clear()
   }
 }
 
+void SceneGraph::idle()
+{
+  for (auto it : graph)
+  {
+    for (Object* const o : it.second)
+      o->idle();
+  }
+}
 void SceneGraph::draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
