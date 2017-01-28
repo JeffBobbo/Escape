@@ -23,6 +23,10 @@ Player::Player()
   setVisage(vc);
 }
 
+void Player::idle()
+{
+}
+
 void Player::move()
 {
   double nx = x;

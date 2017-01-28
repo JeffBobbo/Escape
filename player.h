@@ -16,7 +16,7 @@ public:
   }
 
   virtual inline Type type() const { return Type::PLAYER; }
-  virtual void idle() { move(); }
+  virtual void idle();
   virtual void move();
 };
 
