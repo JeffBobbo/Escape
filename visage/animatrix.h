@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "../util.h"
+#include "../colour.h"
 
 class Animatrix
 {
@@ -29,8 +30,8 @@ public:
   inline bool isVisible() const { return visible; }
 
   uint64_t start, end, loop, offset;
-  uint32_t startColour, endColour;
   double startSize, endSize;
+  RGBA_t startColour, endColour;
   double startAngle, endAngle, rotation;
   double startX, startY, endX, endY;
   bool visible;
