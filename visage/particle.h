@@ -12,10 +12,11 @@ public:
 
   float pos[3];
   float vel[3];
-  float col[3];
+  float col[4];
   float size;
 
   int64_t life;
+  int64_t age;
 };
 
 class ParticleSystem : public Visage
@@ -29,6 +30,10 @@ public:
     particles = new Particle[max];
     last = particles;
     end = particles + max;
+  }
+  ~ParticleSystem()
+  {
+    delete[] particles;
   }
 
   virtual inline Type type() const { return Type::PARTICLE; }

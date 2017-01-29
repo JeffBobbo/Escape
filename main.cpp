@@ -9,11 +9,12 @@
 #include "util.h"
 #include "object/player.h"
 
-#include "visage/polygon.h"
-#include "visage/particle.h"
+#include "visage/allvisage.h"
 
+// fps stuff
+int64_t frame = 0, timebase = 0;
 // extern stuff
-int64_t frame = 0, elapsed = 0, timebase = 0, last, delta;
+int64_t elapsed = 0, last, delta;
 bool keys[255] = {0};
 SceneGraph* graph;
 int window;
@@ -30,7 +31,7 @@ void draw()
   ++frame;
   if (elapsed - timebase > 1000)
   {
-    double fps = frame * 1000.0 / (elapsed - timebase);
+    double fps = frame * (1000.0 / (elapsed - timebase));
     timebase = elapsed;
     frame = 0;
     char buf[50];
@@ -124,6 +125,7 @@ int main(int argc, char** argv)
   }
   {
     Object* o = new Object();
+    VisageComplex* vc = new VisageComplex();
     VisagePolygon* vp = VisagePolygon::circle(0.1, 32);
     vp->setColour(0xFFFFFFFF);
     Animatrix* oflash0 = new Animatrix();
@@ -140,12 +142,15 @@ int main(int argc, char** argv)
     oflash1->startColour = 0xFFFF00FF;
     oflash1->endColour = 0xFF0000FF;
     vp->addAnimatrix(oflash1);
-    o->setVisage(vp);
-    //o->rotation = 180.0;
+    vc->add(vp);
+    ParticleSystem* ps = new ParticleSystem(1000);
+    vc->add(ps);
+    o->setVisage(vc);
     o->x = -0.75;
     o->y = 0.75;
     graph->insert(SceneGraph::Level::BACKGROUND, o);
   }
+
   {
     Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
     graph->insert(SceneGraph::Level::FOREGROUND, o);
@@ -166,14 +171,6 @@ int main(int argc, char** argv)
     o->setVisage(vp);
     o->x = -1/3.0;
     o->y = -0.5;
-    graph->insert(SceneGraph::Level::EFFECTS, o);
-  }
-  {
-    Object* o = new Object();
-    ParticleSystem* ps = new ParticleSystem(1000);
-    o->setVisage(ps);
-    o->x = -0.75;
-    o->y = 0.75;
     graph->insert(SceneGraph::Level::EFFECTS, o);
   }
   graph->insert(SceneGraph::Level::PLAYER, new Player());

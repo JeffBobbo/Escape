@@ -4,16 +4,20 @@
 
 #include "../util.h"
 
+double offset = 0.10;
 Particle::Particle()
 {
   // set position
-  pos[0] = 0.0f;
-  pos[1] = 0.0f;
-  pos[2] = 0.0f;
+  {
+    double angle = random(-Pi(), Pi());
+    pos[0] = offset * std::cos(angle);
+    pos[1] = offset * std::sin(angle);
+    pos[2] = 0.0f;
+  }
 
   // create random direction
   double dir = random(-Pi(), Pi());
-  double speed = random(-0.1f, 0.1f);
+  double speed = random(-0.05f, 0.05f);
   vel[0] = speed * std::cos(dir);
   vel[1] = speed * std::sin(dir);
   vel[2] = 0.0;
@@ -22,12 +26,13 @@ Particle::Particle()
   col[0] = 0.8f;
   col[1] = random(0.0f, 0.75f);
   col[2] = 0.1f;
-  //col[3] = 1.0f;
+  col[3] = 1.0f;
 
   size = 2.5;
 
   // set a random lifespan
   life = random(1000, 1500);
+  age = 0;
 }
 
 void ParticleSystem::add()
@@ -50,9 +55,9 @@ void ParticleSystem::update()
   Particle* p = particles;
   while (p != last)
   {
-    p->life -= delta;
+    p->age += delta;
 
-    if (p->life > 0)
+    if (p->age < p->life)
     {
       // apply some Gs
       //p->vel[1] -= 0.0005f*delta;
@@ -66,7 +71,7 @@ void ParticleSystem::update()
       p->col[0] *= 1.0f - 0.3f*(delta / 1000.0f);
       p->col[1] *= 1.0f - 0.3f*(delta / 1000.0f);
       p->col[2] *= 1.0f - 0.3f*(delta / 1000.0f);
-      //p->col[3] *= (1.0f - 0.3f*delta);
+      p->col[3] *= (1.0f - 0.3f*delta);
 
       ++p;
     }
@@ -108,7 +113,7 @@ void ParticleSystem::draw()
   {
     glPointSize(p->size);
     glBegin(GL_POINTS);
-    glColor3fv(p->col);
+    glColor4fv(p->col);
     glVertex3fv(p->pos);
     ++p;
   }
