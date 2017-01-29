@@ -1,6 +1,10 @@
 #ifndef COLOUR_H_INCLUDE
 #define COLOUR_H_INCLUDE
 
+#include <stdint.h>
+
+typedef uint32_t RGBA_t;
+
 struct RGBA
 {
   double r, g, b, a;
@@ -91,7 +95,7 @@ static RGBA rgba(HSVA hsva)
   return {0.0, 0.0, 0.0, hsva.a};
 }
 
-static inline RGBA fromInt(uint32_t col)
+static inline RGBA fromInt(RGBA_t col)
 {
   return {
     ((col >> 24 & 255) / 255.0),
@@ -101,13 +105,13 @@ static inline RGBA fromInt(uint32_t col)
   };
 }
 
-static inline uint32_t toInt(const RGBA& col)
+static inline RGBA_t toInt(const RGBA& col)
 {
   return
-    (static_cast<uint32_t>(col.r*255.0) & 255) << 24 |
-    (static_cast<uint32_t>(col.g*255.0) & 255) << 16 |
-    (static_cast<uint32_t>(col.b*255.0) & 255) <<  8 |
-    (static_cast<uint32_t>(col.a*255.0) & 255);
+    (static_cast<RGBA_t>(col.r*255.0) & 255) << 24 |
+    (static_cast<RGBA_t>(col.g*255.0) & 255) << 16 |
+    (static_cast<RGBA_t>(col.b*255.0) & 255) <<  8 |
+    (static_cast<RGBA_t>(col.a*255.0) & 255);
 }
 
 
