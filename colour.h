@@ -12,6 +12,7 @@ struct HSVA
   double h, s, v, a;
 };
 
+// algorithm, with some slight modifications, from: http://stackoverflow.com/a/6930407/5187801
 static HSVA hsva(RGBA rgba)
 {
   HSVA out;
@@ -55,6 +56,7 @@ static HSVA hsva(RGBA rgba)
   return out;
 }
 
+// algorithm, with some slight modifications, from: http://stackoverflow.com/a/6930407/5187801
 static RGBA rgba(HSVA hsva)
 {
   if (hsva.s <= 0.0)
@@ -87,6 +89,39 @@ static RGBA rgba(HSVA hsva)
       return {hsva.v, p, q, hsva.a};
   }
   return {0.0, 0.0, 0.0, hsva.a};
+}
+
+static inline RGBA fromInt(uint32_t col)
+{
+  return {
+    ((col >> 24 & 255) / 255.0),
+    ((col >> 16 & 255) / 255.0),
+    ((col >>  8 & 255) / 255.0),
+    ((col       & 255) / 255.0)
+  };
+}
+
+static inline uint32_t toInt(const RGBA& col)
+{
+  return
+    (static_cast<uint32_t>(col.r*255.0) & 255) << 24 |
+    (static_cast<uint32_t>(col.g*255.0) & 255) << 16 |
+    (static_cast<uint32_t>(col.b*255.0) & 255) <<  8 |
+    (static_cast<uint32_t>(col.a*255.0) & 255);
+}
+
+
+static inline RGBA interpolate(const RGBA& c0, const RGBA& c1, double p)
+{
+  // convert to HSV colourspace
+  HSVA h0 = hsva(c0);
+  HSVA h1 = hsva(c1);
+  return rgba({
+    interpolate(h0.h, h1.h, p),
+    interpolate(h0.s, h1.s, p),
+    interpolate(h0.v, h1.v, p),
+    interpolate(h0.a, h1.a, p),
+  });
 }
 
 #endif
