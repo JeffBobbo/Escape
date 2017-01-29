@@ -40,6 +40,8 @@ VisagePolygon* VisagePolygon::circle(double radius, uint32_t points)
   return vp;
 }
 
+#include "../colour.h"
+#include <iostream>
 void VisagePolygon::draw()
 {
   double offsetX = 0.0;
@@ -59,6 +61,33 @@ void VisagePolygon::draw()
 
     if (ani->loop != 0)
     {
+      const double p = (tickCount() % (ani->end-ani->start)) / static_cast<double>(ani->end-ani->start);
+
+      HSVA c0 = hsva({
+        ((ani->startColour >> 24) & 255) / 255.0,
+        ((ani->startColour >> 16) & 255) / 255.0,
+        ((ani->startColour >>  8) & 255) / 255.0,
+        ((ani->startColour      ) & 255) / 255.0
+      });
+      HSVA c1 = hsva({
+        ((ani->endColour >> 24) & 255) / 255.0,
+        ((ani->endColour >> 16) & 255) / 255.0,
+        ((ani->endColour >>  8) & 255) / 255.0,
+        ((ani->endColour      ) & 255) / 255.0
+      });
+
+      RGBA cf = rgba({
+        interpolate(c0.h, c1.h, p),
+        interpolate(c0.s, c1.s, p),
+        interpolate(c0.v, c1.v, p),
+        interpolate(c0.a, c1.a, p)
+      });
+      r *= cf.r;
+      g *= cf.g;
+      b *= cf.b;
+      a *= cf.a;
+
+      /*
       uint8_t startR = (ani->startColour >> 24) & 255;
       uint8_t startG = (ani->startColour >> 16) & 255;
       uint8_t startB = (ani->startColour >>  8) & 255;
@@ -72,6 +101,7 @@ void VisagePolygon::draw()
       g *= interpolate(startG, endG, p) / 255.0;
       b *= interpolate(startB, endB, p) / 255.0;
       a *= interpolate(startA, endA, p) / 255.0;
+       */
     }
   }
   glBegin(GL_POLYGON);
