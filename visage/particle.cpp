@@ -108,6 +108,8 @@ void ParticleSystem::draw()
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
   */
+  // this is inefficient, what's above is much better, but it's the only way
+  // I can specify sizes individually for particles
   Particle* p = particles;
   while (p != last)
   {
@@ -115,7 +117,7 @@ void ParticleSystem::draw()
     glBegin(GL_POINTS);
     glColor4fv(p->col);
     glVertex3fv(p->pos);
+    glEnd();
     ++p;
   }
-  glEnd();
 }
