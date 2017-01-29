@@ -128,20 +128,38 @@ int main(int argc, char** argv)
     VisageComplex* vc = new VisageComplex();
     VisagePolygon* vp = VisagePolygon::circle(0.1, 32);
     vp->setColour(0xFFFFFFFF);
-    Animatrix* oflash0 = new Animatrix();
-    oflash0->start = 0;
-    oflash0->end = 500;
-    oflash0->loop = 1000;
-    oflash0->startColour = 0xFF0000FF;
-    oflash0->endColour = 0xFFFF00FF;
-    vp->addAnimatrix(oflash0);
-    Animatrix* oflash1 = new Animatrix();
-    oflash1->start = 500;
-    oflash1->end = 1000;
-    oflash1->loop = 1000;
-    oflash1->startColour = 0xFFFF00FF;
-    oflash1->endColour = 0xFF0000FF;
-    vp->addAnimatrix(oflash1);
+    {
+      Animatrix* oflash0 = new Animatrix();
+      oflash0->start = 0;
+      oflash0->end = 500;
+      oflash0->loop = 1000;
+      oflash0->startColour = 0xFF0000FF;
+      oflash0->endColour = 0xFFFF00FF;
+      vp->addAnimatrix(oflash0);
+      Animatrix* oflash1 = new Animatrix();
+      oflash1->start = 500;
+      oflash1->end = 1000;
+      oflash1->loop = 1000;
+      oflash1->startColour = 0xFFFF00FF;
+      oflash1->endColour = 0xFF0000FF;
+      vp->addAnimatrix(oflash1);
+    }
+    {
+      Animatrix* oscale0 = new Animatrix();
+      oscale0->start = 0;
+      oscale0->end = 1000;
+      oscale0->loop = 2000;
+      oscale0->startScaleX = oscale0->startScaleY = 1.0;
+      oscale0->endScaleX = oscale0->endScaleY = 1.3;
+      vp->addAnimatrix(oscale0);
+      Animatrix* oscale1 = new Animatrix();
+      oscale1->start = 1000;
+      oscale1->end = 2000;
+      oscale1->loop = 2000;
+      oscale1->startScaleX = oscale1->startScaleY = 1.3;
+      oscale1->endScaleX = oscale1->endScaleY = 1.0;
+      vp->addAnimatrix(oscale1);
+    }
     vc->add(vp);
     ParticleSystem* ps = new ParticleSystem(1000);
     vc->add(ps);

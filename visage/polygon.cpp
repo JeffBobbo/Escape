@@ -46,6 +46,9 @@ void VisagePolygon::draw()
 {
   double offsetX = 0.0;
   double offsetY = 0.0;
+  double angle = 0.0;
+  double scalex = 1.0;
+  double scaley = 1.0;
   double r = ((colour >> 24) & 255) / 255.0; // r
   double g = ((colour >> 16) & 255) / 255.0; // g
   double b = ((colour >> 8 ) & 255) / 255.0; // b
@@ -63,51 +66,30 @@ void VisagePolygon::draw()
     {
       const double p = (tickCount() % (ani->end-ani->start)) / static_cast<double>(ani->end-ani->start);
 
-      HSVA c0 = hsva({
-        ((ani->startColour >> 24) & 255) / 255.0,
-        ((ani->startColour >> 16) & 255) / 255.0,
-        ((ani->startColour >>  8) & 255) / 255.0,
-        ((ani->startColour      ) & 255) / 255.0
-      });
-      HSVA c1 = hsva({
-        ((ani->endColour >> 24) & 255) / 255.0,
-        ((ani->endColour >> 16) & 255) / 255.0,
-        ((ani->endColour >>  8) & 255) / 255.0,
-        ((ani->endColour      ) & 255) / 255.0
-      });
+      if (ani->startColour != ani->endColour)
+      {
+        RGBA cf = interpolate(fromInt(ani->startColour), fromInt(ani->endColour), p);
+        r *= cf.r;
+        g *= cf.g;
+        b *= cf.b;
+        a *= cf.a;
+      }
 
-      RGBA cf = rgba({
-        interpolate(c0.h, c1.h, p),
-        interpolate(c0.s, c1.s, p),
-        interpolate(c0.v, c1.v, p),
-        interpolate(c0.a, c1.a, p)
-      });
-      r *= cf.r;
-      g *= cf.g;
-      b *= cf.b;
-      a *= cf.a;
-
-      /*
-      uint8_t startR = (ani->startColour >> 24) & 255;
-      uint8_t startG = (ani->startColour >> 16) & 255;
-      uint8_t startB = (ani->startColour >>  8) & 255;
-      uint8_t startA = (ani->startColour      ) & 255;
-      uint8_t endR = (ani->endColour >> 24) & 255;
-      uint8_t endG = (ani->endColour >> 16) & 255;
-      uint8_t endB = (ani->endColour >>  8) & 255;
-      uint8_t endA = (ani->endColour      ) & 255;
-      const double p = (tickCount() % (ani->end-ani->start)) / static_cast<double>(ani->end-ani->start);
-      r *= interpolate(startR, endR, p) / 255.0;
-      g *= interpolate(startG, endG, p) / 255.0;
-      b *= interpolate(startB, endB, p) / 255.0;
-      a *= interpolate(startA, endA, p) / 255.0;
-       */
+      if (ani->startScaleX != ani->endScaleX)
+        scalex *= interpolate(ani->startScaleX, ani->endScaleX, p);
+      if (ani->startScaleY != ani->endScaleY)
+        scaley *= interpolate(ani->startScaleY, ani->endScaleY, p);
     }
   }
+  glPushMatrix();
+  glTranslatef(offsetX, offsetY, 0.0);
+  glRotatef(angle, 0.0, 0.0, 1.0);
+  glScalef(scalex, scaley, 1.0);
   glBegin(GL_POLYGON);
   // set the colour
   glColor4f(r, g, b, a);
   for (const Vec2D* const v : vertices)
-    glVertex3f(v->x+offsetX, v->y+offsetY, 0.0);
+    glVertex3f(v->x, v->y, 0.0);
   glEnd();
+  glPopMatrix();
 }

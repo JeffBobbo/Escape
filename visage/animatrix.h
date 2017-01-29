@@ -13,7 +13,7 @@ public:
   {
     start = end = loop = offset = 0;
     startColour = endColour = 0xFFFFFFFF;
-    startSize = endSize = 1.0;
+    startScaleX = startScaleY = endScaleX = endScaleY = 1.0;
     startAngle = endAngle = rotation = 0.0;
     startX = startY = endX = endY = 0.0;
     visible = true;
@@ -30,8 +30,8 @@ public:
   inline bool isVisible() const { return visible; }
 
   uint64_t start, end, loop, offset;
-  double startSize, endSize;
   RGBA_t startColour, endColour;
+  double startScaleX, startScaleY, endScaleX, endScaleY;
   double startAngle, endAngle, rotation;
   double startX, startY, endX, endY;
   bool visible;
