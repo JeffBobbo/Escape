@@ -1,6 +1,6 @@
 #include "polygon.h"
 
-#include <GL/gl.h>
+#include "../gli.h"
 
 #include "../util.h"
 

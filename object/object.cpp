@@ -1,8 +1,7 @@
 #include "object.h"
 
 #include "../main.h"
-
-#include <GL/gl.h>
+#include "../gli.h"
 
 void Object::idle()
 {

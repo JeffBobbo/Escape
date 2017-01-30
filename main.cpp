@@ -1,10 +1,6 @@
 #include "main.h"
 
-#include <iostream>
-#include <cmath>
-
-#include <GL/freeglut.h>
-#include <GL/gl.h>
+#include "gli.h"
 
 #include "util.h"
 #include "object/player.h"
@@ -25,7 +21,7 @@ void draw()
   // apparently this is good to have
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-1,1,-1,1,-1,1);
+  glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
@@ -92,10 +88,6 @@ int main(int argc, char** argv)
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glShadeModel(GL_FLAT);
-
-  glEnable(GL_LINE_SMOOTH);
-  glLineWidth(1.5);
-  glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 
   graph = new SceneGraph();
   // create objects
@@ -164,9 +156,9 @@ int main(int argc, char** argv)
     vc->add(vp);
     ParticleSystem* ps = new ParticleSystem(1000, 150);
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
-    ps->lifeMin = 1000;
-    ps->lifeMax = 5000;
-    ps->sizeStart = 3.5f;
+    ps->lifeMin = 5000;
+    ps->lifeMax = 7000;
+    ps->sizeStart = 5.0f;
     ps->sizeEnd = 0.0f;
     vc->add(ps);
     o->setVisage(vc);

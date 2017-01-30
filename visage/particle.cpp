@@ -1,6 +1,6 @@
 #include "particle.h"
 
-#include <GL/gl.h>
+#include "../gli.h"
 
 #include "../util.h"
 
@@ -34,6 +34,11 @@ void ParticleSystem::add()
     last->size = sizeStart;
     //last->sizeEnd = sizeEnd < 0.0f ? sizeStart : sizeEnd;
 
+    RGBA c = rgba(hsva0);
+    last->col[0] = c.r;
+    last->col[0] = c.g;
+    last->col[0] = c.b;
+    last->col[0] = c.a;
     // create random direction
     double dir = direction + random(-spray/2.0, spray/2.0);
     double speed = random(0.0f, 0.1f);

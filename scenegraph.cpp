@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include <GL/gl.h>
+#include "gli.h"
 
 
 SceneGraph::SceneGraph()
