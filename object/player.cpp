@@ -14,13 +14,20 @@ Player::Player()
   Animatrix* ahead = new Animatrix();
   ahead->startY = 0.25;
   head->addAnimatrix(ahead);
-  VisagePolygon* hat = VisagePolygon::triangle(0.25, 0.1);
+  VisagePolygon* eye = VisagePolygon::rectangle(0.02, 0.02);
+  eye->setColour(0x000000FF);
+  Animatrix* aeye = new Animatrix();
+  aeye->startY = 0.28;
+  aeye->startX = 0.075;
+  eye->addAnimatrix(aeye);
+  VisagePolygon* hat = VisagePolygon::triangle(0.25, 0.1, 1.1);
   hat->setColour(0xFF0000FF);
   Animatrix* ahat = new Animatrix();
   ahat->startY = 0.375;
   hat->addAnimatrix(ahat);
   vc->add(hat);
   vc->add(head);
+  vc->add(eye);
   vc->add(body);
   setVisage(vc);
 }
