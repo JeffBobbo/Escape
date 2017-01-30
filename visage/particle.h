@@ -24,10 +24,11 @@ public:
 class ParticleSystem : public Visage
 {
 public:
-  ParticleSystem(size_t m, size_t r) :
-    max(m), rate(r), lifeMin(1000), lifeMax(0),
-    sizeStart(0.0f), sizeEnd(0.0f),
-    gravity(false)
+  ParticleSystem(size_t m, size_t r)
+    : max(m), rate(r), lifeMin(1000), lifeMax(0)
+    , sizeStart(0.0f), sizeEnd(0.0f)
+    , direction(0.0), spray(2.0*Pi())
+    , gravity(false)
   {
     // allocate all the memory up front
     // this'll make memory usage initially higher, but means less allocations
@@ -75,6 +76,8 @@ public:
   int64_t lifeMax;
   float sizeStart;
   float sizeEnd;
+  double direction;
+  double spray;
   bool gravity;
 };
 

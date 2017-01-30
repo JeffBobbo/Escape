@@ -4,31 +4,15 @@
 
 #include "../util.h"
 
-double offset = 0.10;
+double offset = 0.1;
 Particle::Particle()
 {
   // set position
-  {
-    double angle = random(-Pi(), Pi());
-    double o = random(0.0, offset);
-    pos[0] = o * std::cos(angle);
-    pos[1] = o * std::sin(angle);
-    pos[2] = 0.0f;
-  }
-
-  // create random direction
-  double dir = random(-Pi(), Pi());
-  double speed = random(-0.05f, 0.05f);
-  vel[0] = speed * std::cos(dir);
-  vel[1] = speed * std::sin(dir);
-  vel[2] = 0.0;
-
-  // create random colour
-  col[0] = 0.8f;
-  col[1] = random(0.0f, 0.75f);
-  col[2] = 0.1f;
-  col[3] = 1.0f;
-
+  double angle = random(-Pi(), Pi());
+  double o = random(0.0, offset);
+  pos[0] = o * std::cos(angle);
+  pos[1] = o * std::sin(angle);
+  pos[2] = 0.0f;
   age = 0;
 }
 
@@ -49,6 +33,14 @@ void ParticleSystem::add()
       last->life = random(lifeMin, lifeMax);
     last->size = sizeStart;
     //last->sizeEnd = sizeEnd < 0.0f ? sizeStart : sizeEnd;
+
+    // create random direction
+    double dir = direction + random(-spray/2.0, spray/2.0);
+    double speed = random(0.0f, 0.1f);
+    last->vel[0] = speed * std::cos(dir);
+    last->vel[1] = speed * std::sin(dir);
+    last->vel[2] = 0.0;
+
     ++last;
   }
 }
