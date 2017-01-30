@@ -162,8 +162,12 @@ int main(int argc, char** argv)
       vp->addAnimatrix(oscale1);
     }
     vc->add(vp);
-    ParticleSystem* ps = new ParticleSystem(1000, 10);
+    ParticleSystem* ps = new ParticleSystem(1000, 150);
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
+    ps->lifeMin = 1000;
+    ps->lifeMax = 5000;
+    ps->sizeStart = 3.5f;
+    ps->sizeEnd = 0.0f;
     vc->add(ps);
     o->setVisage(vc);
     o->x = -0.75;

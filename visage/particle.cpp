@@ -29,10 +29,6 @@ Particle::Particle()
   col[2] = 0.1f;
   col[3] = 1.0f;
 
-  size = 2.5;
-
-  // set a random lifespan
-  life = random(1000, 1500);
   age = 0;
 }
 
@@ -47,6 +43,12 @@ void ParticleSystem::add()
   if (!full())
   {
     *last = Particle();
+    if (lifeMax == 0)
+      last->life = lifeMin;
+    else
+      last->life = random(lifeMin, lifeMax);
+    last->size = sizeStart;
+    //last->sizeEnd = sizeEnd < 0.0f ? sizeStart : sizeEnd;
     ++last;
   }
 }
@@ -89,6 +91,9 @@ void ParticleSystem::update()
       p->col[2] = col.b;
       p->col[3] = col.a;
 
+      if (sizeEnd >= 0.0f)
+        p->size = interpolate(sizeStart, sizeEnd, prog);
+
       ++p;
     }
     else
@@ -99,8 +104,12 @@ void ParticleSystem::update()
     }
   }
   // create a random number of particles
-  for (size_t i = 0; i < (rate * delta); ++i)
+  count += (rate / 1000.0) * delta;
+  while (count > 1.0)
+  {
     add();
+    count -= 1.0;
+  }
 }
 
 void ParticleSystem::draw()

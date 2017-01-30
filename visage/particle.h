@@ -24,7 +24,10 @@ public:
 class ParticleSystem : public Visage
 {
 public:
-  ParticleSystem(size_t m, size_t r) : max(m), rate(r), gravity(false)
+  ParticleSystem(size_t m, size_t r) :
+    max(m), rate(r), lifeMin(1000), lifeMax(0),
+    sizeStart(0.0f), sizeEnd(0.0f),
+    gravity(false)
   {
     // allocate all the memory up front
     // this'll make memory usage initially higher, but means less allocations
@@ -33,7 +36,7 @@ public:
     last = particles;
     end = particles + max;
   }
-  ~ParticleSystem()
+  virtual ~ParticleSystem()
   {
     delete[] particles;
   }
@@ -58,12 +61,21 @@ private:
   Particle* last;
   Particle* end;
 
+  // how many particles to add
+  // adds up fractions so that we can create a slow stream of particles (e.g., 1 a second)
+  // or even longer time periods
+  // see ParticleSystem::add()
+  double count;
+public:
   // store the HSVA version, allows faster interpolation
   HSVA hsva0;
   HSVA hsva1;
-  size_t rate; // per ms
+  size_t rate; // per s
+  int64_t lifeMin;
+  int64_t lifeMax;
+  float sizeStart;
+  float sizeEnd;
   bool gravity;
-
 };
 
 #endif
