@@ -10,6 +10,7 @@
 #include "object/player.h"
 
 #include "visage/allvisage.h"
+#include "colour.h"
 
 // fps stuff
 int64_t frame = 0, timebase = 0;
@@ -161,7 +162,8 @@ int main(int argc, char** argv)
       vp->addAnimatrix(oscale1);
     }
     vc->add(vp);
-    ParticleSystem* ps = new ParticleSystem(1000);
+    ParticleSystem* ps = new ParticleSystem(1000, 10);
+    ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
     vc->add(ps);
     o->setVisage(vc);
     o->x = -0.75;

@@ -10,8 +10,9 @@ Particle::Particle()
   // set position
   {
     double angle = random(-Pi(), Pi());
-    pos[0] = offset * std::cos(angle);
-    pos[1] = offset * std::sin(angle);
+    double o = random(0.0, offset);
+    pos[0] = o * std::cos(angle);
+    pos[1] = o * std::sin(angle);
     pos[2] = 0.0f;
   }
 
@@ -33,6 +34,12 @@ Particle::Particle()
   // set a random lifespan
   life = random(1000, 1500);
   age = 0;
+}
+
+void ParticleSystem::setColours(RGBA c0, RGBA c1)
+{
+  hsva0 = hsva(c0);
+  hsva1 = hsva(c1);
 }
 
 void ParticleSystem::add()
@@ -59,19 +66,28 @@ void ParticleSystem::update()
 
     if (p->age < p->life)
     {
-      // apply some Gs
-      //p->vel[1] -= 0.0005f*delta;
+      double prog = p->age / static_cast<double>(p->life);
+
+      if (gravity) // apply some Gs
+        p->vel[1] -= 0.0005f * delta;
 
       // move
       p->pos[0] += p->vel[0] * (delta / 1000.0f);
       p->pos[1] += p->vel[1] * (delta / 1000.0f);
       p->pos[2] += p->vel[2] * (delta / 1000.0f);
 
-      // some colour decay
-      p->col[0] *= 1.0f - 0.3f*(delta / 1000.0f);
-      p->col[1] *= 1.0f - 0.3f*(delta / 1000.0f);
-      p->col[2] *= 1.0f - 0.3f*(delta / 1000.0f);
-      p->col[3] *= (1.0f - 0.3f*delta);
+      // interpolate colours
+      // do it in HSV space because it looks better, but is slightly slower
+      RGBA col = rgba({
+        interpolate(hsva0.h, hsva1.h, prog),
+        interpolate(hsva0.s, hsva1.s, prog),
+        interpolate(hsva0.v, hsva1.v, prog),
+        interpolate(hsva0.a, hsva1.a, prog)
+      });
+      p->col[0] = col.r;
+      p->col[1] = col.g;
+      p->col[2] = col.b;
+      p->col[3] = col.a;
 
       ++p;
     }
@@ -83,8 +99,7 @@ void ParticleSystem::update()
     }
   }
   // create a random number of particles
-  size_t num = random(0, 50);
-  for (size_t i = 0; i < num; ++i)
+  for (size_t i = 0; i < (rate * delta); ++i)
     add();
 }
 
