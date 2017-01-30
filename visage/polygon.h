@@ -31,7 +31,7 @@ public:
 
 private:
   std::vector<Vec2D* > vertices;
-  uint32_t colour; // temp
+  uint32_t colour;
 };
 
 #endif
