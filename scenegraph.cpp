@@ -76,13 +76,6 @@ void SceneGraph::idle()
 }
 void SceneGraph::draw()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  // background is black
-  //glClearColor(0.0, 0.0, 0.0, 1.0);
-  // background is now sky!
-  glClearColor(0x43 / 255.0, 0xC5 / 255.0, 0xF0 / 255.0, 255.0);
-
   for (auto it : graph)
   {
     for (Object* const o : it.second)

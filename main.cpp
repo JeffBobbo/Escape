@@ -1,5 +1,7 @@
 #include "main.h"
 
+#include <iostream>
+
 #include "gli.h"
 
 #include "util.h"
@@ -7,6 +9,9 @@
 
 #include "visage/allvisage.h"
 #include "colour.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "external/stb_image.h"
 
 // fps stuff
 int64_t frame = 0, timebase = 0;
@@ -16,15 +21,23 @@ bool keys[255] = {0};
 SceneGraph* graph;
 int window;
 
+GLuint tex = 0;
+uint8_t* idata = nullptr;
+int width, height, bpp;
 void draw()
 {
-  // apparently this is good to have
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  // setup the projection matrix
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+
+  // and switch back to model view to arrange our scene
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
+  // fps update
   ++frame;
   if (elapsed - timebase > 1000)
   {
@@ -38,6 +51,17 @@ void draw()
     frame = 0;
   }
 
+  // dirty texture hack
+  glEnable(GL_TEXTURE_2D);
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  glBegin(GL_QUADS);
+  glTexCoord2f(0.0f, 0.0f);  glVertex3f(-0.5f, 0.5f, 0.0f);
+  glTexCoord2f(0.0f, 1.0f);  glVertex3f(-0.5f, -0.5f, 0.0f);
+  glTexCoord2f(1.0f, 1.0f);  glVertex3f(0.5f, -0.5f, 0.0f);
+  glTexCoord2f(1.0f, 0.0f);  glVertex3f(0.5f, 0.5f, 0.0f);
+  glEnd();
+  glDisable(GL_TEXTURE_2D);
+  // draw the scene
   graph->draw();
 
   glutSwapBuffers();
@@ -74,8 +98,53 @@ void release(const unsigned char key, const int x, const int y)
   keys[key] = false;
 }
 
+void loadImage(const char* const name)
+{
+  /*
+
+  std::vector<uint8_t> image;
+  uint32_t w, h;
+  uint32_t e = lodepng::decode(image, w, h, name);
+  if (e)
+  {
+    std::cout << "Failed to load image: " << lodepng_error_text(e) << std::endl;
+    return 0;
+  }
+  size_t u2 = 1;
+  while (u2 < w)
+    u2 *= 2;
+  size_t v2 = 1;
+  while (v2 < h)
+    v2 *= 2;
+
+  //double u3 = static_cast<double>(w) / u2;
+  //double v3 = static_cast<double>(h) / v2;
+  std::vector<uint8_t> image2(u2*v2*4);
+  for (size_t y = 0; y < h; ++y)
+  {
+    for (size_t x = 0; x < w; ++x)
+    {
+      for (size_t c = 0; c < 4; ++c)
+        image2[4 * u2 * y + 4 * x + c] = image[4 * w * y + 4 * x + c];
+    }
+  }
+ */
+  idata = stbi_load(name, &width, &height, &bpp, 4);
+
+  glGenTextures(1, &tex);
+  glBindTexture(GL_TEXTURE_2D, tex);
+  glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, idata);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16.0f);
+}
+
 int main(int argc, char** argv)
 {
+  std::cout << "Woaahhhh" << std::endl;
   seed();
 
   glutInit(&argc, argv);
@@ -84,10 +153,21 @@ int main(int argc, char** argv)
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
   window = glutCreateWindow(title);
 
+  // enable blending
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  glShadeModel(GL_FLAT);
+  // we're in 2d land, we don't need backface culling
+  glDisable(GL_CULL_FACE);
+  glDisable(GL_DEPTH_TEST); // don't need this either
+  glShadeModel(GL_FLAT); // dunno what this is
+
+  // background is black
+  //glClearColor(0.0, 0.0, 0.0, 1.0);
+  // background is now sky!
+  glClearColor(0x43 / 255.0, 0xC5 / 255.0, 0xF0 / 255.0, 255.0);
+
+  loadImage("img/hazard.png");
 
   graph = new SceneGraph();
   // create objects
@@ -166,7 +246,6 @@ int main(int argc, char** argv)
     o->y = 0.75;
     graph->insert(SceneGraph::Level::BACKGROUND, o);
   }
-
   {
     Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
     graph->insert(SceneGraph::Level::FOREGROUND, o);
@@ -213,6 +292,7 @@ int main(int argc, char** argv)
 
   // cleanup
   delete graph;
+  stbi_image_free(idata);
 
   return 0;
 }
