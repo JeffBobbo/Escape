@@ -2,3 +2,4 @@
 #include "complex.h"
 #include "polygon.h"
 #include "particle.h"
+#include "texture.h"
