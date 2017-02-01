@@ -9,7 +9,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../external/stb_image.h"
 
-
 VisageTexture::VisageTexture(const std::string& file)
 {
   data = stbi_load(file.c_str(), &width, &height, &bpp, 4);

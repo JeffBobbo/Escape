@@ -25,10 +25,12 @@ class ParticleSystem : public Visage
 {
 public:
   ParticleSystem(size_t m, size_t r)
-    : max(m), rate(r), lifeMin(1000), lifeMax(0)
+    : max(m), rate(r)
+    , lifeMin(1000), lifeMax(0)
     , sizeStart(0.0f), sizeEnd(0.0f)
     , direction(0.0), spray(2.0*Pi())
     , gravity(false)
+    , data(nullptr), texture(0)
   {
     // allocate all the memory up front
     // this'll make memory usage initially higher, but means less allocations
@@ -68,6 +70,7 @@ private:
   // see ParticleSystem::add()
   double count;
 public:
+
   // store the HSVA version, allows faster interpolation
   HSVA hsva0;
   HSVA hsva1;
@@ -79,6 +82,10 @@ public:
   double direction;
   double spray;
   bool gravity;
+
+  uint8_t* data;
+  GLuint texture;
+  int32_t width, height;
 };
 
 #endif

@@ -186,6 +186,8 @@ int main(int argc, char** argv)
     }
     vc->add(vp);
     ParticleSystem* ps = new ParticleSystem(1000, 150);
+    ps->data = loadTexture("img/particles/flame0_256.png", &ps->texture, &ps->width, &ps->height);
+    std::cout << ps->data << std::endl;
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
     ps->lifeMin = 5000;
     ps->lifeMax = 7000;

@@ -132,13 +132,38 @@ void ParticleSystem::draw()
   // this is inefficient, what's above is much better, but it's the only way
   // I can specify sizes individually for particles
   Particle* p = particles;
-  while (p != last)
+  if (data)
   {
-    glPointSize(p->size);
-    glBegin(GL_POINTS);
-    glColor4fv(p->col);
-    glVertex3fv(p->pos);
-    glEnd();
-    ++p;
+    //std::cout << "Data!" << std::endl;
+    std::printf("Data!\n");
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glEnable(GL_TEXTURE_2D);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    while (p != last)
+    {
+      float x0 = p->pos[0] - p->size/2.0f;
+      float y0 = p->pos[1] - p->size/2.0f;
+      float x1 = x0 + p->size;
+      float y1 = y0 + p->size;
+      glBegin(GL_QUADS);
+      glTexCoord2f(0.0f, 0.0f);  glVertex3f(x0, y1, 0.0f);
+      glTexCoord2f(0.0f, 1.0f);  glVertex3f(x0, y0, 0.0f);
+      glTexCoord2f(1.0f, 1.0f);  glVertex3f(x1, y0, 0.0f);
+      glTexCoord2f(1.0f, 0.0f);  glVertex3f(x1, y1, 0.0f);
+      glEnd();
+    }
+    glDisable(GL_TEXTURE_2D);
+  }
+  else
+  {
+    while (p != last)
+    {
+      glPointSize(p->size);
+      glBegin(GL_POINTS);
+      glColor4fv(p->col);
+      glVertex3fv(p->pos);
+      glEnd();
+      ++p;
+    }
   }
 }
