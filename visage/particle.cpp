@@ -136,9 +136,9 @@ void ParticleSystem::draw()
   {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glEnable(GL_TEXTURE_2D);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     while (p != last)
     {
+      glColor4fv(p->col);
       float x0 = p->pos[0] - p->size/2.0f;
       float y0 = p->pos[1] - p->size/2.0f;
       float x1 = x0 + p->size;
