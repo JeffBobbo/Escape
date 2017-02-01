@@ -36,9 +36,9 @@ void ParticleSystem::add()
 
     RGBA c = rgba(hsva0);
     last->col[0] = c.r;
-    last->col[0] = c.g;
-    last->col[0] = c.b;
-    last->col[0] = c.a;
+    last->col[1] = c.g;
+    last->col[2] = c.b;
+    last->col[3] = c.a;
     // create random direction
     double dir = direction + random(-spray/2.0, spray/2.0);
     double speed = random(0.0f, 0.1f);
@@ -134,8 +134,6 @@ void ParticleSystem::draw()
   Particle* p = particles;
   if (data)
   {
-    //std::cout << "Data!" << std::endl;
-    std::printf("Data!\n");
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glEnable(GL_TEXTURE_2D);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -151,6 +149,7 @@ void ParticleSystem::draw()
       glTexCoord2f(1.0f, 1.0f);  glVertex3f(x1, y0, 0.0f);
       glTexCoord2f(1.0f, 0.0f);  glVertex3f(x1, y1, 0.0f);
       glEnd();
+      ++p;
     }
     glDisable(GL_TEXTURE_2D);
   }
@@ -166,4 +165,9 @@ void ParticleSystem::draw()
       ++p;
     }
   }
+}
+
+void ParticleSystem::loadParticleImage(const std::string& file)
+{
+  data = loadTexture(file.c_str(), &texture, &width, &height);
 }

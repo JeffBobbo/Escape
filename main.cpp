@@ -84,7 +84,6 @@ void release(const unsigned char key, const int x, const int y)
 
 int main(int argc, char** argv)
 {
-  std::cout << "Woaahhhh" << std::endl;
   seed();
 
   glutInit(&argc, argv);
@@ -186,12 +185,11 @@ int main(int argc, char** argv)
     }
     vc->add(vp);
     ParticleSystem* ps = new ParticleSystem(1000, 150);
-    ps->data = loadTexture("img/particles/flame0_256.png", &ps->texture, &ps->width, &ps->height);
-    std::cout << ps->data << std::endl;
+    ps->loadParticleImage("img/particles/particle4.png");
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
     ps->lifeMin = 5000;
     ps->lifeMax = 7000;
-    ps->sizeStart = 5.0f;
+    ps->sizeStart = 0.25f;
     ps->sizeEnd = 0.0f;
     vc->add(ps);
     o->setVisage(vc);

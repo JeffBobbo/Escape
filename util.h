@@ -204,6 +204,10 @@ inline uint8_t* loadTexture(const char* const file, uint* texture,
 {
   int32_t bpp;
   uint8_t* data = stbi_load(file, width, height, &bpp, 4);
+  if (!data)
+  {
+    printf("%s\n", stbi_failure_reason());
+  }
 
   glGenTextures(1, texture);
   glBindTexture(GL_TEXTURE_2D, *texture);

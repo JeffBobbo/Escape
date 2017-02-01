@@ -25,7 +25,9 @@ class ParticleSystem : public Visage
 {
 public:
   ParticleSystem(size_t m, size_t r)
-    : max(m), rate(r)
+    : max(m)
+    , count(0.0)
+    , rate(r)
     , lifeMin(1000), lifeMax(0)
     , sizeStart(0.0f), sizeEnd(0.0f)
     , direction(0.0), spray(2.0*Pi())
@@ -57,6 +59,8 @@ public:
   void update();
 
   virtual void draw();
+
+  void loadParticleImage(const std::string& file);
 
 private:
   Particle* particles;
