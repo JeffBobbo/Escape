@@ -30,6 +30,11 @@ Player::Player()
   vc->add(eye);
   vc->add(body);
   setVisage(vc);
+
+  /*
+  VisageTexture* vt = new VisageTexture("img/M484SpaceSoldier.png");
+  setVisage(vt);
+  */
 }
 
 void Player::idle()

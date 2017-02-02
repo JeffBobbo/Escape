@@ -30,6 +30,10 @@ void VisageTexture::draw()
   glEnable(GL_TEXTURE_2D);
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBegin(GL_QUADS);
+  float u0 = 9.0f / 530.0f;
+  float u1 = 57.0f / 530.0f;
+  float v0 = 12.0f / 580.0f;
+  float v1 = 60.0f / 580.0f;
   glTexCoord2f(0.0f, 0.0f);  glVertex3f(-0.5f, 0.5f, 0.0f);
   glTexCoord2f(0.0f, 1.0f);  glVertex3f(-0.5f, -0.5f, 0.0f);
   glTexCoord2f(1.0f, 1.0f);  glVertex3f(0.5f, -0.5f, 0.0f);
