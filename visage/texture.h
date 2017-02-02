@@ -3,7 +3,7 @@
 
 #include "visage.h"
 
-#include <vector>
+#include <string>
 #include <stdint.h>
 
 #include "../util.h"
@@ -17,18 +17,21 @@ public:
   VisageTexture(const std::string& file);
   virtual ~VisageTexture()
   {
-    stbi_image_free(data);
   }
 
   virtual inline Type type() const { return Type::TEXTURE; }
 
+  void setAtlasSize(int32_t r, int32_t c) { rows = r; columns = c; }
+  void setAtlasSprite(int32_t x, int32_t y) { sprite_c = x; sprite_r = y; }
   virtual void draw();
 
 private:
   float vertices[12];
-  GLuint texture;
-  uint8_t* data;
-  int32_t width, height, bpp;
+  std::string file;
+  int32_t rows;
+  int32_t columns;
+  int32_t sprite_r;
+  int32_t sprite_c;
 };
 
 #endif

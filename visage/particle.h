@@ -32,7 +32,7 @@ public:
     , sizeStart(0.0f), sizeEnd(0.0f)
     , direction(0.0), spray(2.0*Pi())
     , gravity(false)
-    , data(nullptr), texture(0)
+    , data(nullptr)
   {
     // allocate all the memory up front
     // this'll make memory usage initially higher, but means less allocations
@@ -88,7 +88,6 @@ public:
   bool gravity;
 
   uint8_t* data;
-  GLuint texture;
   int32_t width, height;
 };
 

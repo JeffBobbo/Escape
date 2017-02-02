@@ -1,11 +1,11 @@
 #ifndef IMAGE_H_INCLUDE
 #define IMAGE_H_INCLUDE
 
-#include <map>
 #include <string>
 #include <stdint.h>
 
 #include "external/stb_image.h"
+#include "gli.h"
 
 struct Texture
 {
@@ -13,13 +13,12 @@ struct Texture
   int32_t width;
   int32_t height;
   int32_t bpp;
+  GLuint tex;
 
   // atlasing information
   int32_t rows;
   int32_t columns;
 };
-
-std::map<char*, Texture> texmap;
 
 //uint8_t* loadTexture(const char* const file, uint* texture,
 //                            int32_t* width, int32_t* height);
@@ -35,11 +34,12 @@ inline void dropTexture(const char* const t)
 {
   dropTexture(std::string(t));
 }
+void dropAllTextures();
 
-uint8_t* getTexture(const std::string& t);
-inline uint8_t* getTexture(const char* const t)
+uint8_t* getTexture(const std::string& t, int32_t& width, int32_t& height);
+inline uint8_t* getTexture(const char* const t, int32_t& width, int32_t& height)
 {
-  return getTexture(std::string(t));
+  return getTexture(std::string(t), width, height);
 }
 
 #endif

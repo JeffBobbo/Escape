@@ -5,39 +5,39 @@
 #include "../util.h"
 
 #include "../colour.h"
+#include "../image.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "../external/stb_image.h"
-
-VisageTexture::VisageTexture(const std::string& file)
+VisageTexture::VisageTexture(const std::string& f)
 {
-  data = stbi_load(file.c_str(), &width, &height, &bpp, 4);
-
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16.0f);
+  file = f;
+  loadTexture(file);
+  rows = 1;
+  columns = 1;
+  sprite_r = 0;
+  sprite_c = 0;
 }
 
 void VisageTexture::draw()
 {
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  int32_t w, h;
+  uint8_t* d = getTexture(file, w, h);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, d);
 
   glEnable(GL_TEXTURE_2D);
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBegin(GL_QUADS);
-  float u0 = 9.0f / 530.0f;
-  float u1 = 57.0f / 530.0f;
-  float v0 = 12.0f / 580.0f;
-  float v1 = 60.0f / 580.0f;
-  glTexCoord2f(0.0f, 0.0f);  glVertex3f(-0.5f, 0.5f, 0.0f);
-  glTexCoord2f(0.0f, 1.0f);  glVertex3f(-0.5f, -0.5f, 0.0f);
-  glTexCoord2f(1.0f, 1.0f);  glVertex3f(0.5f, -0.5f, 0.0f);
-  glTexCoord2f(1.0f, 0.0f);  glVertex3f(0.5f, 0.5f, 0.0f);
+
+  float uw = 1.0f / columns;
+  float u0 = sprite_c * uw;
+  float u1 = (sprite_c+1) * uw;
+  float vw = 1.0f / rows;
+  float v0 = sprite_r * vw;
+  float v1 = (sprite_r+1) * vw;
+
+  glTexCoord2f(u0, v0);  glVertex3f(-0.5f, 0.5f, 0.0f);
+  glTexCoord2f(u0, v1);  glVertex3f(-0.5f, -0.5f, 0.0f);
+  glTexCoord2f(u1, v1);  glVertex3f(0.5f, -0.5f, 0.0f);
+  glTexCoord2f(u1, v0);  glVertex3f(0.5f, 0.5f, 0.0f);
   glEnd();
   glDisable(GL_TEXTURE_2D);
 }

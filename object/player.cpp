@@ -6,6 +6,7 @@
 
 Player::Player()
 {
+  /*
   VisageComplex* vc = new VisageComplex();
   VisagePolygon* body = VisagePolygon::rectangle(0.2, 0.35);
   body->setColour(0xFFFFFFFF);
@@ -31,10 +32,12 @@ Player::Player()
   vc->add(body);
   setVisage(vc);
 
-  /*
   VisageTexture* vt = new VisageTexture("img/M484SpaceSoldier.png");
   setVisage(vt);
   */
+  VisageTexture* vt = new VisageTexture("img/character.png");
+  vt->setAtlasSize(9, 8);
+  setVisage(vt);
 }
 
 void Player::idle()
@@ -73,4 +76,8 @@ void Player::move()
     x = nx;
     y = ny;
   }
+
+  static int32_t sprite = 0;
+  sprite = std::abs(((elapsed / 200) % 7) - 3);
+  static_cast<VisageTexture*>(visage)->setAtlasSprite(sprite, 0);
 }

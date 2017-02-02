@@ -9,6 +9,7 @@
 
 #include "visage/allvisage.h"
 #include "colour.h"
+#include "image.h"
 
 // fps stuff
 int64_t frame = 0, timebase = 0;
@@ -23,7 +24,7 @@ int screenHeight = 480;
 
 const int DEFAULT_WIDTH  = 640;
 const int DEFAULT_HEIGHT = 480;
-const double TILE_SIZE = 64.0;
+const double TILE_SIZE = 256.0;
 
 void draw()
 {
@@ -266,7 +267,10 @@ int main(int argc, char** argv)
   glutMainLoop();
 
   // cleanup
+  // remove the SceneGraph and all objects
   delete graph;
+  // free up all the textures
+  dropAllTextures();
 
   return 0;
 }

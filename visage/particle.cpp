@@ -3,6 +3,7 @@
 #include "../gli.h"
 
 #include "../util.h"
+#include "../image.h"
 
 double offset = 0.1;
 Particle::Particle()
@@ -169,5 +170,5 @@ void ParticleSystem::draw()
 
 void ParticleSystem::loadParticleImage(const std::string& file)
 {
-  data = loadTexture(file.c_str(), &texture, &width, &height);
+  data = getTexture(file, width, height);
 }
