@@ -5,7 +5,7 @@ MAIN := main.o util.o scenegraph.o object/object.o object/player.o visage/polygo
 # general compiler settings
 CPPFLAGS=
 CXXFLAGS=-Wall -Wextra -Wpedantic -std=c++11
-LDFLAGS=-lglut -lGL
+LDFLAGS=-L/usr/lib/nvidia-304/ -lglut -lGL
 
 debug: CXXFLAGS+=-O0 -ggdb
 debug: all
