@@ -38,25 +38,37 @@ Player::Player()
   VisageTexture* vt = new VisageTexture("img/character.png");
   vt->setAtlasSize(9, 8);
   setVisage(vt);
+
+  facingRight = true;
+  lastMove = 0;
 }
 
 void Player::idle()
 {
 }
 
+#include <iostream>
+#include <algorithm>
 void Player::move()
 {
   double nx = x;
   double ny = y;
 
+  bool running = false;
   if (keys['w'])
     ny += 0.5 * (delta / 1000.0);
   if (keys['s'])
     ny -= 0.5 * (delta / 1000.0);
   if (keys['a'])
-    nx -= 0.5 * (delta / 1000.0);
+  {
+    running = true;
+    nx -= 1.5 * (delta / 1000.0);
+  }
   if (keys['d'])
-    nx += 0.5 * (delta / 1000.0);
+  {
+    running = true;
+    nx += 1.5 * (delta / 1000.0);
+  }
 
   bool good = true;
   // make sure we can move here
@@ -73,11 +85,38 @@ void Player::move()
 
   if (good)
   {
+    // if we move in x, face the correct way, otherwise keep facing the same way
+    facingRight = (nx-x) != 0.0 ? (nx-x) > 0.0 : facingRight;
+    if (nx-x != 0.0)
+      lastMove = elapsed;
+    // otherwise, set it appropriately.
     x = nx;
     y = ny;
   }
 
-  static int32_t sprite = 0;
-  sprite = std::abs(((elapsed / 200) % 7) - 3);
-  static_cast<VisageTexture*>(visage)->setAtlasSprite(sprite, 0);
+  int32_t sprite;
+  if (running) // if we're running, use a running sprite (index 5-12)
+  {
+    sprite = (elapsed / 100) % 8 + 4;
+  }
+  else
+  {
+    uint64_t t = elapsed - lastMove;
+    if (t > 2500)
+    {
+      if (t > 10000)
+      {
+        sprite = interpolate(18, 23, std::min(1.0, (t-10000)/500.0));
+      }
+      else
+      {
+        sprite = 64;
+      }
+    }
+    else
+      sprite = std::abs(((elapsed / 200) % 7) - 3);
+  }
+  VisageTexture* vt = static_cast<VisageTexture*>(visage);
+  vt->setAtlasSprite(sprite % 8, sprite / 8);
+  vt->setFlip(!facingRight);
 }

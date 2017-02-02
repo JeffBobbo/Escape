@@ -14,6 +14,10 @@ public:
   virtual inline Type type() const { return Type::PLAYER; }
   virtual void idle();
   virtual void move();
+
+private:
+  bool facingRight;
+  uint64_t lastMove;
 };
 
 #endif

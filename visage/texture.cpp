@@ -15,8 +15,10 @@ VisageTexture::VisageTexture(const std::string& f)
   columns = 1;
   sprite_r = 0;
   sprite_c = 0;
+  flip = false;
 }
 
+#include <iostream>
 void VisageTexture::draw()
 {
   int32_t w, h;
@@ -34,6 +36,12 @@ void VisageTexture::draw()
   float v0 = sprite_r * vw;
   float v1 = (sprite_r+1) * vw;
 
+  if (flip)
+  {
+    float t = u0;
+    u0 = u1;
+    u1 = t;
+  }
   glTexCoord2f(u0, v0);  glVertex3f(-0.5f, 0.5f, 0.0f);
   glTexCoord2f(u0, v1);  glVertex3f(-0.5f, -0.5f, 0.0f);
   glTexCoord2f(u1, v1);  glVertex3f(0.5f, -0.5f, 0.0f);

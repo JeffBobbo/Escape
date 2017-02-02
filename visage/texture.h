@@ -23,6 +23,7 @@ public:
 
   void setAtlasSize(int32_t r, int32_t c) { rows = r; columns = c; }
   void setAtlasSprite(int32_t x, int32_t y) { sprite_c = x; sprite_r = y; }
+  void setFlip(bool f) { flip = f; }
   virtual void draw();
 
 private:
@@ -32,6 +33,7 @@ private:
   int32_t columns;
   int32_t sprite_r;
   int32_t sprite_c;
+  bool flip;
 };
 
 #endif

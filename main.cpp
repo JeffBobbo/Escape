@@ -24,7 +24,7 @@ int screenHeight = 480;
 
 const int DEFAULT_WIDTH  = 640;
 const int DEFAULT_HEIGHT = 480;
-const double TILE_SIZE = 256.0;
+const double TILE_SIZE = 128.0;
 
 void draw()
 {
