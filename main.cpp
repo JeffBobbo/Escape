@@ -18,6 +18,13 @@ bool keys[255] = {0};
 SceneGraph* graph;
 int window;
 
+int screenWidth = 640;
+int screenHeight = 480;
+
+const int DEFAULT_WIDTH  = 640;
+const int DEFAULT_HEIGHT = 480;
+const double TILE_SIZE = 64.0;
+
 void draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
@@ -25,7 +32,7 @@ void draw()
   // setup the projection matrix
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+  glOrtho(-screenWidth/TILE_SIZE/2.0, screenWidth/TILE_SIZE/2.0, -screenHeight/TILE_SIZE/2.0, screenHeight/TILE_SIZE/2.0, -1.0, 0.0);
 
   // and switch back to model view to arrange our scene
   glMatrixMode(GL_MODELVIEW);
@@ -68,7 +75,6 @@ void mouse(const int button, const int state, const int x, const int y)
   (void)y;
 }
 
-
 void keyboard(const unsigned char key, const int x, const int y)
 {
   (void)x;
@@ -82,13 +88,29 @@ void release(const unsigned char key, const int x, const int y)
   keys[key] = false;
 }
 
+void reshape(int width, int height)
+{
+  screenWidth = width;
+  screenHeight = height;
+
+  glViewport(0, 0, width, height); // Reset The Current Viewport
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+
+  glOrtho(-screenWidth/TILE_SIZE/2.0, screenWidth/TILE_SIZE/2.0, -screenHeight/TILE_SIZE/2.0, screenHeight/TILE_SIZE/2.0, -1.0, 0.0);
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+}
+
 int main(int argc, char** argv)
 {
   seed();
 
   glutInit(&argc, argv);
   glutInitWindowPosition(-1, -1);
-  glutInitWindowSize(500, 500);
+  glutInitWindowSize(640, 480);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
   window = glutCreateWindow(title);
 
@@ -185,7 +207,7 @@ int main(int argc, char** argv)
     }
     vc->add(vp);
     ParticleSystem* ps = new ParticleSystem(1000, 150);
-    ps->loadParticleImage("img/particles/particle4.png");
+    ps->loadParticleImage("img/particles/soft_glow_alpha_128.png");
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
     ps->lifeMin = 5000;
     ps->lifeMax = 7000;
@@ -195,7 +217,7 @@ int main(int argc, char** argv)
     o->setVisage(vc);
     o->x = -0.75;
     o->y = 0.75;
-    graph->insert(SceneGraph::Level::BACKGROUND, o);
+    graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
     Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
@@ -224,6 +246,8 @@ int main(int argc, char** argv)
   // tell glut to return from glutMainLoop when closing the application
   // this lets us do proper clean up
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
+
+  glutReshapeFunc(reshape);
 
   // set the display function callback
   glutDisplayFunc(draw);
