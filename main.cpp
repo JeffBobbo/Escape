@@ -221,7 +221,26 @@ int main(int argc, char** argv)
     graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
-    Object* o = new Wall(2.0, 0.3, 0.0, -0.85);
+    Object* o = new Object();
+    ParticleSystem* ps = new ParticleSystem(1000, 200);
+    ps->loadParticleImage("img/particles/soft_glow_alpha_128.png");
+    ps->setColours(fromInt(0xE1F0F5FF), fromInt(0xFFFFFF00));
+    ps->lifeMin = 2000;
+    ps->lifeMax = 3000;
+    ps->sizeStart = 1.0f;
+    ps->sizeEnd = 0.0f;
+    ps->speedStart = 2.0;
+    ps->speedEnd = 0.0;
+    ps->spray = pi() / 4;
+    ps->direction = pi()/2;
+    ps->setGravity(true);
+    o->setVisage(ps);
+    o->x = 2.75;
+    o->y = 0.0;
+    graph->insert(SceneGraph::Level::SCENARY, o);
+  }
+  {
+    Object* o = new Wall(10.0, 0.3, 0.0, -0.85);
     graph->insert(SceneGraph::Level::FOREGROUND, o);
   }
   {

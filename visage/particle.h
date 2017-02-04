@@ -30,7 +30,7 @@ public:
     , rate(r)
     , lifeMin(1000), lifeMax(0)
     , sizeStart(0.0f), sizeEnd(0.0f)
-    , direction(0.0), spray(2.0*Pi())
+    , direction(0.0), spray(2.0*pi())
     , gravity(false)
     , data(nullptr)
   {

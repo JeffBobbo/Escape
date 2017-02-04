@@ -30,7 +30,7 @@ VisagePolygon* VisagePolygon::circle(double radius, uint32_t points)
   VisagePolygon* vp = new VisagePolygon();
   // calculate angle between points
   // take the negative, we want our vertices to go anticlockwise
-  const double increment = -(2 * Pi()) / points;
+  const double increment = -(2 * pi()) / points;
   for (uint32_t i = 0; i < points; ++i)
   {
     double x = radius * std::cos(increment * i);

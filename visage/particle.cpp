@@ -9,7 +9,7 @@ double offset = 0.1;
 Particle::Particle()
 {
   // set position
-  double angle = random(-Pi(), Pi());
+  double angle = random(-pi(), pi());
   double o = random(0.0, offset);
   pos[0] = o * std::cos(angle);
   pos[1] = o * std::sin(angle);

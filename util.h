@@ -37,19 +37,35 @@ extern int64_t delta;
 static inline uint64_t tickCount() { return elapsed; }
 
 // math stuff
-constexpr double Pi()
+#ifdef __GNUC__
+// it seems GCC goes against the standard and allows std::atan2 to work
+// as constexpr, so let's use that
+constexpr double pi()
 {
   return std::atan2(0.0, -1.0);
 }
+#else
+// but use an inline call and static const variable for other systems
+inline double pi()
+{
+  static const double p = std::atan2(0.0, -1.0);
+  return p;
+}
+#endif
+constexpr double gravity()
+{
+  return 0.00981f;
+}
+
 
 inline double radians(const double degrees)
 {
-  static const double ratio = Pi() / 180.0;
+  static const double ratio = pi() / 180.0;
   return degrees * ratio;
 }
 inline double degrees(const double radians)
 {
-  static const double ratio = 180.0 / Pi();
+  static const double ratio = 180.0 / pi();
   return radians * ratio;
 }
 
