@@ -16,22 +16,20 @@ namespace mouse
   bool right();
   Wheel wheel();
   void velocity(double& x, double& y);
-  int64_t lastEvent();
+  int64_t idle();
+  int64_t idle(const int b);
 
   void registerCallbacks();
 }
 
-struct KeyState
+namespace keyboard
 {
-  int key;
-  int x;
-  int y;
-  int mod;
-};
+  bool pressed(const int id);
+  int modifiers(const int id);
+  int64_t idle();
+  int64_t idle(const int id);
 
-extern bool keys[256];
-
-bool keyDown(const int key);
-inline bool keyUp(const int key) { return !keyDown(key); }
+  void registerCallbacks();
+}
 
 #endif
