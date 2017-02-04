@@ -69,21 +69,6 @@ void update()
   glutPostRedisplay();
 }
 
-void keyboard(const unsigned char key, const int x, const int y)
-{
-  (void)x;
-  (void)y;
-  keys[key] = true;
-  int mod = glutGetModifiers();
-}
-void release(const unsigned char key, const int x, const int y)
-{
-  (void)x;
-  (void)y;
-  keys[key] = false;
-  int mod = glutGetModifiers();
-}
-
 void reshape(int width, int height)
 {
   screenWidth = width;
@@ -270,9 +255,7 @@ int main(int argc, char** argv)
   glutIdleFunc(update);
 
   // kb stuff
-  glutIgnoreKeyRepeat(1);
-  glutKeyboardFunc(keyboard);
-  glutKeyboardUpFunc(release);
+  keyboard::registerCallbacks();
 
   // mouse stuff
   mouse::registerCallbacks();

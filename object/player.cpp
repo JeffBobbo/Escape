@@ -1,6 +1,7 @@
 #include "player.h"
 
-#include "../main.h" // keys
+#include "../main.h"
+#include "../input.h"
 #include "../visage/allvisage.h"
 #include "../visage/animatrix.h"
 
@@ -55,16 +56,16 @@ void Player::move()
   double ny = y;
 
   bool running = false;
-  if (keys['w'])
+  if (keyboard::pressed('w'))
     ny += 0.5 * (delta / 1000.0);
-  if (keys['s'])
+  if (keyboard::pressed('s'))
     ny -= 0.5 * (delta / 1000.0);
-  if (keys['a'])
+  if (keyboard::pressed('a'))
   {
     running = true;
     nx -= 1.5 * (delta / 1000.0);
   }
-  if (keys['d'])
+  if (keyboard::pressed('d'))
   {
     running = true;
     nx += 1.5 * (delta / 1000.0);
