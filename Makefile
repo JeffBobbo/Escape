@@ -11,8 +11,8 @@ debug: CXXFLAGS+=-O0 -ggdb
 debug: all
 
 # compile for release, optimisations, no debug etc
-release: CPPFLAGS+=-O3
-release: CXXFLAGS+=-DNDEBUG
+release: CXXFLAGS+=-O3
+release: CPPFLAGS+=-DNDEBUG
 release: all
 
 all: $(MAIN)
@@ -25,5 +25,5 @@ clean:
 	$(warning Cleaning...)
 	@$(RM) $(MAIN)
 
-.PHONY: all opt clean
+.PHONY: debug release all clean
 
