@@ -9,7 +9,6 @@
 
 const char* const title = "Shifter";
 
-extern bool keys[255];
 extern SceneGraph* graph;
 
 #endif

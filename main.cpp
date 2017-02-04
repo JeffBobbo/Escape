@@ -5,6 +5,8 @@
 #include "gli.h"
 
 #include "util.h"
+#include "input.h"
+
 #include "object/player.h"
 
 #include "visage/allvisage.h"
@@ -15,7 +17,6 @@
 int64_t frame = 0, timebase = 0;
 // extern stuff
 int64_t elapsed = 0, last, delta;
-bool keys[255] = {0};
 SceneGraph* graph;
 int window;
 
@@ -68,25 +69,19 @@ void update()
   glutPostRedisplay();
 }
 
-void mouse(const int button, const int state, const int x, const int y)
-{
-  (void)button;
-  (void)state;
-  (void)x;
-  (void)y;
-}
-
 void keyboard(const unsigned char key, const int x, const int y)
 {
   (void)x;
   (void)y;
   keys[key] = true;
+  int mod = glutGetModifiers();
 }
 void release(const unsigned char key, const int x, const int y)
 {
   (void)x;
   (void)y;
   keys[key] = false;
+  int mod = glutGetModifiers();
 }
 
 void reshape(int width, int height)
@@ -280,7 +275,7 @@ int main(int argc, char** argv)
   glutKeyboardUpFunc(release);
 
   // mouse stuff
-  glutMouseFunc(mouse);
+  mouse::registerCallbacks();
 
   // begin glut loop
   glutMainLoop();
