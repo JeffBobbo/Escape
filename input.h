@@ -22,12 +22,13 @@ namespace mouse
   void registerCallbacks();
 }
 
+#include "keys.h"
 namespace keyboard
 {
-  bool pressed(const int id);
-  int modifiers(const int id);
+  bool pressed(const KeyCode id);
+  int modifiers(const KeyCode id);
   int64_t idle();
-  int64_t idle(const int id);
+  int64_t idle(const KeyCode id);
 
   void registerCallbacks();
 }

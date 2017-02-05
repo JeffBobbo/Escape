@@ -111,17 +111,16 @@ struct KeyState
 };
 struct KeyboardState
 {
-  KeyState keys[256];
+  KeyState keys[400]; // ASCII takes 0..255, leaves plenty of extra room for special keys
   int64_t last;
 };
 KeyboardState k;
 
-bool keyboard::pressed(const int id) { return k.keys[id].pressed; }
-int keyboard::modifiers(const int id) { return k.keys[id].mod; }
+bool keyboard::pressed(const KeyCode id) { return k.keys[static_cast<int>(id)].pressed; }
+int keyboard::modifiers(const KeyCode id) { return k.keys[static_cast<int>(id)].mod; }
 int64_t keyboard::idle() { return last; }
-int64_t keyboard::idle(const int id) { return k.keys[id].last; }
+int64_t keyboard::idle(const KeyCode id) { return k.keys[static_cast<int>(id)].last; }
 
-#include <iostream>
 void kb_press(const unsigned char key, const int x, const int y)
 {
   // leaving these bits out for now
@@ -154,6 +153,22 @@ void kb_release(const unsigned char key, const int x, const int y)
   k.keys[key].mod = glutGetModifiers();
   k.keys[key].last = elapsed;
 }
+void kb_spec_press(const int key, const int x, const int y)
+{
+  (void)x;
+  (void)y;
+  k.keys[key + 256].pressed = true;
+  k.keys[key + 256].mod = glutGetModifiers();
+  k.keys[key + 256].last = elapsed;
+}
+void kb_spec_release(const int key, const int x, const int y)
+{
+  (void)x;
+  (void)y;
+  k.keys[key + 256].pressed = false;
+  k.keys[key + 256].mod = glutGetModifiers();
+  k.keys[key + 256].last = elapsed;
+}
 void keyboard::registerCallbacks()
 {
   // not trivial is initialise KeyboardState with the declaration
@@ -164,4 +179,6 @@ void keyboard::registerCallbacks()
   glutIgnoreKeyRepeat(1);
   glutKeyboardFunc(kb_press);
   glutKeyboardUpFunc(kb_release);
+  glutSpecialFunc(kb_spec_press);
+  glutSpecialFunc(kb_spec_release);
 }

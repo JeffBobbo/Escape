@@ -50,25 +50,27 @@ void Player::idle()
 
 #include <iostream>
 #include <algorithm>
+#include "../controls.h"
 void Player::move()
 {
   double nx = x;
   double ny = y;
 
   bool running = false;
-  if (keyboard::pressed('w'))
+  if (keyboard::pressed(controls::bind(controls::Action::JUMP)))
     ny += 0.5 * (delta / 1000.0);
-  if (keyboard::pressed('s'))
+  if (keyboard::pressed(controls::bind(controls::Action::CROUCH)))
     ny -= 0.5 * (delta / 1000.0);
-  if (keyboard::pressed('a'))
+  bool walk = keyboard::pressed(controls::bind(controls::Action::WALK_MODIFIER));
+  if (keyboard::pressed(controls::bind(controls::Action::MOVE_LEFT)))
   {
     running = true;
-    nx -= 1.5 * (delta / 1000.0);
+    nx -= (walk ? 0.75 : 1.5) * (delta / 1000.0);
   }
-  if (keyboard::pressed('d'))
+  if (keyboard::pressed(controls::bind(controls::Action::MOVE_RIGHT)))
   {
     running = true;
-    nx += 1.5 * (delta / 1000.0);
+    nx += (walk ? 0.75 : 1.5) * (delta / 1000.0);
   }
 
   bool good = true;

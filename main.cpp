@@ -6,6 +6,7 @@
 
 #include "util.h"
 #include "input.h"
+#include "controls.h"
 
 #include "object/player.h"
 
@@ -259,6 +260,9 @@ int main(int argc, char** argv)
 
   // mouse stuff
   mouse::registerCallbacks();
+
+  // setup controls
+  controls::init();
 
   // begin glut loop
   glutMainLoop();
