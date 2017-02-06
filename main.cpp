@@ -267,6 +267,11 @@ int main(int argc, char** argv)
   // begin glut loop
   glutMainLoop();
 
+  // we're on the way out
+
+  // save the controls
+  controls::save();
+
   // cleanup
   // remove the SceneGraph and all objects
   delete graph;
