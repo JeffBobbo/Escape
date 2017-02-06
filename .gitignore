@@ -4,3 +4,7 @@
 
 # sublime text
 *.sublime-*
+
+
+# game files
+controls.txt
