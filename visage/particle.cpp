@@ -42,9 +42,8 @@ void ParticleSystem::add()
     last->col[3] = c.a;
     // create random direction
     double dir = direction + random(-spray/2.0, spray/2.0);
-    double speed = random(0.0f, 0.1f);
-    last->vel[0] = speed * std::cos(dir);
-    last->vel[1] = speed * std::sin(dir);
+    last->vel[0] = speedStart * std::cos(dir);
+    last->vel[1] = speedStart * std::sin(dir);
     last->vel[2] = 0.0;
 
     ++last;
@@ -69,12 +68,16 @@ void ParticleSystem::update()
       double prog = p->age / static_cast<double>(p->life);
 
       if (gravity) // apply some Gs
-        p->vel[1] -= 0.0005f * delta;
+        p->vel[1] -= ::gravity() * delta;
+
+      const double a = std::atan2(p->vel[1], p->vel[0]);
+      const double s = interpolate(speedStart, speedEnd, prog);
+      p->vel[0] = s * std::cos(a);
+      p->vel[1] = s * std::sin(a);
 
       // move
       p->pos[0] += p->vel[0] * (delta / 1000.0f);
       p->pos[1] += p->vel[1] * (delta / 1000.0f);
-      p->pos[2] += p->vel[2] * (delta / 1000.0f);
 
       // interpolate colours
       // do it in HSV space because it looks better, but is slightly slower
