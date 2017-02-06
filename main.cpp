@@ -195,7 +195,7 @@ int main(int argc, char** argv)
     ps->lifeMax = 7000;
     ps->sizeStart = 10.0f;
     ps->sizeEnd = 1.0f;
-    ps->speedStart = 10.0;
+    ps->speedStart = 5.0;
     ps->speedEnd = 0.0;
     vc->add(ps);
     o->setVisage(vc);

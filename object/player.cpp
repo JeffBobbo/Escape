@@ -5,6 +5,8 @@
 #include "../visage/allvisage.h"
 #include "../visage/animatrix.h"
 
+#include "../controls.h"
+
 Player::Player()
 {
   /*
@@ -38,6 +40,24 @@ Player::Player()
   */
   VisageTexture* vt = new VisageTexture("img/character.png");
   vt->setAtlasSize(9, 8);
+  {
+    Animatrix* a = new Animatrix();
+    a->startColour = 0xFFFFFFFF;
+    a->endColour = 0xFF0000FF;
+    a->start = 0;
+    a->end = 350;
+    a->loop = 700;
+    vt->addAnimatrix(a);
+  }
+  {
+    Animatrix* a = new Animatrix();
+    a->startColour = 0xFF3F3FFF;
+    a->endColour = 0xFFFFFFFF;
+    a->start = 350;
+    a->end = 700;
+    a->loop = 700;
+    vt->addAnimatrix(a);
+  }
   setVisage(vt);
 
   facingRight = true;
@@ -49,9 +69,7 @@ void Player::idle()
 {
 }
 
-#include <iostream>
 #include <algorithm>
-#include "../controls.h"
 void Player::move()
 {
   double nx = x;
