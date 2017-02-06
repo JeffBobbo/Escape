@@ -23,6 +23,7 @@ void Object::draw()
   // transformations
   glTranslatef(x, y, 0.0);
   glRotatef(angle, 0.0, 0.0, 1.0);
+  glScalef(width, height, 1.0f);
 
   if (visage)
     visage->draw();

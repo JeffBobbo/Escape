@@ -4,28 +4,24 @@
 
 #include "../util.h"
 
-VisagePolygon* VisagePolygon::rectangle(double u, double v)
+VisagePolygon* VisagePolygon::rectangle()
 {
   VisagePolygon* vp = new VisagePolygon();
-  vp->vertices.push_back(new Vec2D(-u/2, -v/2));
-  vp->vertices.push_back(new Vec2D( u/2, -v/2));
-  vp->vertices.push_back(new Vec2D( u/2,  v/2));
-  vp->vertices.push_back(new Vec2D(-u/2,  v/2));
+  vp->vertices.push_back(new Vec2D(-0.5f, -0.5f));
+  vp->vertices.push_back(new Vec2D( 0.5f, -0.5f));
+  vp->vertices.push_back(new Vec2D( 0.5f,  0.5f));
+  vp->vertices.push_back(new Vec2D(-0.5f,  0.5f));
   return vp;
 }
-VisagePolygon* VisagePolygon::square(double u)
-{
-  return rectangle(u, u);
-}
-VisagePolygon* VisagePolygon::triangle(double width, double height, double offset)
+VisagePolygon* VisagePolygon::triangle(double offset)
 {
   VisagePolygon* vp = new VisagePolygon();
-  vp->vertices.push_back(new Vec2D(-width/2.0, -height/2.0));
-  vp->vertices.push_back(new Vec2D(width/2.0, -height/2.0));
-  vp->vertices.push_back(new Vec2D(width*offset-width/2.0, height/2));
+  vp->vertices.push_back(new Vec2D(-0.5f, -0.5f));
+  vp->vertices.push_back(new Vec2D( 0.5f, -0.5f));
+  vp->vertices.push_back(new Vec2D(offset, 0.5f));
   return vp;
 }
-VisagePolygon* VisagePolygon::circle(double radius, uint32_t points)
+VisagePolygon* VisagePolygon::circle(uint32_t points)
 {
   VisagePolygon* vp = new VisagePolygon();
   // calculate angle between points
@@ -33,8 +29,8 @@ VisagePolygon* VisagePolygon::circle(double radius, uint32_t points)
   const double increment = -(2 * pi()) / points;
   for (uint32_t i = 0; i < points; ++i)
   {
-    double x = radius * std::cos(increment * i);
-    double y = radius * std::sin(increment * i);
+    double x = std::cos(increment * i);
+    double y = std::sin(increment * i);
     vp->vertices.push_back(new Vec2D(x, y));
   }
   return vp;

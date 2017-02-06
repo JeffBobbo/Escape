@@ -42,6 +42,7 @@ Player::Player()
 
   facingRight = true;
   lastMove = 0;
+  v = 0.0;
 }
 
 void Player::idle()
@@ -72,6 +73,8 @@ void Player::move()
     running = true;
     nx += (walk ? 0.75 : 1.5) * (delta / 1000.0);
   }
+  //v -= 0.00981f * (delta / 1000.0);
+  //ny += v;// * (delta / 1000);
 
   bool good = true;
   // make sure we can move here

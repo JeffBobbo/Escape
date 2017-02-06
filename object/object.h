@@ -14,14 +14,14 @@ public:
     PLAYER
   };
 
-  Object()
+  Object(double w = 1.0, double h = 1.0)
   {
     angle = 0.0;
     rotation = 0.0;
     x = 0.0;
     y = 0.0;
-    width = 0.0;
-    height = 0.0;
+    width = w;
+    height = h;
     visage = nullptr;
   }
 
@@ -55,7 +55,7 @@ public:
     Object();
     x = u;
     y = v;
-    visage = VisagePolygon::rectangle(w, h);
+    visage = VisagePolygon::rectangle();
     static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
     width = w;
     height = h;
