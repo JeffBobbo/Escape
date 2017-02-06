@@ -36,10 +36,10 @@ inline void dropTexture(const char* const t)
 }
 void dropAllTextures();
 
-uint8_t* getTexture(const std::string& t, int32_t& width, int32_t& height);
-inline uint8_t* getTexture(const char* const t, int32_t& width, int32_t& height)
+GLuint getTexture(const std::string& t);
+inline GLuint getTexture(const char* const t)
 {
-  return getTexture(std::string(t), width, height);
+  return getTexture(std::string(t));
 }
 
 #endif

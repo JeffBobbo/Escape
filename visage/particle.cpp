@@ -136,9 +136,9 @@ void ParticleSystem::draw()
   // this is inefficient, what's above is much better, but it's the only way
   // I can specify sizes individually for particles
   Particle* p = particles;
-  if (data)
+  if (tex)
   {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glBindTexture(GL_TEXTURE_2D, tex);
     glEnable(GL_TEXTURE_2D);
     while (p != last)
     {
@@ -173,5 +173,5 @@ void ParticleSystem::draw()
 
 void ParticleSystem::loadParticleImage(const std::string& file)
 {
-  data = getTexture(file, width, height);
+  tex = getTexture(file);
 }
