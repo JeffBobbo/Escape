@@ -21,11 +21,9 @@ VisageTexture::VisageTexture(const std::string& f)
 #include <iostream>
 void VisageTexture::draw()
 {
-  int32_t w, h;
-  uint8_t* d = getTexture(file, w, h);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, d);
-
+  GLuint t = getTexture(file);
   glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, t);
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBegin(GL_QUADS);
 

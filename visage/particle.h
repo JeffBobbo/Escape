@@ -33,7 +33,7 @@ public:
     , direction(0.0), spray(2.0*pi())
     , speedStart(0.0), speedEnd(0.0)
     , gravity(false)
-    , data(nullptr)
+    , tex(0)
   {
     // allocate all the memory up front
     // this'll make memory usage initially higher, but means less allocations
@@ -90,8 +90,7 @@ public:
   double speedEnd;
   bool gravity;
 
-  uint8_t* data;
-  int32_t width, height;
+  GLuint tex;
 };
 
 #endif
