@@ -189,7 +189,7 @@ int main(int argc, char** argv)
     }
     vc->add(vp);
     ParticleSystem* ps = new ParticleSystem(1000, 150);
-    ps->loadParticleImage("img/particles/soft_glow_alpha_128.png");
+    ps->loadParticleImage("img/particle_soft.png");
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
     ps->lifeMin = 5000;
     ps->lifeMax = 7000;
@@ -225,24 +225,6 @@ int main(int argc, char** argv)
   {
     Object* o = new Wall(10.0, 0.3, 0.0, -0.85);
     graph->insert(SceneGraph::Level::FOREGROUND, o);
-  }
-  {
-    Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::rectangle();
-    vp->setColour(0x00BCFF7F);
-    o->setVisage(vp);
-    o->x = 1/3.0;
-    o->y = -0.5;
-    graph->insert(SceneGraph::Level::NPC, o);
-  }
-  {
-    Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::rectangle();
-    vp->setColour(0xBC00007F);
-    o->setVisage(vp);
-    o->x = -1/3.0;
-    o->y = -0.5;
-    graph->insert(SceneGraph::Level::EFFECTS, o);
   }
   graph->insert(SceneGraph::Level::PLAYER, new Player());
 
