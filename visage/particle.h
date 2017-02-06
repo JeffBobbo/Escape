@@ -31,6 +31,7 @@ public:
     , lifeMin(1000), lifeMax(0)
     , sizeStart(0.0f), sizeEnd(0.0f)
     , direction(0.0), spray(2.0*pi())
+    , speedStart(0.0), speedEnd(0.0)
     , gravity(false)
     , data(nullptr)
   {
@@ -85,6 +86,8 @@ public:
   float sizeEnd;
   double direction;
   double spray;
+  double speedStart;
+  double speedEnd;
   bool gravity;
 
   uint8_t* data;
