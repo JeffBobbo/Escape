@@ -25,10 +25,14 @@ namespace controls
     // game controls
     PAUSE,
     MUTE_MUSIC, // like I'm going to have music.... lol
-    MUTE_ALL
+    MUTE
   };
 
+  std::string actionToString(const Action a);
+  Action actionFromString(const std::string& s);
+
   KeyCode bind(const Action a);
+  void save();
   void init();
 }
 
