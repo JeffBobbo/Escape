@@ -27,3 +27,12 @@ void Object::draw()
   if (visage)
     visage->draw();
 }
+
+#include <iostream>
+void Platform::move()
+{
+  const double p = (elapsed % period) / static_cast<double>(period);
+  const double a = 2.0 * pi() * p;
+  x = originx + std::cos(a) * radiusx;
+  y = originy + std::sin(a) * radiusy;
+}

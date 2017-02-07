@@ -130,21 +130,8 @@ int main(int argc, char** argv)
     graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
-    Object* o = new Object();
-    VisageTexture* vt = new VisageTexture("img/hazard.png");
-    o->setVisage(vt);
-    graph->insert(SceneGraph::Level::SCENARY, o);
-  }
-    {
-    Object* o = new Object();
-    VisageTexture* vt = new VisageTexture("img/SpaceBase1.png");
-    o->setVisage(vt);
-    o->y = 0.5;
-    graph->insert(SceneGraph::Level::SCENARY, o);
-  }
-  {
-    Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::triangle(2.0, 0.4, 0.4);
+    Object* o = new Object(2.0, 0.4);
+    VisagePolygon* vp = VisagePolygon::triangle(-0.1);
     vp->setColour(0x00AF1FFF);
     o->setVisage(vp);
     o->y = -(1.0 - 0.3 - 0.2);
@@ -225,22 +212,8 @@ int main(int argc, char** argv)
     graph->insert(SceneGraph::Level::FOREGROUND, o);
   }
   {
-    Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::square(1.0);
-    vp->setColour(0x00BCFF7F);
-    o->setVisage(vp);
-    o->x = 1/3.0;
-    o->y = -0.5;
-    graph->insert(SceneGraph::Level::NPC, o);
-  }
-  {
-    Object* o = new Object();
-    VisagePolygon* vp = VisagePolygon::square(1.0);
-    vp->setColour(0xBC00007F);
-    o->setVisage(vp);
-    o->x = -1/3.0;
-    o->y = -0.5;
-    graph->insert(SceneGraph::Level::EFFECTS, o);
+    Object* o = new Platform(1.0, 1.0, -5.0, 0.0, 2.0, 0.0, 5000);
+    graph->insert(SceneGraph::Level::FOREGROUND, o);
   }
   graph->insert(SceneGraph::Level::PLAYER, new Player());
 

@@ -11,7 +11,8 @@ public:
   {
     OBJECT = 0,
     WALL,
-    PLAYER
+    PLAYER,
+    PLATFORM
   };
 
   Object()
@@ -60,8 +61,32 @@ public:
     width = w;
     height = h;
   }
+  virtual ~Wall() {}
   virtual inline Type type() const { return Type::WALL; }
   virtual inline bool isSolid() const { return true; }
+};
+
+class Platform : public Wall
+{
+public:
+  Platform(double w, double h, double u, double v, double rx, double ry, int64_t p)
+  : Wall(w, h, u, v)
+  , radiusx(rx), radiusy(ry)
+  , period(p)
+  {
+    originx = x;
+    originy = y;
+  }
+  virtual ~Platform() {}
+
+  virtual inline Type type() const { return Type::PLATFORM; }
+  virtual void move();
+private:
+  double radiusx;
+  double radiusy;
+  int64_t period;
+  double originx;
+  double originy;
 };
 
 #endif
