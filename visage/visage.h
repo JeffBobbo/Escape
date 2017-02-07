@@ -26,7 +26,11 @@ public:
 
   virtual inline Type type() const = 0;
 
-  virtual void draw() = 0;
+  virtual void draw()
+  {
+    for (const Animatrix* const ani : animatrices)
+      ani->apply();
+  };
   virtual void addAnimatrix(Animatrix* const a) { animatrices.push_back(a); }
 
 protected:

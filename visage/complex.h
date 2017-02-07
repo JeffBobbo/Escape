@@ -22,7 +22,11 @@ public:
   virtual void draw()
   {
     for (Visage* const v : visages)
+    {
+      glPushMatrix();
       v->draw();
+      glPopMatrix();
+    }
   }
 
 private:

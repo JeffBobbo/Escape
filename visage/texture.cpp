@@ -21,10 +21,12 @@ VisageTexture::VisageTexture(const std::string& f)
 #include <iostream>
 void VisageTexture::draw()
 {
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  Visage::draw();
+
   GLuint t = getTexture(file);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, t);
-  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBegin(GL_QUADS);
 
   float uw = 1.0f / columns;

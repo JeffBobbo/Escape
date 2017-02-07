@@ -29,6 +29,9 @@ public:
   }
   inline bool isVisible() const { return visible; }
 
+  void apply() const;
+
+
   uint64_t start, end, loop, offset;
   RGBA_t startColour, endColour;
   double startScaleX, startScaleY, endScaleX, endScaleY;
