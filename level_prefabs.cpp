@@ -128,6 +128,12 @@ Level* Level::prefabTest()
     o->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
+  level->phases.push_back(new SceneGraph());
+  {
+    Object* o = new Platform(1.0, 1.0, 0.0, 0.0, 2.0, 2.0, 2000);
+    o->phase = 3;
+    level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
+  }
 
   level->player = new Player();
   return level;
