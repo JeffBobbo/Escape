@@ -2,6 +2,7 @@
 #define COMPLEX_H_INCLUDE
 
 #include "visage.h"
+#include "../gli.h"
 
 #include <vector>
 

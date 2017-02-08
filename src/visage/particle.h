@@ -6,6 +6,7 @@
 #include "visage.h"
 
 #include "../colour.h"
+#include "../gli.h"
 
 class Particle
 {

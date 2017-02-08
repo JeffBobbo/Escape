@@ -1,6 +1,6 @@
 EXEC:=Shifter.out
 
-MAIN := main.o util.o scenegraph.o image.o input.o controls.o level.o level_prefabs.o object/object.o object/player.o visage/animatrix.o visage/polygon.o visage/particle.o visage/texture.o
+MAIN := src/main.o src/util.o src/scenegraph.o src/image.o src/input.o src/controls.o src/level.o src/level_prefabs.o src/object/object.o src/object/player.o src/visage/animatrix.o src/visage/polygon.o src/visage/particle.o src/visage/texture.o
 
 # general compiler settings
 CPPFLAGS=

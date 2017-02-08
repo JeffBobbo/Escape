@@ -213,26 +213,4 @@ public:
   double y;
 };
 
-#include "gli.h"
-#include "external/stb_image.h"
-inline uint8_t* loadTexture(const char* const file, uint* texture,
-                            int32_t* width, int32_t* height)
-{
-  int32_t bpp;
-  uint8_t* data = stbi_load(file, width, height, &bpp, 4);
-  if (!data)
-  {
-    printf("%s\n", stbi_failure_reason());
-  }
-
-  glGenTextures(1, texture);
-  glBindTexture(GL_TEXTURE_2D, *texture);
-  glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16.0f);
-  return data;
-}
 #endif

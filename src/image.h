@@ -4,7 +4,7 @@
 #include <string>
 #include <stdint.h>
 
-#include "external/stb_image.h"
+#include "../external/stb_image.h"
 #include "gli.h"
 
 struct Texture
