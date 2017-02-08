@@ -38,8 +38,8 @@ Player::Player()
   VisageTexture* vt = new VisageTexture("img/M484SpaceSoldier.png");
   setVisage(vt);
   */
-  VisageTexture* vt = new VisageTexture("img/character.png");
-  vt->setAtlasSize(9, 8);
+  VisageTexture* vt = new VisageTexture("img/character2.png");
+  vt->setAtlasSize(8, 8);
   {
     Animatrix* a = new Animatrix();
     a->startColour = 0xFFFFFFFF;
