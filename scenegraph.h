@@ -15,7 +15,7 @@ public:
     SCENARY, // extra background layer
     FOREGROUND, // foreground objects, ideally stuff that can be moved/interacted
     NPC, // AI
-    PLAYER, // we want the player on top of any AI
+    PLAYER, // we want anything player related on top of any AI
     EFFECTS // for particles and similar things, which should be on top of the player
   };
   SceneGraph();

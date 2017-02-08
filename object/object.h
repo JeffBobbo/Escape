@@ -24,6 +24,7 @@ public:
     width = w;
     height = h;
     visage = nullptr;
+    phase = -1;
   }
 
   virtual ~Object()
@@ -45,6 +46,7 @@ public:
   double y;
   double width;
   double height;
+  int16_t phase;
   Visage* visage;
 };
 

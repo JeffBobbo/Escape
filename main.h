@@ -5,10 +5,10 @@
 #include <vector>
 
 #include "object/object.h"
-#include "scenegraph.h"
+#include "level.h"
 
 const char* const title = "Shifter";
 
-extern SceneGraph* graph;
+extern Level* level;
 
 #endif

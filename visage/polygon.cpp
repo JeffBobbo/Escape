@@ -36,15 +36,16 @@ VisagePolygon* VisagePolygon::circle(uint32_t points)
   return vp;
 }
 
-#include "../colour.h"
-#include <iostream>
 void VisagePolygon::draw()
 {
+  double col[4];
+  glGetDoublev(GL_CURRENT_COLOR, col);
+
   glColor4f(
-    ((colour >> 24) & 255) / 255.0, // r
-    ((colour >> 16) & 255) / 255.0, // g
-    ((colour >> 8 ) & 255) / 255.0, // b
-    ((colour      ) & 255) / 255.0); // a
+    col[0] * ((colour >> 24) & 255) / 255.0, // r
+    col[1] * ((colour >> 16) & 255) / 255.0, // g
+    col[2] * ((colour >> 8 ) & 255) / 255.0, // b
+    col[3] * ((colour      ) & 255) / 255.0); // a
 
   Visage::draw();
 

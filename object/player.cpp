@@ -63,6 +63,7 @@ Player::Player()
   facingRight = true;
   lastMove = 0;
   v = 0.0;
+  phase = 0;
 }
 
 void Player::idle()
@@ -96,7 +97,7 @@ void Player::move()
 
   bool good = true;
   // make sure we can move here
-  for (const Object* const o : graph->foreground())
+  for (const Object* const o : level->getPhaseBase()->foreground())
   {
     if (!o->isSolid()) // skip non-solids
       continue;
@@ -104,6 +105,20 @@ void Player::move()
     {
       good = false;
       break;
+    }
+  }
+
+  if (phase != -1)
+  {
+    for (const Object* const o : level->getPhase(phase)->foreground())
+    {
+      if (!o->isSolid()) // skip non-solids
+        continue;
+      if (nx > o->x - o->width/2.0 && nx < o->x + o->width/2.0 && ny > o->y - o->height/2.0 && ny < o->y + o->height/2.0)
+      {
+        good = false;
+        break;
+      }
     }
   }
 

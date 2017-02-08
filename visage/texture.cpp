@@ -21,7 +21,6 @@ VisageTexture::VisageTexture(const std::string& f)
 #include <iostream>
 void VisageTexture::draw()
 {
-  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   Visage::draw();
 
   GLuint t = getTexture(file);
