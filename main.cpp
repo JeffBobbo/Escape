@@ -106,8 +106,7 @@ int main(int argc, char** argv)
   glShadeModel(GL_FLAT); // dunno what this is
 
   // background is black
-  //glClearColor(0.0, 0.0, 0.0, 1.0);
-  glClearColor(1.0, 1.0, 1.0, 1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
   // background is now sky!
   //glClearColor(0x43 / 255.0, 0xC5 / 255.0, 0xF0 / 255.0, 255.0);
 
