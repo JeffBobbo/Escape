@@ -30,14 +30,16 @@ void Object::draw()
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
   // now work out what the colour should be for the phase
-  if (phase >= 0) // only needs to be done if we're actually in a phase
+  if (phase >= 0 && phase != level->phasePlayer()) // only needs to be done if we're actually in a phase
   {
     int16_t pphase = level->phasePlayer();
-    double phaseOffset = (((pphase - phase) + level->numPhases()) % level->numPhases()) / static_cast<double>(level->numPhases());
-    if (phaseOffset < 0.5)
-      glColor4f(1.0 - phaseOffset, 0.5, 0.5, 0.75);
+    int16_t diff = (pphase - phase);
+    double phaseOffset = std::abs(diff) / static_cast<double>(level->numPhases());
+
+    if (diff < 0)
+      glColor4f(1.0, 0.25, 0.25, phaseOffset);
     else
-      glColor4f(0.5, 0.5, 0.5 + phaseOffset, 0.75);
+      glColor4f(0.25, 0.25, 1.0, phaseOffset);
   }
   if (visage)
     visage->draw();
