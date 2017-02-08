@@ -136,13 +136,20 @@ void ParticleSystem::draw()
   // this is inefficient, what's above is much better, but it's the only way
   // I can specify sizes individually for particles
   Particle* p = particles;
+  double col[4];
+  glGetDoublev(GL_CURRENT_COLOR, col);
   if (tex)
   {
     glBindTexture(GL_TEXTURE_2D, tex);
     glEnable(GL_TEXTURE_2D);
     while (p != last)
     {
-      glColor4fv(p->col);
+      glColor4f(
+        col[0] * p->col[0],
+        col[1] * p->col[1],
+        col[2] * p->col[2],
+        col[3] * p->col[3]
+        );
       float x0 = p->pos[0] - p->size/2.0f;
       float y0 = p->pos[1] - p->size/2.0f;
       float x1 = x0 + p->size;
