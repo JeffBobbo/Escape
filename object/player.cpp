@@ -76,6 +76,19 @@ void Player::move()
   double nx = x;
   double ny = y;
 
+  static uint64_t lastPhase = 0;
+
+  if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_UP)))
+  {
+    phase = (phase+1) % level->numPhases();
+    lastPhase = elapsed;
+  }
+  else if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_DOWN)))
+  {
+    phase = (phase-1+level->numPhases()) % level->numPhases();
+    lastPhase = elapsed;
+  }
+
   bool running = false;
   if (keyboard::pressed(controls::bind(controls::Action::JUMP)))
     ny += 0.5 * (delta / 1000.0);
