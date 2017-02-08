@@ -1,0 +1,19 @@
+MAIN=\
+src/main.o \
+src/input.o \
+src/controls.o \
+src/scenegraph.o \
+src/level.o \
+src/level_prefabs.o \
+src/util.o \
+src/image.o
+
+OBJECT=\
+src/object/object.o \
+src/object/player.o
+
+VISAGE=\
+src/visage/animatrix.o \
+src/visage/polygon.o \
+src/visage/particle.o \
+src/visage/texture.o

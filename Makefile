@@ -1,6 +1,6 @@
 EXEC:=Shifter.out
 
-MAIN := src/main.o src/util.o src/scenegraph.o src/image.o src/input.o src/controls.o src/level.o src/level_prefabs.o src/object/object.o src/object/player.o src/visage/animatrix.o src/visage/polygon.o src/visage/particle.o src/visage/texture.o
+include make.objects
 
 # general compiler settings
 CPPFLAGS=
@@ -15,15 +15,15 @@ release: CXXFLAGS+=-O3
 release: CPPFLAGS+=-DNDEBUG
 release: all
 
-all: $(MAIN)
-	$(CXX) $(CXXFLAGS) $(MAIN) -o $(EXEC) $(LDFLAGS)
+all: $(MAIN) $(OBJECT) $(VISAGE)
+	$(CXX) $(CXXFLAGS) $(MAIN) $(OBJECT) $(VISAGE) -o $(EXEC) $(LDFLAGS)
 
 %.o : %.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	$(warning Cleaning...)
-	@$(RM) $(MAIN)
+	@$(RM) $(MAIN) $(OBJECT) $(VISAGE)
 
 .PHONY: debug release all clean
 
