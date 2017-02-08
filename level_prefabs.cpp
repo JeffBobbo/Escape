@@ -85,7 +85,7 @@ Level* Level::prefabTest()
     ps->sizeEnd = 1.0f;
     ps->speedStart = 5.0;
     ps->speedEnd = 0.0;
-    //vc->add(ps);
+    vc->add(ps);
     o->setVisage(vc);
     o->x = -0.75;
     o->y = 0.75;
