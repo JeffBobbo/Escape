@@ -22,7 +22,7 @@ public:
 
   inline const SceneGraph* getPhaseBase() const { return graph; }
   inline const SceneGraph* getPhase(int16_t p) const { return phases[p]; }
-  inline const int16_t phasePlayer() const { return player ? player->phase : -1; }
+  inline int16_t phasePlayer() const { return player ? player->phase : -1; }
 
   void idle();
   void draw();
