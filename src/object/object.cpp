@@ -32,14 +32,16 @@ void Object::draw()
   // now work out what the colour should be for the phase
   if (phase >= 0 && phase != level->phasePlayer()) // only needs to be done if we're actually in a phase
   {
-    int16_t pphase = level->phasePlayer();
-    int16_t diff = (pphase - phase);
-    double phaseOffset = std::abs(diff) / static_cast<double>(level->numPhases());
+    // calculate the phases colour
+    double h = (2.0 * pi() / level->numPhases()) *  phase;
+    RGBA c = rgba({degrees(h), 1.0, 1.0, 1.0});
 
-    if (diff < 0)
-      glColor4f(1.0, 0.25, 0.25, phaseOffset);
-    else
-      glColor4f(0.25, 0.25, 1.0, phaseOffset);
+    // calculate the alpha
+    double t = (2.0 * pi() / level->numPhases()) * level->phasePlayer();
+    double a  = std::fabs(t - h);
+    a = (a > pi() ? 2.0 * pi() - a : a) / pi();
+
+    glColor4f(c.r, c.g, c.b, a);
   }
   if (visage)
     visage->draw();

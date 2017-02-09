@@ -42,19 +42,19 @@ Player::Player()
   {
     Animatrix* a = new Animatrix();
     a->startColour = 0xFFFFFFFF;
-    a->endColour = 0xFF0000FF;
+    a->endColour = 0xB0AFAFFF;
     a->start = 0;
-    a->end = 350;
-    a->loop = 700;
+    a->end = 500;
+    a->loop = 1000;
     vt->addAnimatrix(a);
   }
   {
     Animatrix* a = new Animatrix();
-    a->startColour = 0xFF3F3FFF;
+    a->startColour = 0xB0AFAFFF;
     a->endColour = 0xFFFFFFFF;
-    a->start = 350;
-    a->end = 700;
-    a->loop = 700;
+    a->start = 500;
+    a->end = 1000;
+    a->loop = 1000;
     vt->addAnimatrix(a);
   }
   setVisage(vt);
@@ -89,7 +89,7 @@ void Player::move()
     lastPhase = elapsed;
   }
 
-  bool running = false;
+  bool move = false;
   if (keyboard::pressed(controls::bind(controls::Action::JUMP)))
     ny += 0.5 * (delta / 1000.0);
   if (keyboard::pressed(controls::bind(controls::Action::CROUCH)))
@@ -97,12 +97,12 @@ void Player::move()
   bool walk = keyboard::pressed(controls::bind(controls::Action::WALK_MODIFIER));
   if (keyboard::pressed(controls::bind(controls::Action::MOVE_LEFT)))
   {
-    running = true;
+    move = true;
     nx -= (walk ? 0.75 : 1.5) * (delta / 1000.0);
   }
   if (keyboard::pressed(controls::bind(controls::Action::MOVE_RIGHT)))
   {
-    running = true;
+    move = true;
     nx += (walk ? 0.75 : 1.5) * (delta / 1000.0);
   }
   //v -= 0.00981f * (delta / 1000.0);
@@ -147,9 +147,9 @@ void Player::move()
   }
 
   std::stringstream sprite;
-  if (running)
+  if (move)
   {
-    sprite << "run" << (elapsed / 100) % 8;
+    sprite << (walk ? "walk" : "run") << (elapsed / (walk ? 200 : 100)) % 8;
   }
   else
   {
