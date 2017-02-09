@@ -38,8 +38,7 @@ Player::Player()
   VisageTexture* vt = new VisageTexture("img/M484SpaceSoldier.png");
   setVisage(vt);
   */
-  VisageTexture* vt = new VisageTexture("img/character2.png");
-  vt->setAtlasSize(8, 8);
+  VisageTexture* vt = new VisageTexture("img/character.png");
   {
     Animatrix* a = new Animatrix();
     a->startColour = 0xFFFFFFFF;
@@ -71,6 +70,7 @@ void Player::idle()
 }
 
 #include <algorithm>
+#include <sstream>
 void Player::move()
 {
   double nx = x;
@@ -146,10 +146,10 @@ void Player::move()
     y = ny;
   }
 
-  int32_t sprite;
-  if (running) // if we're running, use a running sprite (index 5-12)
+  std::stringstream sprite;
+  if (running)
   {
-    sprite = (elapsed / 100) % 8 + 4;
+    sprite << "run" << (elapsed / 100) % 8;
   }
   else
   {
@@ -157,18 +157,16 @@ void Player::move()
     if (t > 2500)
     {
       if (t > 10000)
-      {
-        sprite = interpolate(18, 23, std::min(1.0, (t-10000)/500.0));
-      }
+        sprite << "death" << interpolate(0, 5, std::min(1.0, (t-10000)/500.0));
       else
-      {
-        sprite = 64;
-      }
+        sprite << "stand";
     }
     else
-      sprite = std::abs(((elapsed / 200) % 7) - 3);
+    {
+      sprite << "stance" << std::abs(((elapsed / 200) % 7) - 3);
+    }
   }
   VisageTexture* vt = static_cast<VisageTexture*>(visage);
-  vt->setAtlasSprite(sprite % 8, sprite / 8);
+  vt->setAtlasSprite(sprite.str());
   vt->setFlip(!facingRight);
 }

@@ -34,7 +34,6 @@ public:
     , direction(0.0), spray(2.0*pi())
     , speedStart(0.0), speedEnd(0.0)
     , gravity(false)
-    , tex(0)
   {
     // allocate all the memory up front
     // this'll make memory usage initially higher, but means less allocations
@@ -62,7 +61,7 @@ public:
 
   virtual void draw();
 
-  void loadParticleImage(const std::string& file);
+  void setParticleImage(const std::string& file) { particle = file; }
 
 private:
   Particle* particles;
@@ -91,7 +90,7 @@ public:
   double speedEnd;
   bool gravity;
 
-  GLuint tex;
+  std::string particle;
 };
 
 #endif

@@ -138,9 +138,9 @@ void ParticleSystem::draw()
   Particle* p = particles;
   double col[4];
   glGetDoublev(GL_CURRENT_COLOR, col);
-  if (tex)
+  if (particle.size())
   {
-    glBindTexture(GL_TEXTURE_2D, tex);
+    bindTexture(particle);
     glEnable(GL_TEXTURE_2D);
     while (p != last)
     {
@@ -176,9 +176,4 @@ void ParticleSystem::draw()
       ++p;
     }
   }
-}
-
-void ParticleSystem::loadParticleImage(const std::string& file)
-{
-  tex = getTexture(file);
 }

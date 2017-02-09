@@ -2,10 +2,24 @@
 #define IMAGE_H_INCLUDE
 
 #include <string>
+#include <map>
 #include <stdint.h>
 
 #include "../external/stb_image.h"
 #include "gli.h"
+
+struct AtlasSprite
+{
+  int32_t x;
+  int32_t y;
+  int32_t w;
+  int32_t h;
+};
+
+struct STSprite
+{
+  double s0, s1, t0, t1;
+};
 
 struct Texture
 {
@@ -16,8 +30,7 @@ struct Texture
   GLuint tex;
 
   // atlasing information
-  int32_t rows;
-  int32_t columns;
+  std::map<std::string, AtlasSprite> sprites;
 };
 
 //uint8_t* loadTexture(const char* const file, uint* texture,
@@ -36,10 +49,18 @@ inline void dropTexture(const char* const t)
 }
 void dropAllTextures();
 
-GLuint getTexture(const std::string& t);
-inline GLuint getTexture(const char* const t)
+void bindTexture(const std::string& t);
+inline void bindTexture(const char* const t)
 {
-  return getTexture(std::string(t));
+  return bindTexture(std::string(t));
+}
+
+GLuint getTexture(const std::string& t);
+
+STSprite getSTCoords(const std::string& t, const std::string& s);
+inline STSprite getSTCoords(const char* const t, const char* const s)
+{
+  return getSTCoords(std::string(t), std::string(s));
 }
 
 #endif

@@ -77,7 +77,7 @@ Level* Level::prefabTest()
     }
     vc->add(vp);
     ParticleSystem* ps = new ParticleSystem(1000, 150);
-    ps->loadParticleImage("img/particle_soft.png");
+    ps->setParticleImage("img/particle_soft.png");
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
     ps->lifeMin = 5000;
     ps->lifeMax = 7000;
@@ -95,7 +95,7 @@ Level* Level::prefabTest()
   {
     Object* o = new Object();
     ParticleSystem* ps = new ParticleSystem(1000, 200);
-    ps->loadParticleImage("img/particles/soft_glow_alpha_128.png");
+    ps->setParticleImage("img/particles/soft_glow_alpha_128.png");
     ps->setColours(fromInt(0xE1F0F5FF), fromInt(0xFFFFFF00));
     ps->lifeMin = 2000;
     ps->lifeMax = 3000;
