@@ -18,9 +18,9 @@ public:
       delete v;
   }
 
-  static VisagePolygon* rectangle();
-  static VisagePolygon* triangle(double offset = 0.0);
-  static VisagePolygon* circle(uint32_t points);
+  static VisagePolygon* rectangle(double w, double h);
+  static VisagePolygon* triangle(double b, double h, double offset = 0.0);
+  static VisagePolygon* circle(double r, uint32_t points);
 
   virtual inline Type type() const { return Type::POLYGON; }
   inline const uint32_t& getColour() const { return colour; }

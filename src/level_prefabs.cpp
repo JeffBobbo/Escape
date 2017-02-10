@@ -15,7 +15,7 @@ Level* Level::prefabTest()
   // create objects
   {
     Object* o = new Object(1.6, 0.6);
-    VisagePolygon* vp = VisagePolygon::triangle(-0.5);
+    VisagePolygon* vp = VisagePolygon::triangle(1.6, 0.6, -0.5);
     vp->setColour(0x007F00FF);
     o->setVisage(vp);
     o->x = -0.2;
@@ -24,7 +24,7 @@ Level* Level::prefabTest()
   }
   {
     Object* o = new Object(2.0, 0.6);
-    VisagePolygon* vp = VisagePolygon::triangle(0.5);
+    VisagePolygon* vp = VisagePolygon::triangle(2.0, 0.6, 0.5);
     vp->setColour(0x00FF1FFF);
     o->setVisage(vp);
     o->y = -(1.0 - 0.3 - 0.3);
@@ -32,7 +32,7 @@ Level* Level::prefabTest()
   }
   {
     Object* o = new Object(2.0, 0.4);
-    VisagePolygon* vp = VisagePolygon::triangle(-0.1);
+    VisagePolygon* vp = VisagePolygon::triangle(2.0, 0.4, -0.1);
     vp->setColour(0x00AF1FFF);
     o->setVisage(vp);
     o->y = -(1.0 - 0.3 - 0.2);
@@ -41,7 +41,7 @@ Level* Level::prefabTest()
   {
     Object* o = new Object(0.1, 0.1);
     VisageComplex* vc = new VisageComplex();
-    VisagePolygon* vp = VisagePolygon::circle(16);
+    VisagePolygon* vp = VisagePolygon::circle(0.1, 16);
     vp->setColour(0xFFFFFFFF);
     {
       Animatrix* oflash0 = new Animatrix();
@@ -79,11 +79,11 @@ Level* Level::prefabTest()
     ParticleSystem* ps = new ParticleSystem(1000, 150);
     ps->setParticleImage("img/particle_soft.png");
     ps->setColours(fromInt(0xFFAF00FF), fromInt(0xFF000000));
-    ps->lifeMin = 5000;
-    ps->lifeMax = 7000;
-    ps->sizeStart = 10.0f;
-    ps->sizeEnd = 1.0f;
-    ps->speedStart = 5.0;
+    ps->lifeMin = 2000;
+    ps->lifeMax = 4000;
+    ps->sizeStart = 1.0f;
+    ps->sizeEnd = 0.0f;
+    ps->speedStart = 0.5;
     ps->speedEnd = 0.0;
     vc->add(ps);
     o->setVisage(vc);

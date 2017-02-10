@@ -14,7 +14,7 @@
 class VisageTexture : public Visage
 {
 public:
-  VisageTexture(const std::string& file);
+  VisageTexture(double w, double h, const std::string& file);
   virtual ~VisageTexture()
   {
   }
@@ -27,7 +27,7 @@ public:
   virtual void draw();
 
 private:
-  float vertices[12];
+  float vertices[8];
   std::string file;
   std::string sprite;
   bool flip;

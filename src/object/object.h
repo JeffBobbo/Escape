@@ -58,10 +58,10 @@ public:
     Object();
     x = u;
     y = v;
-    visage = VisagePolygon::rectangle();
-    static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
     width = w;
     height = h;
+    visage = VisagePolygon::rectangle(w, h);
+    static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
   }
   virtual ~Wall() {}
   virtual inline Type type() const { return Type::WALL; }
