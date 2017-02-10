@@ -58,6 +58,27 @@ void draw()
   // draw the scene
   level->draw();
 
+  // draw gui stuff on top
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-screenWidth/2.0, screenWidth/2.0, screenHeight/2.0, -screenHeight/2.0, -1.0, 1.0);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  bindTexture("img/phase.png");
+  glEnable(GL_TEXTURE_2D);
+  glBegin(GL_QUADS);
+  glTexCoord2f(0.0, 1.0); glVertex3f(-screenWidth/2.0 + 8.0, screenHeight - 8.0, 0.0f);
+  glTexCoord2f(1.0, 1.0); glVertex3f(-screenWidth/2.0 + 8.0 + 128.0, screenHeight - 8.0, 0.0f);
+  glTexCoord2f(1.0, 0.0); glVertex3f(-screenWidth/2.0 + 8.0 + 128.0, screenHeight - 8.0 - 16.0, 0.0f);
+  glTexCoord2f(0.0, 0.0); glVertex3f(-screenWidth/2.0 + 8.0, screenHeight - 8.0 - 16.0, 0.0f);
+  glEnd();
+  glDisable(GL_TEXTURE_2D);
+  glRotatef(180.0, 0, 0, 1);
+  static VisagePolygon* phasepointer = VisagePolygon::triangle(8, 8, 0.0);
+  phasepointer->setColour(0xFFFFFFFF);
+  glTranslatef(screenWidth/2.0 + level->phasePlayer() * 126.0 /level->numPhases(), screenHeight/2.0 - 24, 0.0);
+  phasepointer->draw();
+
   glutSwapBuffers();
 }
 
