@@ -47,7 +47,28 @@ void Object::draw()
     visage->draw();
 }
 
-#include <iostream>
+bool Object::aabbOverlap(const Object* const o) const
+{
+  return x < (o->x+o->width) &&
+         x+width > o->x &&
+         y < (o->y+o->height) &&
+         y+height > o->y;
+}
+
+/*
+bool Object::satOverlap(const Object* const o) const
+{
+  Vec2D axis(1.0, -1.0);
+
+  double tProjMin = Vec2D(x, y).dot(axis);
+  int tDotMin = 1;
+  double tProjMax = tProjMin;
+  int tDotMax = 1;
+
+  for ()
+}
+*/
+
 void Platform::move()
 {
   const double p = (elapsed % period) / static_cast<double>(period);
