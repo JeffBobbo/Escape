@@ -113,24 +113,28 @@ Level* Level::prefabTest()
     level->phases.back()->insert(SceneGraph::Level::SCENARY, o);
   }
   {
-    Object* o = new Wall(10.0, 0.3, 0.0, -0.85);
-    level->graph->insert(SceneGraph::Level::FOREGROUND, o);
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall(10.0, 0.3, 0.0, -0.85));
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall(1.0, 0.3, -2.0, 0.3));
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall(1.0, 0.3, -2.50, 1));
   }
   level->phases.push_back(new SceneGraph());
   {
-    Object* o = new Platform(1.0, 1.0, -5.0, 0.0, 2.0, 2.0, 5000);
+    Object* o = new Platform(1.0, 1.0, -5.0, 0.0, 2.0, 0.0, 5000);
     o->phase = 1;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
   level->phases.push_back(new SceneGraph());
   {
-    Object* o = new Platform(1.0, 1.0, 5.0, 0.0, 2.0, 2.0, 5000);
+    Object* o = new Platform(1.0, 1.0, 5.0, 0.0, 0.0, 2.0, 5000);
     o->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
   level->phases.push_back(new SceneGraph());
   {
-    Object* o = new Platform(1.0, 1.0, 0.0, 0.0, 2.0, 2.0, 2000);
+    Object* o = new Platform(1.0, 1.0, 0.0, 0.0, 0.0, 2.0, 2000);
     o->phase = 3;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }

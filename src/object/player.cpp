@@ -89,11 +89,14 @@ void Player::move()
     lastPhase = elapsed;
   }
 
-  bool move = false;
+  bool move = false; // do we want moving animation
+  // only jump if v==0.0, that means we're on the ground
   if (v == 0.0 && keyboard::pressed(controls::bind(controls::Action::JUMP)))
   {
-    v = 0.0981f/2.0;
+    v = 0.0981f/1.5;
+    lastMove = elapsed;
   }
+
   if (keyboard::pressed(controls::bind(controls::Action::CROUCH)))
     ny -= 0.5 * (delta / 1000.0);
   bool walk = keyboard::pressed(controls::bind(controls::Action::WALK_MODIFIER));
@@ -116,17 +119,17 @@ void Player::move()
     if (!o->isSolid()) // skip non-solids
       continue;
 
-    if (nx+width/2.0 > o->x-o->width/2.0 &&
-        nx-width/2.0 < o->x+o->width/2.0 &&
+    if (nx+width/4.0 > o->x-o->width/2.0 &&
+        nx-width/4.0 < o->x+o->width/2.0 &&
         y+height/2.0 > o->y-o->height/2.0 &&
         y-height/2.0 < o->y+o->height/2.0)
       nx = x;
-    if (x+width/2.0 > o->x-o->width/2.0 &&
-        x-width/2.0 < o->x+o->width/2.0 &&
+    if (x+width/4.0 > o->x-o->width/2.0 &&
+        x-width/4.0 < o->x+o->width/2.0 &&
         ny+height/2.0 > o->y-o->height/2.0 &&
         ny-height/2.0 < o->y+o->height/2.0)
     {
-      ny = y;
+      ny = v <= 0 ? o->y+o->height/2.0+height/2.0 : y;
       v = 0.0; // can't fall further
     }
   }
@@ -137,10 +140,19 @@ void Player::move()
     {
       if (!o->isSolid()) // skip non-solids
         continue;
-      if (nx > o->x - o->width/2.0 && nx < o->x + o->width/2.0 && y > o->y - o->height/2.0 && y < o->y + o->height/2.0)
-        nx = x;
-      if (x > o->x - o->width/2.0 && x < o->x + o->width/2.0 && ny > o->y - o->height/2.0 && ny < o->y + o->height/2.0)
-        ny = y;
+      if (x+width/4.0 > o->x-o->width/2.0 &&
+          x-width/4.0 < o->x+o->width/2.0 &&
+          ny+height/2.0 > o->y-o->height/2.0 &&
+          ny-height/2.0 < o->y+o->height/2.0)
+      {
+        ny = v <= 0 ? o->y+o->height/2.0+height/2.0 : y;
+        v = 0.0;
+      }
+      if (nx+width/4.0 > o->x-o->width/2.0 &&
+          nx-width/4.0 < o->x+o->width/2.0 &&
+          ny+height/2.0 > o->y-o->height/2.0 &&
+          ny-height/2.0 < o->y+o->height/2.0)
+          nx = x;
     }
   }
 
