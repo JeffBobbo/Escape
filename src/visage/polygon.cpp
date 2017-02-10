@@ -18,7 +18,7 @@ VisagePolygon* VisagePolygon::triangle(double b, double h, double offset)
   VisagePolygon* vp = new VisagePolygon();
   vp->vertices.push_back(new Vec2D(-b/2.0, -h/2.0));
   vp->vertices.push_back(new Vec2D( b/2.0, -h/2.0));
-  vp->vertices.push_back(new Vec2D(offset,  h/2.0));
+  vp->vertices.push_back(new Vec2D(b*offset,  h/2.0));
   return vp;
 }
 VisagePolygon* VisagePolygon::circle(double r, uint32_t points)
