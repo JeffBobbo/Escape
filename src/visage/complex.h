@@ -24,9 +24,12 @@ public:
   {
     for (Visage* const v : visages)
     {
+      float c[4];
+      glGetFloatv(GL_CURRENT_COLOR, c);
       glPushMatrix();
       v->draw();
       glPopMatrix();
+      glColor4fv(c);
     }
   }
 
