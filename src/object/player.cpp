@@ -119,11 +119,7 @@ void Player::move()
     if (!o->isSolid()) // skip non-solids
       continue;
 
-    if (nx+width/4.0 > o->x-o->width/2.0 &&
-        nx-width/4.0 < o->x+o->width/2.0 &&
-        y+height/2.0 > o->y-o->height/2.0 &&
-        y-height/2.0 < o->y+o->height/2.0)
-      nx = x;
+    // test y first
     if (x+width/4.0 > o->x-o->width/2.0 &&
         x-width/4.0 < o->x+o->width/2.0 &&
         ny+height/2.0 > o->y-o->height/2.0 &&
@@ -132,6 +128,11 @@ void Player::move()
       ny = v <= 0 ? o->y+o->height/2.0+height/2.0 : y;
       v = 0.0; // can't fall further
     }
+    if (nx+width/4.0 > o->x-o->width/2.0 &&
+        nx-width/4.0 < o->x+o->width/2.0 &&
+        ny+height/2.0 > o->y-o->height/2.0 &&
+        ny-height/2.0 < o->y+o->height/2.0)
+      nx = x;
   }
 
   if (phase != -1)
