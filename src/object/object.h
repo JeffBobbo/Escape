@@ -12,7 +12,8 @@ public:
     OBJECT = 0,
     WALL,
     PLAYER,
-    PLATFORM
+    PLATFORM,
+    DOOR
   };
 
   Object(double w = 1.0, double h = 1.0)
@@ -29,7 +30,8 @@ public:
 
   virtual ~Object()
   {
-    delete visage;
+    if (visage)
+      delete visage;
   }
 
   virtual inline Type type() const { return Type::OBJECT; }
@@ -96,6 +98,43 @@ private:
   int64_t period;
   double originx;
   double originy;
+};
+
+class Door : public Wall
+{
+public:
+  Door(double w, double h, double u, double v, bool o)
+  : Wall(w, h, u, v)
+  {
+    trigger = nullptr;
+    open = o;
+    vOpen = VisagePolygon::rectangle(w, h*0.1);
+    static_cast<VisagePolygon*>(vOpen)->setColour(0x7f7f7fFF);
+    vClose = visage;
+  }
+  virtual ~Door()
+  {
+    if (vOpen)
+    {
+      delete vOpen;
+      vOpen = nullptr;
+    }
+    if (vClose)
+    {
+      delete vClose;
+      vClose = nullptr;
+    }
+    visage = nullptr;
+  }
+
+  virtual inline Type type() const { return Type::DOOR; }
+  virtual inline bool isSolid() const { return !open; }
+  virtual void move();
+private:
+  Object* trigger;
+  bool open;
+  Visage* vOpen;
+  Visage* vClose;
 };
 
 #endif

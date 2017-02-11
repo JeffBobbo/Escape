@@ -76,3 +76,22 @@ void Platform::move()
   x = originx + std::cos(a) * radiusx;
   y = originy + std::sin(a) * radiusy;
 }
+
+
+void Door::move()
+{
+  if (phase == -1 || phase == level->phasePlayer())
+  {
+    if (distanceSquared(level->getPlayer()) < 2)
+    {
+      if (!open) // open the door
+        open = true;
+    }
+    else
+    {
+      if (open)
+        open = false;
+    }
+    visage = open ? vOpen : vClose;
+  }
+}
