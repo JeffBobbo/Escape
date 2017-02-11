@@ -27,6 +27,7 @@ int screenHeight = 480;
 const int DEFAULT_WIDTH  = 640;
 const int DEFAULT_HEIGHT = 480;
 const double TILE_SIZE = 64.0;
+VisagePolygon* phasepointer = nullptr;
 
 void draw()
 {
@@ -59,25 +60,28 @@ void draw()
   level->draw();
 
   // draw gui stuff on top
+  glLoadIdentity();
+  glColor4f(1.0, 1.0, 1.0, 1.0);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-screenWidth/2.0, screenWidth/2.0, screenHeight/2.0, -screenHeight/2.0, -1.0, 1.0);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+  glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
   bindTexture("img/phase.png");
   glEnable(GL_TEXTURE_2D);
   glBegin(GL_QUADS);
-  glTexCoord2f(0.0, 1.0); glVertex3f(-screenWidth/2.0 + 8.0, screenHeight - 8.0, 0.0f);
-  glTexCoord2f(1.0, 1.0); glVertex3f(-screenWidth/2.0 + 8.0 + 128.0, screenHeight - 8.0, 0.0f);
-  glTexCoord2f(1.0, 0.0); glVertex3f(-screenWidth/2.0 + 8.0 + 128.0, screenHeight - 8.0 - 16.0, 0.0f);
-  glTexCoord2f(0.0, 0.0); glVertex3f(-screenWidth/2.0 + 8.0, screenHeight - 8.0 - 16.0, 0.0f);
+  glTexCoord2f(0.0, 1.0);
+  glVertex3f(16.0f,           16.0f, 0.0f);
+  glTexCoord2f(1.0, 1.0);
+  glVertex3f(16.0f + 128.0f,  16.0f, 0.0f);
+  glTexCoord2f(1.0, 0.0);
+  glVertex3f(16.0f + 128.0f, 32.0f, 0.0f);
+  glTexCoord2f(0.0, 0.0);
+  glVertex3f(16.0f,          32.0f, 0.0f);
   glEnd();
   glDisable(GL_TEXTURE_2D);
-  glRotatef(180.0, 0, 0, 1);
-  static VisagePolygon* phasepointer = VisagePolygon::triangle(8, 8, 0.0);
-  phasepointer->setColour(0xFFFFFFFF);
-  glTranslatef(screenWidth/2.0 + level->phasePlayer() * 126.0 /level->numPhases(), screenHeight/2.0 - 24, 0.0);
+  glTranslatef(16 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
   phasepointer->draw();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 
   glutSwapBuffers();
 }
@@ -152,6 +156,10 @@ int main(int argc, char** argv)
   controls::init();
 
   level = Level::prefabTest();
+
+  phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
+  phasepointer->setColour(0x7F7F7FFF);
+
 
   // begin glut loop
   glutMainLoop();
