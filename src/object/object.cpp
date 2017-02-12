@@ -78,6 +78,20 @@ void Platform::move()
 }
 
 
+Door::Door(double w, double h, double u, double v, bool o)
+: Wall(w, h, u, v)
+{
+  trigger = nullptr;
+  open = o;
+  vOpen = VisagePolygon::rectangle(w, h*0.1);
+  static_cast<VisagePolygon*>(vOpen)->setColour(0xafafafFF);
+  Animatrix* a = new Animatrix();
+  a->startY = h*0.9/2.0;
+  vOpen->addAnimatrix(a);
+  vClose = visage;
+  static_cast<VisagePolygon*>(vClose)->setColour(0xafafafFF);
+}
+
 void Door::move()
 {
   if (phase == -1 || phase == level->phasePlayer())

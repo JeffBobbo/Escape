@@ -103,15 +103,7 @@ private:
 class Door : public Wall
 {
 public:
-  Door(double w, double h, double u, double v, bool o)
-  : Wall(w, h, u, v)
-  {
-    trigger = nullptr;
-    open = o;
-    vOpen = VisagePolygon::rectangle(w, h*0.1);
-    static_cast<VisagePolygon*>(vOpen)->setColour(0x7f7f7fFF);
-    vClose = visage;
-  }
+  Door(double w, double h, double u, double v, bool o);
   virtual ~Door()
   {
     if (vOpen)

@@ -131,7 +131,7 @@ Level* Level::prefabTest()
     Object* o = new Platform(1.0, 1.0, 5.0, 0.0, 0.0, 2.0, 5000);
     o->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
-    Door* d = new Door(0.2, 1.0, 2.5, -0.35, false);
+    Door* d = new Door(0.2, 1.0, 2.5, -0.2, false);
     d->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, d);
   }
