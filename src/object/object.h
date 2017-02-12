@@ -13,15 +13,16 @@ public:
     WALL,
     PLAYER,
     PLATFORM,
-    DOOR
+    DOOR,
+    TRIGGER
   };
 
-  Object(double w = 1.0, double h = 1.0)
+  Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0)
   {
     angle = 0.0;
     rotation = 0.0;
-    x = 0.0;
-    y = 0.0;
+    x = u;
+    y = v;
     width = w;
     height = h;
     visage = nullptr;
@@ -63,12 +64,8 @@ class Wall : public Object
 {
 public:
   Wall(double w, double h, double u, double v)
+  : Object(w, h, u, v)
   {
-    Object();
-    x = u;
-    y = v;
-    width = w;
-    height = h;
     visage = VisagePolygon::rectangle(w, h);
     static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
   }
@@ -100,6 +97,7 @@ private:
   double originy;
 };
 
+class Button;
 class Door : public Wall
 {
 public:
@@ -121,12 +119,37 @@ public:
 
   virtual inline Type type() const { return Type::DOOR; }
   virtual inline bool isSolid() const { return !open; }
-  virtual void move();
+  virtual void idle();
+
+  inline void link(Button* l) { trigger = l; }
+
 private:
-  Object* trigger;
+  Button* trigger; // later change this to a Trigger object
   bool open;
   Visage* vOpen;
   Visage* vClose;
+};
+
+// turn into a generic trigger class
+class Button : public Object
+{
+public:
+  Button(double u, double v, int64_t t);
+  virtual ~Button() {};
+
+  virtual inline Type type() const { return Type::TRIGGER; }
+  virtual void idle();
+
+  inline void set() { last = timeout == -1 ? !last : elapsed; }
+
+  virtual inline bool on() const
+  {
+    return timeout == -1 ? last : elapsed - last < timeout;
+  }
+
+private:
+  int64_t last;
+  int64_t timeout;
 };
 
 #endif

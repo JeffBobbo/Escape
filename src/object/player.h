@@ -6,7 +6,7 @@
 class Player : public Object
 {
 public:
-  Player();
+  Player(double u = 0.0, double v = 0.0);
   virtual ~Player()
   {
   }

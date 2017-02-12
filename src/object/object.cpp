@@ -92,20 +92,35 @@ Door::Door(double w, double h, double u, double v, bool o)
   static_cast<VisagePolygon*>(vClose)->setColour(0xafafafFF);
 }
 
-void Door::move()
+void Door::idle()
 {
-  if (phase == -1 || phase == level->phasePlayer())
+  if (trigger)
   {
-    if (distanceSquared(level->getPlayer()) < 2)
-    {
-      if (!open) // open the door
-        open = true;
-    }
-    else
-    {
-      if (open)
-        open = false;
-    }
-    visage = open ? vOpen : vClose;
+    open = trigger->on();
   }
+  else
+  {
+    if ((phase == -1 || phase == level->phasePlayer()) &&
+        distanceSquared(level->getPlayer()) < 2)
+      open = true;
+    else
+      open = false;
+  }
+  visage = open ? vOpen : vClose;
+}
+
+Button::Button(double u, double v, int64_t t)
+  : Object(0.25, 0.25, u, v)
+  , last(0), timeout(t)
+{
+  visage = VisagePolygon::circle(0.1, 16);
+  static_cast<VisagePolygon*>(visage)->setColour(0xff7f7fff);
+}
+
+void Button::idle()
+{
+  if (on())
+    static_cast<VisagePolygon*>(visage)->setColour(0xff3f3fff);
+  else
+    static_cast<VisagePolygon*>(visage)->setColour(0xff7f7fff);
 }

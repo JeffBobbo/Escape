@@ -7,8 +7,10 @@
 
 #include "../controls.h"
 
-Player::Player()
+Player::Player(double u, double v)
+  : Object(1.0, 1.0, u, v)
 {
+
   /*
   VisageComplex* vc = new VisageComplex();
   VisagePolygon* body = VisagePolygon::rectangle(0.2, 0.35);
@@ -71,13 +73,13 @@ void Player::idle()
 
 #include <algorithm>
 #include <sstream>
+#include <iostream>
 void Player::move()
 {
   double nx = x;
   double ny = y;
 
   static uint64_t lastPhase = 0;
-
   if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_UP)))
   {
     phase = (phase+1) % level->numPhases();
@@ -87,6 +89,30 @@ void Player::move()
   {
     phase = (phase-1+level->numPhases()) % level->numPhases();
     lastPhase = elapsed;
+  }
+
+  if (keyboard::pressed(controls::bind(controls::Action::USE)))
+  {
+    for (auto o : level->getPhaseBase()->foreground())
+    {
+      if (o->type() != Object::Type::TRIGGER)
+        continue;
+      Button* b = static_cast<Button*>(o);
+      if (aabbOverlap(b))
+      {
+        b->set();
+      }
+    }
+    for (auto o : level->getPhase(phase)->foreground())
+    {
+      if (o->type() != Object::Type::TRIGGER)
+        continue;
+      Button* b = static_cast<Button*>(o);
+      if (aabbOverlap(b))
+      {
+        b->set();
+      }
+    }
   }
 
   bool move = false; // do we want moving animation

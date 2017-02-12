@@ -14,32 +14,28 @@ Level* Level::prefabTest()
   level->graph = new SceneGraph();
   // create objects
   {
-    Object* o = new Object(1.6, 0.6);
+    Object* o = new Object(1.6, 0.6, -0.2, -0.4);
     VisagePolygon* vp = VisagePolygon::triangle(1.6, 0.6, -0.5);
     vp->setColour(0x007F00FF);
     o->setVisage(vp);
-    o->x = -0.2;
-    o->y = -(1.0 - 0.3 - 0.3);
     level->graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
-    Object* o = new Object(2.0, 0.6);
+    Object* o = new Object(2.0, 0.6, 0.0, -0.4);
     VisagePolygon* vp = VisagePolygon::triangle(2.0, 0.6, 0.5);
     vp->setColour(0x00FF1FFF);
     o->setVisage(vp);
-    o->y = -(1.0 - 0.3 - 0.3);
     level->graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
-    Object* o = new Object(2.0, 0.4);
+    Object* o = new Object(2.0, 0.4, 0.0, -0.5);
     VisagePolygon* vp = VisagePolygon::triangle(2.0, 0.4, -0.1);
     vp->setColour(0x00AF1FFF);
     o->setVisage(vp);
-    o->y = -(1.0 - 0.3 - 0.2);
     level->graph->insert(SceneGraph::Level::SCENARY, o);
   }
   {
-    Object* o = new Object(0.1, 0.1);
+    Object* o = new Object(0.1, 0.1, -0.75, 0.75);
     VisageComplex* vc = new VisageComplex();
     VisagePolygon* vp = VisagePolygon::circle(0.1, 16);
     vp->setColour(0xFFFFFFFF);
@@ -87,8 +83,6 @@ Level* Level::prefabTest()
     ps->speedEnd = 0.0;
     vc->add(ps);
     o->setVisage(vc);
-    o->x = -0.75;
-    o->y = 0.75;
     level->graph->insert(SceneGraph::Level::SCENARY, o);
   }
   level->phases.push_back(new SceneGraph());
@@ -131,8 +125,13 @@ Level* Level::prefabTest()
     Object* o = new Platform(1.0, 1.0, 5.0, 0.0, 0.0, 2.0, 5000);
     o->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
+    Button* b = new Button(-2.5, 2, -1);
+    b->phase = 2;
+    level->phases.back()->insert(SceneGraph::Level::FOREGROUND, b);
+
     Door* d = new Door(0.2, 1.0, 2.5, -0.2, false);
     d->phase = 2;
+    d->link(b);
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, d);
   }
   level->phases.push_back(new SceneGraph());
