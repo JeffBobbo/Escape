@@ -28,6 +28,7 @@ void Level::idle()
   player->move();
 }
 
+#include "gli.h"
 void Level::draw()
 {
   graph->draw(); // draw everything in all phases first

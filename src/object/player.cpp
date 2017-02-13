@@ -7,8 +7,8 @@
 
 #include "../controls.h"
 
-Player::Player(double u, double v)
-  : Object(1.0, 1.0, u, v)
+Player::Player(double a, double b)
+  : Object(1.0, 1.0, a, b)
 {
 
   /*
@@ -80,12 +80,12 @@ void Player::move()
   double ny = y;
 
   static uint64_t lastPhase = 0;
-  if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_UP)))
+  if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_UP)) && level->numPhases())
   {
     phase = (phase+1) % level->numPhases();
     lastPhase = elapsed;
   }
-  else if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_DOWN)))
+  else if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_DOWN)) && level->numPhases())
   {
     phase = (phase-1+level->numPhases()) % level->numPhases();
     lastPhase = elapsed;
@@ -152,16 +152,16 @@ void Player::move()
         ny-height/2.0 < o->y+o->height/2.0)
     {
       ny = v <= 0 ? o->y+o->height/2.0+height/2.0 : y;
-      v = 0.0; // can't fall further
+      v = 0.0;
     }
     if (nx+width/4.0 > o->x-o->width/2.0 &&
         nx-width/4.0 < o->x+o->width/2.0 &&
         ny+height/2.0 > o->y-o->height/2.0 &&
         ny-height/2.0 < o->y+o->height/2.0)
-      nx = x;
+        nx = x;
   }
 
-  if (phase != -1)
+  if (phase != -1 && level->getPhase(phase))
   {
     for (const Object* const o : level->getPhase(phase)->foreground())
     {

@@ -14,6 +14,21 @@ Level* Level::prefabTest()
   level->graph = new SceneGraph();
   // create objects
   {
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall(50.0, 0.2,   0.0, -6.0));
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall( 2.0, 1.0, -14.0, -5.5));
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall( 2.0, 2.0, -11.0, -5.0));
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall( 2.0, 3.0,  -8.0, -4.5));
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Wall( 2.0, 5.0,   0.0, -1.0));
+    level->graph->insert(SceneGraph::Level::FOREGROUND,
+      new Platform(2.0, 0.5, -2.0, -1.0, 0.0, 2.5, 10000));
+  }
+  /*
+  {
     Object* o = new Object(1.6, 0.6, -0.2, -0.4);
     VisagePolygon* vp = VisagePolygon::triangle(1.6, 0.6, -0.5);
     vp->setColour(0x007F00FF);
@@ -140,7 +155,8 @@ Level* Level::prefabTest()
     o->phase = 3;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
+  */
 
-  level->player = new Player();
+  level->player = new Player(-22.5, -6.0);
   return level;
 }

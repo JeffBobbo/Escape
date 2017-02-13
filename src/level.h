@@ -21,7 +21,7 @@ public:
   inline int16_t numPhases() const { return phases.size(); }
 
   inline const SceneGraph* getPhaseBase() const { return graph; }
-  inline const SceneGraph* getPhase(int16_t p) const { return phases[p]; }
+  inline const SceneGraph* getPhase(int16_t p) const { return p >= phases.size() ? nullptr : phases[p]; }
   inline int16_t phasePlayer() const { return player ? player->phase : -1; }
   inline const Player* getPlayer() const { return player; }
 

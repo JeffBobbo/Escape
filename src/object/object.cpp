@@ -20,6 +20,7 @@ void Object::draw()
 {
   // reset
   glLoadIdentity();
+  glTranslatef(-level->getPlayer()->x, -level->getPlayer()->y, 0.0f);
 
   // transformations
   glTranslatef(x, y, 0.0);
