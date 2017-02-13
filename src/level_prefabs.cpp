@@ -7,33 +7,77 @@
 #include "util.h"
 #include "colour.h"
 
+Level* Level::prefab0()
+{
+  Level* level = new Level("Basic Training");
+
+  // create objects
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(50.0, 1.0,   0.0, 0.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(50.0, 1.0,   0.0, 10.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(1.0, 10.0,   -24.5, 5.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(1.0, 10.0,   9.0, 5.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall( 2.0, 1.0, -14.0, 1.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall( 2.0, 2.0, -11.0, 1.5));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall( 1.0, 1.0, -9.5, 1.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall( 2.0, 3.0,  -8.0, 2.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall( 2.0, 5.0,   0.0, 3.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Platform(2.0, 0.5, -2.0, 2.5, 0.0, 2.5, 10000));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Platform(2.0, 0.5, 4.0, 4.75, 0.0, 1.0, 10000));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall( 2.0, 0.5,   8.0, 4.75));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Exit(8.0, 5.5, "prefab1"));
+
+  level->player = new Player(-23.5, 0.0);
+  return level;
+}
+
+Level* Level::prefab1()
+{
+  Level* level = new Level("As if you were selling Buttons at the Door");
+
+  // create objects
+  // the bounding box
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(15.0, 1.0, 7.5, 0.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(15.0, 1.0, 7.5, 20.0));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(1.0, 19.0, 0.5, 10));
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(1.0, 19.0, 14.5, 10));
+
+  // first level
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(11.0, 1.0, 6.5, 15.0));
+
+  Button* b = new Button(11.0, 17.0, -1);
+  level->graph->insert(SceneGraph::Level::FOREGROUND, b);
+  Door* d = new Door(2.0, 1.0, 13.0, 15.0, false, true);
+  level->graph->insert(SceneGraph::Level::FOREGROUND, d);
+  d->link(b);
+
+  level->player = new Player(1.5, 15.0);
+  return level;
+}
+
 Level* Level::prefabTest()
 {
   Level* level = new Level("Test Scene");
 
   level->graph = new SceneGraph();
   // create objects
-  {
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall(50.0, 1.0,   0.0, 0.0));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall( 2.0, 1.0, -14.0, 1.0));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall( 2.0, 2.0, -11.0, 1.5));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall( 1.0, 1.0, -9.5, 1.0));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall( 2.0, 3.0,  -8.0, 2.0));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall( 2.0, 5.0,   0.0, 3.0));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Platform(2.0, 0.5, -2.0, 2.5, 0.0, 2.5, 10000));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Platform(2.0, 0.5, 4.0, 4.75, 0.0, 1.0, 10000));
-    level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall( 2.0, 0.5,   8.0, 4.75));
-  }
-  /*
   {
     Object* o = new Object(1.6, 0.6, -0.2, -0.4);
     VisagePolygon* vp = VisagePolygon::triangle(1.6, 0.6, -0.5);
@@ -141,8 +185,6 @@ Level* Level::prefabTest()
     o->phase = 1;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
-  */
-  /*
   level->phases.push_back(new SceneGraph());
   {
     Object* o = new Platform(1.0, 1.0, 5.0, 0.0, 0.0, 2.0, 5000);
@@ -163,8 +205,7 @@ Level* Level::prefabTest()
     o->phase = 3;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
-  */
 
-  level->player = new Player(-24.5, 0.0);
+  level->player = new Player(0.0, 0.0);
   return level;
 }

@@ -11,7 +11,10 @@
 class Level
 {
 public:
+  static Level* prefab0();
+  static Level* prefab1();
   static Level* prefabTest();
+  static Level* fromName(const std::string& name); 
 
   Level();
   Level(std::string n);
@@ -21,12 +24,16 @@ public:
   inline int16_t numPhases() const { return phases.size(); }
 
   inline const SceneGraph* getPhaseBase() const { return graph; }
-  inline const SceneGraph* getPhase(int16_t p) const { return p >= phases.size() ? nullptr : phases[p]; }
+  inline const SceneGraph* getPhase(int16_t p) const { return static_cast<size_t>(p) >= phases.size() ? nullptr : phases[p]; }
   inline int16_t phasePlayer() const { return player ? player->phase : -1; }
   inline const Player* getPlayer() const { return player; }
 
+  Exit* getExit() const;
+
   void idle();
   void draw();
+
+  bool completed() const;
 
 private:
   std::string name;
@@ -36,6 +43,8 @@ private:
 
   // include a reference to the player, for convenience
   Player* player;
+  mutable Exit* out;
 };
+
 
 #endif

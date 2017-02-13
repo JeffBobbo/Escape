@@ -91,8 +91,10 @@ void Player::move()
     lastPhase = elapsed;
   }
 
-  if (keyboard::pressed(controls::bind(controls::Action::USE)))
+  static uint64_t lastUse = 0;
+  if (elapsed - lastUse > 50 && keyboard::pressed(controls::bind(controls::Action::USE)))
   {
+    lastUse = elapsed;
     for (auto o : level->getPhaseBase()->foreground())
     {
       if (o->type() != Object::Type::TRIGGER)
@@ -103,14 +105,17 @@ void Player::move()
         b->set();
       }
     }
-    for (auto o : level->getPhase(phase)->foreground())
+    if (level->numPhases())
     {
-      if (o->type() != Object::Type::TRIGGER)
-        continue;
-      Button* b = static_cast<Button*>(o);
-      if (aabbOverlap(b))
+      for (auto o : level->getPhase(phase)->foreground())
       {
-        b->set();
+        if (o->type() != Object::Type::TRIGGER)
+          continue;
+        Button* b = static_cast<Button*>(o);
+        if (aabbOverlap(b))
+        {
+          b->set();
+        }
       }
     }
   }
@@ -129,12 +134,12 @@ void Player::move()
   if (keyboard::pressed(controls::bind(controls::Action::MOVE_LEFT)))
   {
     move = true;
-    nx -= (walk ? 0.75 : 1.5) * (delta / 1000.0);
+    nx -= (walk ? 0.75 : 1.5) * (delta / 1000.0) * 2.0;
   }
   if (keyboard::pressed(controls::bind(controls::Action::MOVE_RIGHT)))
   {
     move = true;
-    nx += (walk ? 0.75 : 1.5) * (delta / 1000.0);
+    nx += (walk ? 0.75 : 1.5) * (delta / 1000.0) * 2.0;
   }
   v -= 0.0981f * (delta / 1000.0);
   ny += v;// * (delta / 1000);
@@ -160,11 +165,7 @@ void Player::move()
         nx-width/4.0 < o->x+o->width/2.0 &&
         ny+height/2.0 > o->y-o->height/2.0 &&
         ny-height/2.0 < o->y+o->height/2.0)
-    {
-      std::cout << nx << "," << ny << std::endl;
-      std::cout << o->x << "," << o->y << " " << o->width << "," << o->height << std::endl;
       nx = x;
-    }
   }
 
   if (phase != -1 && level->getPhase(phase))

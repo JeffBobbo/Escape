@@ -79,15 +79,21 @@ void Platform::move()
 }
 
 
-Door::Door(double w, double h, double u, double v, bool o)
+Door::Door(double w, double h, double u, double v, bool o, bool p)
 : Wall(w, h, u, v)
 {
   trigger = nullptr;
   open = o;
-  vOpen = VisagePolygon::rectangle(w, h*0.1);
+  if (p)
+    vOpen = VisagePolygon::rectangle(w*0.1, h);
+  else
+    vOpen = VisagePolygon::rectangle(w, h*0.1);
   static_cast<VisagePolygon*>(vOpen)->setColour(0xafafafFF);
   Animatrix* a = new Animatrix();
-  a->startY = h*0.9/2.0;
+  if (p)
+    a->startX = w*0.9/2.0;
+  else
+    a->startY = h*0.9/2.0;
   vOpen->addAnimatrix(a);
   vClose = visage;
   static_cast<VisagePolygon*>(vClose)->setColour(0xafafafFF);
@@ -121,7 +127,15 @@ Button::Button(double u, double v, int64_t t)
 void Button::idle()
 {
   if (on())
-    static_cast<VisagePolygon*>(visage)->setColour(0xff3f3fff);
+    static_cast<VisagePolygon*>(visage)->setColour(0xff0000ff);
   else
     static_cast<VisagePolygon*>(visage)->setColour(0xff7f7fff);
+}
+
+Exit::Exit(double u, double v, const std::string& n)
+  : Object(1.0, 1.0, u, v)
+  , name(n)
+{
+  visage = VisagePolygon::triangle(1.0, 1.0, 0.0);
+  static_cast<VisagePolygon*>(visage)->setColour(0xFFFF00FF);    
 }

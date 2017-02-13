@@ -1,6 +1,8 @@
 #include "main.h"
 
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 #include "gli.h"
 
@@ -33,6 +35,20 @@ void draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
 
+  // fps update
+  ++frame;
+  if (elapsed - timebase > 1000)
+  {
+    double fps = frame * (1000.0 / (elapsed - timebase));
+    timebase = elapsed;
+    frame = 0;
+    std::stringstream ss;
+    ss << title << " - " << level->getName() << " - FPS: " << std::setprecision(2) << fps;
+    glutSetWindowTitle(ss.str().c_str());
+    timebase = elapsed;
+    frame = 0;
+  }
+
   // setup the projection matrix
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -42,19 +58,7 @@ void draw()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  // fps update
-  ++frame;
-  if (elapsed - timebase > 1000)
-  {
-    double fps = frame * (1000.0 / (elapsed - timebase));
-    timebase = elapsed;
-    frame = 0;
-    char buf[50];
-    sprintf(buf, "%s - %s - FPS: %4.2f", title, level->getName().c_str(), fps);
-    glutSetWindowTitle(buf);
-    timebase = elapsed;
-    frame = 0;
-  }
+  
 
   // draw the scene
   level->draw();
@@ -95,6 +99,29 @@ void update()
   last = elapsed;
   elapsed = glutGet(GLUT_ELAPSED_TIME);
   delta = elapsed - last;
+
+  if (level->completed())
+  {
+    Exit* e = level->getExit();
+    std::string next = e->getNext();
+    if (next.size())
+    {
+      delete level;
+      level = Level::fromName(next);
+      if (level == nullptr)
+      {
+        std::cerr << "Failed to load level " << next << std::endl;
+        glutLeaveMainLoop();
+        return;
+      }
+    }
+    else
+    {
+      // exit
+      glutLeaveMainLoop();
+      return;
+    }
+  }
   level->idle();
   glutPostRedisplay();
 }
@@ -159,7 +186,7 @@ int main(int argc, char** argv)
   // setup controls
   controls::init();
 
-  level = Level::prefabTest();
+  level = Level::prefab1();
 
   phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
   phasepointer->setColour(0x7F7F7FFF);
@@ -174,7 +201,8 @@ int main(int argc, char** argv)
   controls::save();
 
   // cleanup
-  delete level;
+  if (level)
+    delete level;
   // free up all the textures
   dropAllTextures();
 

@@ -131,7 +131,11 @@ STSprite getSTCoords(const std::string& t, const std::string& s)
     it = texmap.find(t);
   }
 
-  AtlasSprite as = it->second.sprites.find(s)->second;
+  auto f = it->second.sprites.find(s);
+  if (f == std::end(it->second.sprites))
+    return {0, 0, 0, 0};
+
+  AtlasSprite as = f->second;
   STSprite st;
   st.s0 = as.x / static_cast<double>(it->second.width);
   st.s1 = (as.x + as.w) / static_cast<double>(it->second.width);

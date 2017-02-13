@@ -14,7 +14,8 @@ public:
     PLAYER,
     PLATFORM,
     DOOR,
-    TRIGGER
+    TRIGGER,
+    EXIT
   };
 
   Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0)
@@ -101,7 +102,7 @@ class Button;
 class Door : public Wall
 {
 public:
-  Door(double w, double h, double u, double v, bool o);
+  Door(double w, double h, double u, double v, bool o, bool p = false);
   virtual ~Door()
   {
     if (vOpen)
@@ -142,7 +143,7 @@ public:
 
   inline void set() { last = timeout == -1 ? !last : elapsed; }
 
-  virtual inline bool on() const
+  inline bool on() const
   {
     return timeout == -1 ? last : elapsed - last < timeout;
   }
@@ -150,6 +151,20 @@ public:
 private:
   int64_t last;
   int64_t timeout;
+};
+
+class Exit : public Object
+{
+public:
+  Exit(double u, double v, const std::string& n);
+  virtual ~Exit() {};
+
+  virtual inline Type type() const { return Type::EXIT; }
+
+  inline std::string getNext() const { return name; }
+
+private:
+  std::string name;
 };
 
 #endif

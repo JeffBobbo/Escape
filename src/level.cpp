@@ -1,14 +1,26 @@
 #include "level.h"
 
+Level* Level::fromName(const std::string& name)
+{
+  if (name == "prefab0")
+    return Level::prefab0();
+  if (name == "prefab1")
+    return Level::prefab1();
+  if (name == "prefabTest")
+    return Level::prefabTest();
+  return nullptr;
+}
+
 Level::Level()
 {
   name = "Unnamed Level";
-  graph = nullptr;
+  graph = new SceneGraph();
   player = nullptr;
+  out = nullptr;
 }
 Level::Level(std::string n)
+  : Level()
 {
-  Level();
   name = n;
 }
 
@@ -38,4 +50,30 @@ void Level::draw()
     it->draw();
 
   player->draw(); // draw the player
+}
+
+Exit* Level::getExit() const
+{
+  if (out == nullptr)
+  {
+    for (auto it : graph->foreground())
+    {
+      if (it->type() == Object::Type::EXIT)
+        out = static_cast<Exit*>(it);
+    }
+    for (auto p : phases)
+    {
+      for (auto it : p->foreground())
+      {
+        if (it->type() == Object::Type::EXIT)
+          out = static_cast<Exit*>(it);
+      }
+    }
+  }
+  return out;
+}
+
+bool Level::completed() const
+{
+  return getExit() == nullptr ? false : player->aabbOverlap(getExit());
 }
