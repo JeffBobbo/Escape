@@ -142,6 +142,8 @@ void Player::move()
   // make sure we can move here
   for (const Object* const o : level->getPhaseBase()->foreground())
   {
+    if (o == this) // skip yourself
+      continue;
     if (!o->isSolid()) // skip non-solids
       continue;
 
@@ -158,7 +160,11 @@ void Player::move()
         nx-width/4.0 < o->x+o->width/2.0 &&
         ny+height/2.0 > o->y-o->height/2.0 &&
         ny-height/2.0 < o->y+o->height/2.0)
-        nx = x;
+    {
+      std::cout << nx << "," << ny << std::endl;
+      std::cout << o->x << "," << o->y << " " << o->width << "," << o->height << std::endl;
+      nx = x;
+    }
   }
 
   if (phase != -1 && level->getPhase(phase))

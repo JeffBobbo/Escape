@@ -65,21 +65,25 @@ void draw()
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
-  bindTexture("img/phase.png");
-  glEnable(GL_TEXTURE_2D);
-  glBegin(GL_QUADS);
-  glTexCoord2f(0.0, 1.0);
-  glVertex3f(16.0f,           16.0f, 0.0f);
-  glTexCoord2f(1.0, 1.0);
-  glVertex3f(16.0f + 128.0f,  16.0f, 0.0f);
-  glTexCoord2f(1.0, 0.0);
-  glVertex3f(16.0f + 128.0f, 32.0f, 0.0f);
-  glTexCoord2f(0.0, 0.0);
-  glVertex3f(16.0f,          32.0f, 0.0f);
-  glEnd();
-  glDisable(GL_TEXTURE_2D);
-  glTranslatef(16 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
-  phasepointer->draw();
+
+  if (level->numPhases())
+  {
+    bindTexture("img/phase.png");
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(16.0f,           16.0f, 0.0f);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(16.0f + 128.0f,  16.0f, 0.0f);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(16.0f + 128.0f, 32.0f, 0.0f);
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(16.0f,          32.0f, 0.0f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    glTranslatef(16 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
+    phasepointer->draw();
+  }
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
