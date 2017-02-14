@@ -64,7 +64,7 @@ static HSVA hsva(RGBA rgba)
 static RGBA rgba(HSVA hsva)
 {
   if (hsva.s <= 0.0)
-    return {0.0, 0.0, 0.0, hsva.a};
+    return {hsva.v, hsva.v, hsva.v, hsva.a};
   double hh = hsva.h;
   while (hh >= 360.0)
     hh -= 360.0;
