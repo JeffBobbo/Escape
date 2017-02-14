@@ -11,7 +11,7 @@
 class VisagePolygon : public Visage
 {
 public:
-  VisagePolygon() {}
+  VisagePolygon() : colour(0xFFFFFFFF) {}
   virtual ~VisagePolygon()
   {
     for (Vec2D* v : vertices)
