@@ -8,14 +8,29 @@
 double offset = 0.1;
 Particle::Particle()
 {
-  // set position
-  double angle = random(-pi(), pi());
-  double o = random(0.0, offset);
-  pos[0] = o * std::cos(angle);
-  pos[1] = o * std::sin(angle);
-  pos[2] = 0.0f;
   age = 0;
 }
+
+ParticleSystem::ParticleSystem(size_t m, size_t r)
+  : max(m)
+  , count(0.0)
+  , rate(r)
+  , lifeMin(1000), lifeMax(0)
+  , sizeStart(0.0f), sizeEnd(0.0f)
+  , direction(0.0), spray(2.0*pi())
+  , speedStart(0.0), speedEnd(0.0)
+  , gravity(false)
+  , offsetX(0.0), offsetY(0.0)
+  , rectangle(false)
+{
+  // allocate all the memory up front
+  // this'll make memory usage initially higher, but means less allocations
+  // during run time (thus faster execution)
+  particles = new Particle[max];
+  last = particles;
+  end = particles + max;
+}
+
 
 void ParticleSystem::setColours(RGBA c0, RGBA c1)
 {
@@ -33,7 +48,22 @@ void ParticleSystem::add()
     else
       last->life = random(lifeMin, lifeMax);
     last->size = sizeStart;
-    //last->sizeEnd = sizeEnd < 0.0f ? sizeStart : sizeEnd;
+
+    // set position
+    if (rectangle)
+    {
+      last->pos[0] = random(-offsetX/2.0, offsetX/2.0);
+      last->pos[1] = random(-offsetY/2.0, offsetY/2.0);
+    }
+    else
+    {
+      double angle = random(-pi(), pi());
+      double ox = random(0.0, offsetX);
+      double oy = random(0.0, offsetY);
+      last->pos[0] = ox * std::cos(angle);
+      last->pos[1] = oy * std::sin(angle);
+    }
+    last->pos[2] = 0.0f;
 
     RGBA c = rgba(hsva0);
     last->col[0] = c.r;

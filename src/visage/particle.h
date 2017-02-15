@@ -25,23 +25,7 @@ public:
 class ParticleSystem : public Visage
 {
 public:
-  ParticleSystem(size_t m, size_t r)
-    : max(m)
-    , count(0.0)
-    , rate(r)
-    , lifeMin(1000), lifeMax(0)
-    , sizeStart(0.0f), sizeEnd(0.0f)
-    , direction(0.0), spray(2.0*pi())
-    , speedStart(0.0), speedEnd(0.0)
-    , gravity(false)
-  {
-    // allocate all the memory up front
-    // this'll make memory usage initially higher, but means less allocations
-    // during run time (thus faster execution)
-    particles = new Particle[max];
-    last = particles;
-    end = particles + max;
-  }
+  ParticleSystem(size_t m, size_t r);
   virtual ~ParticleSystem()
   {
     delete[] particles;
@@ -82,13 +66,16 @@ public:
   size_t rate; // per s
   int64_t lifeMin;
   int64_t lifeMax;
-  float sizeStart;
-  float sizeEnd;
+  double sizeStart;
+  double sizeEnd;
   double direction;
   double spray;
   double speedStart;
   double speedEnd;
-  bool gravity;
+  double gravity;
+  double offsetX;
+  double offsetY;
+  bool rectangle;
 
   std::string particle;
 };
