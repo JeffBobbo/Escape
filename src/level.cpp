@@ -75,5 +75,6 @@ Exit* Level::getExit() const
 
 bool Level::completed() const
 {
-  return getExit() == nullptr ? false : player->aabbOverlap(getExit());
+  Exit* e = getExit();
+  return e ? (e->phase == -1 || player->phase == e->phase) && player->aabbOverlap(e) : false;
 }
