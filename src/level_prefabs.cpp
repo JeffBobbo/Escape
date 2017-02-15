@@ -62,11 +62,33 @@ Level* Level::prefab1()
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Wall(11.0, 1.0, 6.5, 15.0));
 
-  Button* b = new Button(11.0, 17.0, -1);
-  level->graph->insert(SceneGraph::Level::FOREGROUND, b);
+  Button* bd = new Button(11.0, 17.0, -1);
+  level->graph->insert(SceneGraph::Level::FOREGROUND, bd);
   Door* d = new Door(2.0, 1.0, 13.0, 15.0, false, true);
   level->graph->insert(SceneGraph::Level::FOREGROUND, d);
-  d->link(b);
+  d->link(bd);
+
+  // second level
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(11.0, 1.0, 8.5, 10.0));
+
+  // third level
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Wall(11.0, 1.0, 6.5, 5.0));
+
+  // forth level
+  Button* bg = new Button(1.5, 1.0, -1);
+  level->graph->insert(SceneGraph::Level::FOREGROUND, bg);
+
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Grid(2.0, 4.0, 8.5, 2.5, 1));
+
+
+  level->phases.push_back(new SceneGraph());
+  level->phases.push_back(new SceneGraph());
+  Exit* e = new Exit(13.0, 1.0, ""); // exit with no name means quit!
+  e->phase = 1;
+  level->phases.back()->insert(SceneGraph::Level::FOREGROUND, e);
 
   level->player = new Player(1.5, 15.0);
   return level;

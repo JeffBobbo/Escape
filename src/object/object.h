@@ -1,6 +1,7 @@
 #ifndef OBJECT_H_INCLUDE
 #define OBJECT_H_INCLUDE
 
+#include "../types.h"
 #include "../visage/visage.h"
 #include "../visage/polygon.h"
 
@@ -15,7 +16,8 @@ public:
     PLATFORM,
     DOOR,
     TRIGGER,
-    EXIT
+    EXIT,
+    GRID
   };
 
   Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0)
@@ -57,7 +59,7 @@ public:
   double y;
   double width;
   double height;
-  int16_t phase;
+  phase_t phase;
   Visage* visage;
 };
 
@@ -165,6 +167,21 @@ public:
 
 private:
   std::string name;
+};
+
+#include <iostream>
+class Grid : public Object
+{
+public:
+  Grid(double w, double h, double u, double v, phase_t p);
+  virtual ~Grid() {}
+
+  virtual inline Type type() const { return Type::GRID; }
+  virtual void idle();
+  virtual void draw() { Object::draw(); }
+
+private:
+  phase_t target;
 };
 
 #endif

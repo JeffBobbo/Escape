@@ -2,6 +2,7 @@
 
 #include "../main.h"
 #include "../gli.h"
+#include "../visage/allvisage.h"
 
 void Object::idle()
 {
@@ -20,12 +21,13 @@ void Object::draw()
 {
   // reset
   glLoadIdentity();
+
+  // translate by the players position, so the camera follows the player
   glTranslatef(-level->getPlayer()->x, -level->getPlayer()->y, 0.0f);
 
   // transformations
   glTranslatef(x, y, 0.0);
   glRotatef(angle, 0.0, 0.0, 1.0);
-  //glScalef(width, height, 1.0f);
 
   // reset the colour
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -34,8 +36,8 @@ void Object::draw()
   if (phase >= 0 && phase != level->phasePlayer()) // only needs to be done if we're actually in a phase
   {
     // calculate the phases colour
-    double h = (2.0 * pi() / level->numPhases()) *  phase;
-    RGBA c = rgba({degrees(h), 1.0, 1.0, 1.0});
+    double h = (360.0 / level->numPhases()) *  phase;
+    RGBA c = rgba({h, 1.0, 1.0, 1.0});
 
     // calculate the alpha
     double t = (2.0 * pi() / level->numPhases()) * level->phasePlayer();
@@ -50,10 +52,10 @@ void Object::draw()
 
 bool Object::aabbOverlap(const Object* const o) const
 {
-  return x < (o->x+o->width) &&
-         x+width > o->x &&
-         y < (o->y+o->height) &&
-         y+height > o->y;
+  return x-width/2.0 < o->x+o->width/2.0 &&
+         x+width/2.0 > o->x-o->width/2.0 &&
+         y-height/2.0 < o->y+o->height/2.0 &&
+         y+height/2.0 > o->y-o->height/2.0;
 }
 
 /*
@@ -137,5 +139,52 @@ Exit::Exit(double u, double v, const std::string& n)
   , name(n)
 {
   visage = VisagePolygon::triangle(1.0, 1.0, 0.0);
-  static_cast<VisagePolygon*>(visage)->setColour(0xFFFF00FF);    
+  static_cast<VisagePolygon*>(visage)->setColour(0xFFFF00FF);
+}
+
+Grid::Grid(double w, double h, double u, double v, phase_t p)
+  : Object(w, h, u, v)
+  , target(p)
+{
+  visage = new VisageComplex();
+  {
+    VisagePolygon* bg = VisagePolygon::rectangle(w, h);
+    Animatrix* a0 = new Animatrix();
+    a0->startColour = 0xFFFFFF3F;
+    a0->endColour   = 0xFFFFFF1F;
+    a0->start =    0;
+    a0->end   = 1000;
+    a0->loop  = 2000;
+    bg->addAnimatrix(a0);
+    Animatrix* a1 = new Animatrix();
+    a1->startColour = 0xFFFFFF1F;
+    a1->endColour   = 0xFFFFFF3F;
+    a1->start = 1000;
+    a1->end   = 2000;
+    a1->loop  = 2000;
+    bg->addAnimatrix(a1);
+    static_cast<VisageComplex*>(visage)->add(bg);
+  }
+  {
+    ParticleSystem* ps = new ParticleSystem(1000, 150);
+    ps->setParticleImage("img/particle_soft.png");
+    ps->setColours(fromInt(0xFFFFFFFF), fromInt(0xFFFFFF00));
+    ps->lifeMin = 2000;
+    ps->lifeMax = 4000;
+    ps->sizeStart = 1.0f / 8.0f;
+    ps->sizeEnd   = 1.0f / 32.0f;
+    ps->speedStart = 0.5;
+    ps->speedEnd = 0.0;
+    ps->setGravity(true);
+    static_cast<VisageComplex*>(visage)->add(ps);
+  }
+}
+
+void Grid::idle()
+{
+  if (level->phasePlayer() != target)
+  {
+    if (aabbOverlap(level->getPlayer()))
+      level->getPlayer()->phase = target;
+  }
 }
