@@ -166,16 +166,19 @@ Grid::Grid(double w, double h, double u, double v, phase_t p)
     static_cast<VisageComplex*>(visage)->add(bg);
   }
   {
-    ParticleSystem* ps = new ParticleSystem(1000, 150);
+    ParticleSystem* ps = new ParticleSystem(1000, 25);
     ps->setParticleImage("img/particle_soft.png");
     ps->setColours(fromInt(0xFFFFFFFF), fromInt(0xFFFFFF00));
-    ps->lifeMin = 2000;
-    ps->lifeMax = 4000;
+    ps->lifeMin = 1000;
+    ps->lifeMax = 1500;
     ps->sizeStart = 1.0f / 8.0f;
     ps->sizeEnd   = 1.0f / 32.0f;
-    ps->speedStart = 0.5;
+    ps->speedStart = 0.1;
     ps->speedEnd = 0.0;
-    ps->setGravity(true);
+    ps->offsetX = w;
+    ps->offsetY = h;
+    ps->rectangle = true;
+    //ps->setGravity(true);
     static_cast<VisageComplex*>(visage)->add(ps);
   }
 }
