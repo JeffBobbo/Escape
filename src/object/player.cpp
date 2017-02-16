@@ -41,24 +41,6 @@ Player::Player(double a, double b)
   setVisage(vt);
   */
   VisageTexture* vt = new VisageTexture(1.0, 1.0, "img/character.png");
-  {
-    Animatrix* a = new Animatrix();
-    a->startColour = 0xFFFFFFFF;
-    a->endColour = 0xB0AFAFFF;
-    a->start = 0;
-    a->end = 500;
-    a->loop = 1000;
-    vt->addAnimatrix(a);
-  }
-  {
-    Animatrix* a = new Animatrix();
-    a->startColour = 0xB0AFAFFF;
-    a->endColour = 0xFFFFFFFF;
-    a->start = 500;
-    a->end = 1000;
-    a->loop = 1000;
-    vt->addAnimatrix(a);
-  }
   setVisage(vt);
 
   facingRight = true;
