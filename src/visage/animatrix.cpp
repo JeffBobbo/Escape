@@ -23,7 +23,7 @@ void Animatrix::apply() const
   offsetX += startX;
   offsetY += startY;
 
-  if (loop != 0)
+  if (loop > 0)
   {
     const double p = (tickCount() % (end-start)) / static_cast<double>(end-start);
 

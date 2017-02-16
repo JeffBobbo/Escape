@@ -25,7 +25,7 @@ public:
     if (loop == 0) // non-looping animatrices are always active
       return true;
     uint32_t progress = tickCount() % loop;
-    return progress > start && progress < end;
+    return progress >= start && progress < end;
   }
   inline bool isVisible() const { return visible; }
 
