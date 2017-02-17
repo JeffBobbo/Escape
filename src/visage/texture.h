@@ -14,10 +14,8 @@
 class VisageTexture : public Visage
 {
 public:
-  VisageTexture(double w, double h, const std::string& file);
-  virtual ~VisageTexture()
-  {
-  }
+  VisageTexture(double w, double h, const std::string& file, double sx = 0.0, double sy = 0.0);
+  virtual ~VisageTexture() {}
 
   virtual inline Type type() const { return Type::TEXTURE; }
 
@@ -31,6 +29,7 @@ private:
   std::string file;
   std::string sprite;
   bool flip;
+  double scrollX, scrollY, offsetX, offsetY;
 };
 
 #endif

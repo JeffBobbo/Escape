@@ -7,14 +7,16 @@
 #include "../colour.h"
 #include "../image.h"
 
-VisageTexture::VisageTexture(double w, double h, const std::string& f)
+VisageTexture::VisageTexture(double w, double h, const std::string& f, double sx, double sy)
+  : file(f), sprite("")
+  , flip(false)
+  , scrollX(sx), scrollY(sy), offsetX(0.0), offsetY(0.0)
 {
   // create a quad at the right size
   vertices[0] = -w/2.0; vertices[1] =  h/2.0;
   vertices[2] = -w/2.0; vertices[3] = -h/2.0;
   vertices[4] =  w/2.0; vertices[5] = -h/2.0;
   vertices[6] =  w/2.0; vertices[7] =  h/2.0;
-  file = f;
   loadTexture(file);
   flip = false;
 }
@@ -28,7 +30,14 @@ void VisageTexture::draw()
   glEnable(GL_TEXTURE_2D);
   glBegin(GL_QUADS);
 
-  STSprite st = getSTCoords(file, sprite);
+  STSprite st;
+  if (sprite.size())
+    st = getSTCoords(file, sprite);
+  else
+    st = {(offsetX += scrollX * (delta / 1000.0)),
+          offsetX + 1.0,
+          (offsetY += scrollY * (delta / 1000.0)),
+          offsetY + 1.0};
 
   if (flip)
   {
