@@ -4,6 +4,16 @@
 #include "../util.h"
 #include "../colour.h"
 
+Animatrix::Animatrix()
+  : start(0), end(0), loop(0)
+  , startColour(0xFFFFFF), endColour(0xFFFFFF)
+  , startScaleX(1.0), startScaleY(1.0), endScaleX(1.0), endScaleY(1.0)
+  , startAngle(0.0), endAngle(0.0), rotation(0.0)
+  , startX(0.0), startY(0.0), endX(0.0), endY(0.0)
+  , visible(true)
+{
+}
+
 void Animatrix::apply() const
 {
   if (!isActive())

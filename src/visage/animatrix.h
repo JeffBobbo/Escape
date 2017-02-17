@@ -9,15 +9,7 @@
 class Animatrix
 {
 public:
-  Animatrix()
-  {
-    start = end = loop = offset = 0;
-    startColour = endColour = 0xFFFFFFFF;
-    startScaleX = startScaleY = endScaleX = endScaleY = 1.0;
-    startAngle = endAngle = rotation = 0.0;
-    startX = startY = endX = endY = 0.0;
-    visible = true;
-  }
+  Animatrix();
   virtual ~Animatrix() {}
 
   inline bool isActive() const
@@ -32,7 +24,7 @@ public:
   void apply() const;
 
 
-  uint64_t start, end, loop, offset;
+  uint64_t start, end, loop;
   RGBA_t startColour, endColour;
   double startScaleX, startScaleY, endScaleX, endScaleY;
   double startAngle, endAngle, rotation;
