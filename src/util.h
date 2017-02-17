@@ -54,7 +54,7 @@ inline double pi()
 #endif
 constexpr double gravity()
 {
-  return 0.00981f;
+  return 0.0981f;
 }
 
 
