@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include <algorithm>
+
 #include "../main.h"
 #include "../input.h"
 #include "../visage/allvisage.h"
@@ -10,36 +12,6 @@
 Player::Player(double a, double b)
   : Object(1.0, 1.0, a, b)
 {
-
-  /*
-  VisageComplex* vc = new VisageComplex();
-  VisagePolygon* body = VisagePolygon::rectangle(0.2, 0.35);
-  body->setColour(0xFFFFFFFF);
-  VisagePolygon* head = VisagePolygon::rectangle(0.2, 0.15);
-  head->setColour(0xffd291FF);
-  Animatrix* ahead = new Animatrix();
-  ahead->startY = 0.25;
-  head->addAnimatrix(ahead);
-  VisagePolygon* eye = VisagePolygon::rectangle(0.02, 0.02);
-  eye->setColour(0x000000FF);
-  Animatrix* aeye = new Animatrix();
-  aeye->startY = 0.28;
-  aeye->startX = 0.075;
-  eye->addAnimatrix(aeye);
-  VisagePolygon* hat = VisagePolygon::triangle(0.25, 0.1, 1.1);
-  hat->setColour(0xFF0000FF);
-  Animatrix* ahat = new Animatrix();
-  ahat->startY = 0.375;
-  hat->addAnimatrix(ahat);
-  vc->add(hat);
-  vc->add(head);
-  vc->add(eye);
-  vc->add(body);
-  setVisage(vc);
-
-  VisageTexture* vt = new VisageTexture("img/M484SpaceSoldier.png");
-  setVisage(vt);
-  */
   VisageTexture* vt = new VisageTexture(1.0, 1.0, "img/character.png");
   setVisage(vt);
 
@@ -123,7 +95,7 @@ void Player::move()
     move = true;
     nx += (walk ? 0.75 : 1.5) * (delta / 1000.0) * 2.0;
   }
-  v -= 0.0981f * (delta / 1000.0);
+  v -= gravity() * (delta / 1000.0);
   ny += v;// * (delta / 1000);
 
   // make sure we can move here
