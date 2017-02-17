@@ -1,10 +1,24 @@
 # compilation stuff
 *.o
 *.out
+*.obj
+*.exe
 
 # sublime text
 *.sublime-*
 
+# visual studio
+*.suo
+*.user
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+.vs/
+*.VC.db
+*.VC.VC.opendb
 
 # game files
 controls.txt
