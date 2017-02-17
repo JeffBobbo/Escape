@@ -21,7 +21,6 @@ VisageTexture::VisageTexture(double w, double h, const std::string& f, double sx
   flip = false;
 }
 
-#include <iostream>
 void VisageTexture::draw()
 {
   Visage::draw();
@@ -35,9 +34,10 @@ void VisageTexture::draw()
     st = getSTCoords(file, sprite);
   else
     st = {(offsetX += scrollX * (delta / 1000.0)),
-          offsetX + 1.0,
+           offsetX + 1.0,
           (offsetY += scrollY * (delta / 1000.0)),
-          offsetY + 1.0};
+           offsetY + 1.0
+    };
 
   if (flip)
   {
