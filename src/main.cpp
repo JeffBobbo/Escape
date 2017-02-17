@@ -4,6 +4,9 @@
 #include <sstream>
 #include <iomanip>
 
+#include <thread>
+#include <chrono>
+
 #include "gli.h"
 
 #include "util.h"
@@ -85,7 +88,7 @@ void draw()
     glVertex3f(16.0f,          32.0f, 0.0f);
     glEnd();
     glDisable(GL_TEXTURE_2D);
-    glTranslatef(16 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
+    glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
     phasepointer->draw();
   }
   glMatrixMode(GL_MODELVIEW);
@@ -186,7 +189,7 @@ int main(int argc, char** argv)
   // setup controls
   controls::init();
 
-  level = Level::prefab1();
+  level = Level::prefab0();
 
   phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
   phasepointer->setColour(0x7F7F7FFF);
