@@ -137,7 +137,7 @@ private:
 class Button : public Object
 {
 public:
-  Button(double u, double v, int64_t t);
+  Button(double u, double v, millis_t t);
   virtual ~Button() {};
 
   virtual inline Type type() const { return Type::TRIGGER; }

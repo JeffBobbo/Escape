@@ -24,7 +24,7 @@ void loadAtlasInformation(const std::string file, Texture& tex)
   // read the entire file in
   std::string buf;
   ifs.seekg(0, std::ios::end);
-  buf.reserve(ifs.tellg()); // reserve all the memory up front
+  buf.reserve(static_cast<std::string::size_type>(ifs.tellg())); // reserve all the memory up front
   ifs.seekg(0, std::ios::beg);
   buf.assign((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
 

@@ -51,8 +51,8 @@ void Animatrix::apply() const
     if (startScaleY != endScaleY)
       scaley *= interpolate(startScaleY, endScaleY, p);
   }
-  glTranslatef(offsetX, offsetY, 0.0);
-  glRotatef(angle, 0.0, 0.0, 1.0);
-  glScalef(scalex, scaley, 1.0);
+  glTranslated(offsetX, offsetY, 0.0);
+  glRotated(angle, 0.0, 0.0, 1.0);
+  glScaled(scalex, scaley, 1.0);
   glColor4dv(col);
 }

@@ -47,34 +47,34 @@ void ParticleSystem::add()
       last->life = lifeMin;
     else
       last->life = random(lifeMin, lifeMax);
-    last->size = sizeStart;
+    last->size = static_cast<float>(sizeStart);
 
     // set position
     if (rectangle)
     {
-      last->pos[0] = random(-offsetX/2.0, offsetX/2.0);
-      last->pos[1] = random(-offsetY/2.0, offsetY/2.0);
+      last->pos[0] = static_cast<float>(random(-offsetX/2.0, offsetX/2.0));
+      last->pos[1] = static_cast<float>(random(-offsetY/2.0, offsetY/2.0));
     }
     else
     {
       double angle = random(-pi(), pi());
       double ox = random(0.0, offsetX);
       double oy = random(0.0, offsetY);
-      last->pos[0] = ox * std::cos(angle);
-      last->pos[1] = oy * std::sin(angle);
+      last->pos[0] = static_cast<float>(ox * std::cos(angle));
+      last->pos[1] = static_cast<float>(oy * std::sin(angle));
     }
     last->pos[2] = 0.0f;
 
     RGBA c = rgba(hsva0);
-    last->col[0] = c.r;
-    last->col[1] = c.g;
-    last->col[2] = c.b;
-    last->col[3] = c.a;
+    last->col[0] = static_cast<float>(c.r);
+    last->col[1] = static_cast<float>(c.g);
+    last->col[2] = static_cast<float>(c.b);
+    last->col[3] = static_cast<float>(c.a);
     // create random direction
     double dir = direction + random(-spray/2.0, spray/2.0);
-    last->vel[0] = speedStart * std::cos(dir);
-    last->vel[1] = speedStart * std::sin(dir);
-    last->vel[2] = 0.0;
+    last->vel[0] = static_cast<float>(speedStart * std::cos(dir));
+    last->vel[1] = static_cast<float>(speedStart * std::sin(dir));
+    last->vel[2] = 0.0f;
 
     ++last;
   }
@@ -98,12 +98,12 @@ void ParticleSystem::update()
       double prog = p->age / static_cast<double>(p->life);
 
       if (gravity) // apply some Gs
-        p->vel[1] -= ::gravity() * delta;
+        p->vel[1] -= static_cast<float>(::gravity() * delta);
 
       const double a = std::atan2(p->vel[1], p->vel[0]);
       const double s = interpolate(speedStart, speedEnd, prog);
-      p->vel[0] = s * std::cos(a);
-      p->vel[1] = s * std::sin(a);
+      p->vel[0] = static_cast<float>(s * std::cos(a));
+      p->vel[1] = static_cast<float>(s * std::sin(a));
 
       // move
       p->pos[0] += p->vel[0] * (delta / 1000.0f);
@@ -117,13 +117,13 @@ void ParticleSystem::update()
         interpolate(hsva0.v, hsva1.v, prog),
         interpolate(hsva0.a, hsva1.a, prog)
       });
-      p->col[0] = col.r;
-      p->col[1] = col.g;
-      p->col[2] = col.b;
-      p->col[3] = col.a;
+      p->col[0] = static_cast<float>(col.r);
+      p->col[1] = static_cast<float>(col.g);
+      p->col[2] = static_cast<float>(col.b);
+      p->col[3] = static_cast<float>(col.a);
 
       if (sizeEnd >= 0.0f)
-        p->size = interpolate(sizeStart, sizeEnd, prog);
+        p->size = static_cast<float>(interpolate(sizeStart, sizeEnd, prog));
 
       ++p;
     }
@@ -174,7 +174,7 @@ void ParticleSystem::draw()
     glEnable(GL_TEXTURE_2D);
     while (p != last)
     {
-      glColor4f(
+      glColor4d(
         col[0] * p->col[0],
         col[1] * p->col[1],
         col[2] * p->col[2],

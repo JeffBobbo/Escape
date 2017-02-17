@@ -71,7 +71,7 @@ inline double degrees(const double radians)
 
 template <typename T> inline T interpolate(const T& a, const T& b, const double& p)
 {
-  return (b - a) * p + a;
+  return static_cast<T>((b - a) * p) + a;
 }
 
 void seed(uint64_t s);

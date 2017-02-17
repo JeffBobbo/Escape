@@ -41,7 +41,7 @@ void VisagePolygon::draw()
   double col[4];
   glGetDoublev(GL_CURRENT_COLOR, col);
 
-  glColor4f(
+  glColor4d(
     col[0] * ((colour >> 24) & 255) / 255.0, // r
     col[1] * ((colour >> 16) & 255) / 255.0, // g
     col[2] * ((colour >> 8 ) & 255) / 255.0, // b
@@ -51,7 +51,7 @@ void VisagePolygon::draw()
 
   glBegin(GL_POLYGON);
   for (const Vec2D* const v : vertices)
-    glVertex3f(v->x, v->y, 0.0);
+    glVertex3d(v->x, v->y, 0.0);
   glEnd();
   glPopMatrix();
 }

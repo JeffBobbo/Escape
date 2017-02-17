@@ -23,14 +23,14 @@ void Object::draw()
   glLoadIdentity();
 
   // translate by the players position, so the camera follows the player
-  glTranslatef(-level->getPlayer()->x, -level->getPlayer()->y, 0.0f);
+  glTranslated(-level->getPlayer()->x, -level->getPlayer()->y, 0.0);
 
   // transformations
-  glTranslatef(x, y, 0.0);
-  glRotatef(angle, 0.0, 0.0, 1.0);
+  glTranslated(x, y, 0.0);
+  glRotated(angle, 0.0, 0.0, 1.0);
 
   // reset the colour
-  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  glColor4d(1.0, 1.0, 1.0, 1.0);
 
   // now work out what the colour should be for the phase
   if (phase >= 0 && phase != level->phasePlayer()) // only needs to be done if we're actually in a phase
@@ -44,7 +44,7 @@ void Object::draw()
     double a  = std::fabs(t - h);
     a = (a > pi() ? 2.0 * pi() - a : a) / pi();
 
-    glColor4f(c.r, c.g, c.b, a);
+    glColor4d(c.r, c.g, c.b, a);
   }
   if (visage)
     visage->draw();
@@ -118,7 +118,7 @@ void Door::idle()
   visage = open ? vOpen : vClose;
 }
 
-Button::Button(double u, double v, int64_t t)
+Button::Button(double u, double v, millis_t t)
   : Object(0.25, 0.25, u, v)
   , last(0), timeout(t)
 {
