@@ -78,12 +78,12 @@ void Player::move()
   // only jump if v==0.0, that means we're on the ground
   if (v == 0.0 && keyboard::pressed(controls::bind(controls::Action::JUMP)))
   {
-    v = 0.0981f/1.5;
+    v = gravity()/1.5;
     lastMove = elapsed;
   }
 
-  if (keyboard::pressed(controls::bind(controls::Action::CROUCH)))
-    ny -= 0.5 * (delta / 1000.0);
+  //if (keyboard::pressed(controls::bind(controls::Action::CROUCH)))
+  //  ny -= 0.5 * (delta / 1000.0);
   bool walk = keyboard::pressed(controls::bind(controls::Action::WALK_MODIFIER));
   if (keyboard::pressed(controls::bind(controls::Action::MOVE_LEFT)))
   {
@@ -96,7 +96,7 @@ void Player::move()
     nx += (walk ? 0.75 : 1.5) * (delta / 1000.0) * 2.0;
   }
   v -= gravity() * (delta / 1000.0);
-  ny += v;// * (delta / 1000);
+  ny += v;// * (delta / 1000.0);
 
   // make sure we can move here
   for (const Object* const o : level->getPhaseBase()->foreground())
