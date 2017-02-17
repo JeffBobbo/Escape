@@ -71,7 +71,7 @@ static RGBA rgba(HSVA hsva)
   while (hh < 0.0)
     hh += 360.0;
   hh /= 60.0;
-  int i = hh;
+  int i = static_cast<int>(hh);
   double ff = hh - i;
   double p = hsva.v * (1.0 - hsva.s);
   double q = hsva.v * (1.0 - (hsva.s * ff));
