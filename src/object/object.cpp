@@ -148,17 +148,18 @@ Grid::Grid(double w, double h, double u, double v, phase_t p)
 {
   visage = new VisageComplex();
   {
-    VisagePolygon* bg = VisagePolygon::rectangle(w, h);
+    //VisagePolygon* bg = VisagePolygon::rectangle(w, h);
+    VisageTexture* bg = new VisageTexture(w, h, "img/background/tile2.png", -0.5, -0.5);
     Animatrix* a0 = new Animatrix();
-    a0->startColour = 0xFFFFFF3F;
-    a0->endColour   = 0xFFFFFF1F;
+    a0->startColour = 0xFFFFFF7F;
+    a0->endColour   = 0xFFFFFF3F;
     a0->start =    0;
     a0->end   = 1000;
     a0->loop  = 2000;
     bg->addAnimatrix(a0);
     Animatrix* a1 = new Animatrix();
-    a1->startColour = 0xFFFFFF1F;
-    a1->endColour   = 0xFFFFFF3F;
+    a1->startColour = 0xFFFFFF3F;
+    a1->endColour   = 0xFFFFFF7F;
     a1->start = 1000;
     a1->end   = 2000;
     a1->loop  = 2000;
