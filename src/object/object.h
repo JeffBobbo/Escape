@@ -143,16 +143,16 @@ public:
   virtual inline Type type() const { return Type::TRIGGER; }
   virtual void idle();
 
-  inline void set() { last = timeout == -1 ? !last : elapsed; }
+  inline void set() { last = timeout == -1 ? !last : static_cast<int32_t>(elapsed); }
 
   inline bool on() const
   {
-    return timeout == -1 ? last : elapsed - last < timeout;
+    return timeout == -1 ? last != 0 : elapsed - last < timeout;
   }
 
 private:
-  int64_t last;
-  int64_t timeout;
+  int32_t last;
+  int32_t timeout;
 };
 
 class Exit : public Object
