@@ -3,7 +3,64 @@
 
 #include <stdint.h>
 
+#ifdef PHASE_FIX
+struct phase_t
+{
+  int16_t d;
+
+  phase_t() {}
+  explicit phase_t(int16_t a) : d(a)
+  {
+  }
+
+  phase_t(const phase_t& o) : d(o.d)
+  {
+  }
+
+  inline phase_t& operator=(const phase_t& o)
+  {
+    d = o.d;
+    return *this;
+  }
+  inline phase_t operator+(const phase_t& o) const
+  {
+    return phase_t(d+o.d);
+  }
+  inline phase_t operator-(const phase_t& o) const
+  {
+    return phase_t(d-o.d);
+  }
+  inline phase_t operator*(const phase_t& o) const
+  {
+    return phase_t(d*o.d);
+  }
+  inline phase_t operator/(const phase_t& o) const
+  {
+    return phase_t(d/o.d);
+  }
+  inline phase_t operator%(const phase_t& o) const
+  {
+    return phase_t(d%o.d);
+  }
+
+  inline bool operator==(const phase_t& o) const
+  {
+    return d == o.d;
+  }
+  inline bool operator!=(const phase_t& o) const
+  {
+    return !(*this == o);
+  }
+  inline bool operator>(const phase_t& o) const { return d > o.d; }
+  inline bool operator<(const phase_t& o) const { return d < o.d; }
+  inline bool operator>=(const phase_t& o) const { return d >= o.d; }
+  inline bool operator<=(const phase_t& o) const { return d <= o.d; }
+
+  inline operator bool() const { return d; }
+};
+#else
 typedef int16_t phase_t;
+#endif
 
 #ifdef MILLIS_FIX
 struct millis_t
