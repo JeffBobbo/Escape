@@ -13,33 +13,41 @@ Level* Level::prefab0()
 
   // create objects
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(50.0, 1.0,   0.0, 0.0));
+    new Wall(20.0, 1.0,  0.0, 0.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(50.0, 1.0,   0.0, 10.0));
+    new Wall(20.0, 1.0,  0.0, 10.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(1.0, 10.0,   -24.5, 5.0));
+    new Wall(1.0, 10.0, -9.5, 5.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(1.0, 10.0,   9.0, 5.0));
+    new Wall(1.0, 10.0,  9.5, 5.0));
+
+  // staircase
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 2.0, 1.0, -14.0, 1.0));
+    new Wall( 1.0, 1.0, -6.0, 1.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 2.0, 2.0, -11.0, 1.5));
+    new Wall( 1.0, 2.0, -4.0, 1.5));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 1.0, 1.0, -9.5, 1.0));
+    new Wall( 1.0, 1.0, -3.0, 1.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 2.0, 3.0,  -8.0, 2.0));
+    new Wall( 1.0, 3.0, -2.0, 2.0));
+
+  // moving platform
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 2.0, 5.0,   0.0, 3.0));
+    new Platform(1.0, 0.5, 1.0, 2.5, 0.0, 2.5, 10000));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Platform(2.0, 0.5, -2.0, 2.5, 0.0, 2.5, 10000));
+    new Wall( 1.0, 5.0, 2.0, 3.0));
+
+  // second moving platform
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Platform(2.0, 0.5, 4.0, 4.75, 0.0, 1.0, 10000));
+    new Platform(1.0, 0.5, 4.0, 4.75, 0.0, 1.0, 10000));
+
+  // exit
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Wall( 2.0, 0.5,   8.0, 4.75));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Exit(8.0, 5.5, "prefab1"));
 
-  level->player = new Player(-23.5, 0.0);
+  level->player = new Player(-8.5, 0.0);
   return level;
 }
 

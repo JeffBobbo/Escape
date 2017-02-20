@@ -150,6 +150,7 @@ Grid::Grid(double w, double h, double u, double v, phase_t p)
   {
     //VisagePolygon* bg = VisagePolygon::rectangle(w, h);
     VisageTexture* bg = new VisageTexture(w, h, "img/background/tile2.png", -0.5, -0.5);
+    static_cast<VisageTexture*>(bg)->setRepeat(w, h);
     Animatrix* a0 = new Animatrix();
     a0->startColour = 0xFFFFFF7F;
     a0->endColour   = 0xFFFFFF3F;
