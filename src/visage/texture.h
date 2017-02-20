@@ -22,6 +22,7 @@ public:
   void setAtlasSprite(const std::string& s) { sprite = s; }
   void setAtlasSprite(const std::string&& s) { sprite = s; }
   void setFlip(bool f) { flip = f; }
+  void setRepeat(double rx, double ry) { repeatX = rx; repeatY = ry; }
   virtual void draw();
 
 private:
@@ -30,6 +31,7 @@ private:
   std::string sprite;
   bool flip;
   double scrollX, scrollY, offsetX, offsetY;
+  double repeatX, repeatY;
 };
 
 #endif

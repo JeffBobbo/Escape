@@ -11,6 +11,7 @@ VisageTexture::VisageTexture(double w, double h, const std::string& f, double sx
   : file(f), sprite("")
   , flip(false)
   , scrollX(sx), scrollY(sy), offsetX(0.0), offsetY(0.0)
+  , repeatX(1.0), repeatY(1.0)
 {
   // create a quad at the right size
   vertices[0] = static_cast<float>(-w/2.0); vertices[1] = static_cast<float>( h/2.0);
@@ -34,9 +35,9 @@ void VisageTexture::draw()
     st = getSTCoords(file, sprite);
   else
     st = {(offsetX += scrollX * (delta / 1000.0)),
-           offsetX + 1.0,
+           offsetX + repeatX,
           (offsetY += scrollY * (delta / 1000.0)),
-           offsetY + 1.0
+           offsetY + repeatY
     };
 
   if (flip)
