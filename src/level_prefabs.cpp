@@ -81,13 +81,13 @@ Level* Level::prefab1()
   level->graph->insert(SceneGraph::Level::FOREGROUND, bg);
 
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Grid(2.0, 4.0, 8.5, 2.5, (phase_t)(1)));
+    new Grid(2.0, 4.0, 8.5, 2.5, 1));
 
 
   level->phases.push_back(new SceneGraph());
   level->phases.push_back(new SceneGraph());
   Exit* e = new Exit(13.0, 1.0, ""); // exit with no name means quit!
-  e->phase = (phase_t)(1);
+  e->phase = 1;
   level->phases.back()->insert(SceneGraph::Level::FOREGROUND, e);
 
   level->player = new Player(1.5, 15.0);
@@ -190,7 +190,7 @@ Level* Level::prefabTest()
     o->setVisage(ps);
     o->x = 2.75;
     o->y = 0.0;
-    o->phase = (phase_t)(0);
+    o->phase = 0;
     level->phases.back()->insert(SceneGraph::Level::SCENARY, o);
   }
   {
@@ -204,27 +204,27 @@ Level* Level::prefabTest()
   level->phases.push_back(new SceneGraph());
   {
     Object* o = new Platform(1.0, 1.0, -5.0, 0.0, 2.0, 0.0, 5000);
-    o->phase = (phase_t)(1);
+    o->phase = 1;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
   level->phases.push_back(new SceneGraph());
   {
     Object* o = new Platform(1.0, 1.0, 5.0, 0.0, 0.0, 2.0, 5000);
-    o->phase = (phase_t)(2);
+    o->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
     Button* b = new Button(-2.5, 2, -1);
-    b->phase = (phase_t)(2);
+    b->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, b);
 
     Door* d = new Door(0.2, 1.0, 2.5, -0.2, false);
-    d->phase = (phase_t)(2);
+    d->phase = 2;
     d->link(b);
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, d);
   }
   level->phases.push_back(new SceneGraph());
   {
     Object* o = new Platform(1.0, 1.0, 0.0, 0.0, 0.0, 2.0, 2000);
-    o->phase = (phase_t)(3);
+    o->phase = 3;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
 

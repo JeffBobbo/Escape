@@ -109,7 +109,7 @@ void Door::idle()
   }
   else
   {
-    if ((phase == (phase_t)(-1) || phase == level->phasePlayer()) &&
+    if ((phase == -1 || phase == level->phasePlayer()) &&
         distanceSquared(level->getPlayer()) < 2)
       open = true;
     else

@@ -18,7 +18,7 @@ Player::Player(double a, double b)
   facingRight = true;
   lastMove = 0;
   v = 0.0;
-  phase = (phase_t)(0);
+  phase = 0;
 }
 
 void Player::idle()
@@ -36,12 +36,12 @@ void Player::move()
   static millis_t lastPhase = 0;
   if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_UP)) && level->numPhases())
   {
-    phase = phase_t(phase+(phase_t)(1)) % level->numPhases();
+    phase = phase+1 % level->numPhases();
     lastPhase = elapsed;
   }
   else if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_DOWN)) && level->numPhases())
   {
-    phase = (phase-(phase_t)(1)+level->numPhases()) % level->numPhases();
+    phase = (phase-1+level->numPhases()) % level->numPhases();
     lastPhase = elapsed;
   }
 

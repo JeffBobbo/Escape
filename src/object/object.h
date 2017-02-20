@@ -29,7 +29,7 @@ public:
     width = w;
     height = h;
     visage = nullptr;
-    phase = (phase_t)(-1);
+    phase = -1;
   }
 
   virtual ~Object()
