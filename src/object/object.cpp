@@ -74,7 +74,7 @@ bool Object::satOverlap(const Object* const o) const
 
 void Platform::move()
 {
-  const double p = (elapsed % period) / static_cast<double>(period);
+  const double p = static_cast<double>(elapsed % period) / static_cast<double>(period);
   const double a = 2.0 * pi() * p;
   x = originx + std::cos(a) * radiusx;
   y = originy + std::sin(a) * radiusy;

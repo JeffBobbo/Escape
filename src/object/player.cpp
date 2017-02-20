@@ -33,7 +33,7 @@ void Player::move()
   double nx = x;
   double ny = y;
 
-  static uint64_t lastPhase = 0;
+  static millis_t lastPhase = 0;
   if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_UP)) && level->numPhases())
   {
     phase = (phase+1) % level->numPhases();
@@ -45,7 +45,7 @@ void Player::move()
     lastPhase = elapsed;
   }
 
-  static uint64_t lastUse = 0;
+  static millis_t lastUse = 0;
   if (elapsed - lastUse > 50 && keyboard::pressed(controls::bind(controls::Action::USE)))
   {
     lastUse = elapsed;

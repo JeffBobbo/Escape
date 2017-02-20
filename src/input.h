@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include "types.h"
+
 namespace mouse
 {
   enum class Wheel
@@ -16,8 +18,8 @@ namespace mouse
   bool right();
   Wheel wheel();
   void velocity(double& x, double& y);
-  int64_t idle();
-  int64_t idle(const int b);
+  millis_t idle();
+  millis_t idle(const int b);
 
   void registerCallbacks();
 }
@@ -27,8 +29,8 @@ namespace keyboard
 {
   bool pressed(const KeyCode id);
   int modifiers(const KeyCode id);
-  int64_t idle();
-  int64_t idle(const KeyCode id);
+  millis_t idle();
+  millis_t idle(const KeyCode id);
 
   void registerCallbacks();
 }

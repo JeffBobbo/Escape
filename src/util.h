@@ -6,6 +6,8 @@
 #include <cctype> // std::toupper
 #include <random>
 
+#include "types.h"
+
 // string stuff
 inline void toUpper(std::string& s)
 {
@@ -31,10 +33,10 @@ inline std::string commify(const int64_t n)
 }
 
 // time stuff
-extern int64_t elapsed;
-extern int64_t last;
-extern int64_t delta;
-static inline uint64_t tickCount() { return elapsed; }
+extern millis_t elapsed;
+extern millis_t last;
+extern millis_t delta;
+static inline millis_t tickCount() { return elapsed; }
 
 // math stuff
 #ifdef __GNUC__

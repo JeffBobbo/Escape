@@ -80,7 +80,7 @@ public:
 class Platform : public Wall
 {
 public:
-  Platform(double w, double h, double u, double v, double rx, double ry, int64_t p)
+  Platform(double w, double h, double u, double v, double rx, double ry, millis_t p)
   : Wall(w, h, u, v)
   , radiusx(rx), radiusy(ry)
   , period(p)
@@ -95,7 +95,7 @@ public:
 private:
   double radiusx;
   double radiusy;
-  int64_t period;
+  millis_t period;
   double originx;
   double originy;
 };
@@ -143,7 +143,10 @@ public:
   virtual inline Type type() const { return Type::TRIGGER; }
   virtual void idle();
 
-  inline void set() { last = timeout == -1 ? !last : static_cast<int32_t>(elapsed); }
+  inline void set()
+  {
+    last = timeout == -1 ? !last : elapsed;
+  }
 
   inline bool on() const
   {
@@ -151,8 +154,8 @@ public:
   }
 
 private:
-  int32_t last;
-  int32_t timeout;
+  millis_t last;
+  millis_t timeout;
 };
 
 class Exit : public Object

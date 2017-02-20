@@ -17,7 +17,7 @@ public:
 
 private:
   bool facingRight;
-  uint64_t lastMove;
+  millis_t lastMove;
   double v;
 };
 

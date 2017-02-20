@@ -20,9 +20,10 @@
 #include "image.h"
 
 // fps stuff
-int64_t frame = 0, timebase = 0;
+int64_t frame = 0;
+millis_t timebase = 0;
 // extern stuff
-int64_t elapsed = 0, last, delta;
+millis_t elapsed = 0, last, delta;
 Level* level;
 int window;
 

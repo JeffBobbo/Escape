@@ -18,8 +18,8 @@ public:
   float col[4];
   float size;
 
-  int64_t life;
-  int64_t age;
+  millis_t life;
+  millis_t age;
 };
 
 class ParticleSystem : public Visage
@@ -64,8 +64,8 @@ public:
   HSVA hsva0;
   HSVA hsva1;
   size_t rate; // per s
-  int64_t lifeMin;
-  int64_t lifeMax;
+  millis_t lifeMin;
+  millis_t lifeMax;
   double sizeStart;
   double sizeEnd;
   double direction;

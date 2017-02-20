@@ -11,7 +11,7 @@ struct MouseButton
   int y;
   int mod;
   bool pressed;
-  int64_t last;
+  millis_t last;
 };
 
 struct MouseState
@@ -22,7 +22,7 @@ struct MouseState
   int y;
   double velx;
   double vely;
-  int64_t last;
+  millis_t last;
 };
 
 MouseState m;
@@ -31,8 +31,8 @@ bool mouse::left()   { return m.buttons[0].pressed; }
 bool mouse::middle() { return m.buttons[1].pressed; }
 bool mouse::right()  { return m.buttons[2].pressed; }
 mouse::Wheel mouse::wheel() { return m.wheel; }
-int64_t mouse::idle() { return m.last; }
-int64_t mouse::idle(const int b) { return m.buttons[b].last; }
+millis_t mouse::idle() { return m.last; }
+millis_t mouse::idle(const int b) { return m.buttons[b].last; }
 
 void mouse::velocity(double& x, double& y)
 {
@@ -107,19 +107,19 @@ struct KeyState
 {
   bool pressed;
   int mod;
-  int64_t last;
+  millis_t last;
 };
 struct KeyboardState
 {
   KeyState keys[400]; // ASCII takes 0..255, leaves plenty of extra room for special keys
-  int64_t last;
+  millis_t last;
 };
 KeyboardState k;
 
 bool keyboard::pressed(const KeyCode id) { return k.keys[static_cast<int>(id)].pressed; }
 int keyboard::modifiers(const KeyCode id) { return k.keys[static_cast<int>(id)].mod; }
-int64_t keyboard::idle() { return last; }
-int64_t keyboard::idle(const KeyCode id) { return k.keys[static_cast<int>(id)].last; }
+millis_t keyboard::idle() { return last; }
+millis_t keyboard::idle(const KeyCode id) { return k.keys[static_cast<int>(id)].last; }
 
 void kb_press(const unsigned char key, const int x, const int y)
 {

@@ -16,7 +16,7 @@ public:
   {
     if (loop == 0) // non-looping animatrices are always active
       return true;
-    uint64_t progress = tickCount() % loop;
+    millis_t progress = tickCount() % loop;
     return progress >= start && progress < end;
   }
   inline bool isVisible() const { return visible; }
@@ -24,7 +24,7 @@ public:
   void apply() const;
 
 
-  uint64_t start, end, loop;
+  millis_t start, end, loop;
   RGBA_t startColour, endColour;
   double startScaleX, startScaleY, endScaleX, endScaleY;
   double startAngle, endAngle, rotation;
