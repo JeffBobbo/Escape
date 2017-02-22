@@ -31,12 +31,10 @@ Level* level;
 int screenWidth = 640;
 int screenHeight = 480;
 
-const int DEFAULT_WIDTH  = 640;
-const int DEFAULT_HEIGHT = 480;
 const double TILE_SIZE = 64.0;
 VisagePolygon* phasepointer = nullptr;
 GUILabel* label = nullptr;
-GUIWindow* window = nullptr;
+GUIWindow* root = nullptr;
 
 void draw()
 {
@@ -99,7 +97,7 @@ void draw()
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
   glColor4f(1.0, 1.0, 1.0, 1.0);
-  window->draw();
+  root->draw();
   label->draw();
 
 
@@ -207,13 +205,20 @@ int main(int argc, char** argv)
   phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
   phasepointer->setColour(0x7F7F7FFF);
 
+  root = new GUIWindow();
+  root->setRelative(0.0, 0.0, 1.0, 1.0);
+  root->setPosition(0, 0, 0, 0);
+  root->setBackgroundColour(0x3f3fFF1F);
+  {
+    GUIWindow* sub = new GUIWindow();
+    sub->setRelative(0.25, 0.25, 0.75, 0.75);
+    sub->setPosition(0, 0, 0, 0);
+    sub->setBackgroundColour(0xFF3f3f1F);
+    root->addElement(sub);
+  }
   label = new GUILabel("Hello world");
   label->setPosition(40, 40);
   label->setTextColour(0xFF0000FF);
-  window = new GUIWindow();
-  window->setPosition(60, 20);
-  window->setSize(60, 20);
-  window->setBackgroundColour(0x3f3fFF7F);
 
   // begin glut loop
   glutMainLoop();

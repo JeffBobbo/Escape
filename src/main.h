@@ -10,5 +10,8 @@
 const char* const title = "Shifter";
 
 extern Level* level;
+extern int32_t screenWidth;
+extern int32_t screenHeight;
+
 
 #endif
