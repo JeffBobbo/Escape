@@ -18,7 +18,7 @@ public:
 
   void setBackgroundColour(const uint32_t& c);
 
-  void addElement(GUIElement* e) { elements.push_back(e); }
+  void addElement(GUIElement* e) { elements.push_back(e); e->setParent(this); }
 
 private:
   double col[4];

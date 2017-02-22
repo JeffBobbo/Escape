@@ -20,7 +20,7 @@ void GUIWindow::draw() const
   if (parent)
   {
     int32_t pWidth, pHeight;
-    parent->getSize(pWidth, pHeight);
+    parent->getRect(pWidth, pHeight);
     p0 = pWidth * px0 + x0;
     q0 = pHeight * py0 + y0;
     p1 = pWidth * px1 + x1;

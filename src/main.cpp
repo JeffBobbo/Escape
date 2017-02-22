@@ -215,6 +215,13 @@ int main(int argc, char** argv)
     sub->setPosition(0, 0, 0, 0);
     sub->setBackgroundColour(0xFF3f3f1F);
     root->addElement(sub);
+    {
+      GUIWindow* subsub = new GUIWindow();
+      subsub->setRelative(0.0, 0.0, 0.5, 0.5);
+      subsub->setPosition(0, 0, 0, 0);
+      subsub->setBackgroundColour(0x3fFF3f1F);
+      sub->addElement(subsub);
+    }
   }
   label = new GUILabel("Hello world");
   label->setPosition(40, 40);

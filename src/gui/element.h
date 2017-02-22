@@ -16,6 +16,7 @@ public:
   virtual void setRelative(double x0, double y0, double x1, double y1);
   virtual void setSize(int32_t w, int32_t h);
   virtual void getSize(int32_t& w, int32_t& h) const;
+  virtual void setParent(GUIElement* e) { parent = e; }
 
 protected:
   int32_t x0, y0, x1, y1;
