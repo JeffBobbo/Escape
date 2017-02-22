@@ -9,15 +9,6 @@ GUIElement::GUIElement()
 {
 }
 
-void GUIElement::setPosition(int32_t x, int32_t y)
-{
-  int32_t w = x1 - x0;
-  int32_t h = y1 - y0;
-  x0 = x;
-  x1 = x+w;
-  y0 = y;
-  y1 = y+h;
-}
 void GUIElement::setPosition(int32_t w, int32_t x, int32_t y, int32_t z)
 {
   x0 = w;
@@ -32,11 +23,26 @@ void GUIElement::setRelative(double x0, double y0, double x1, double y1)
   px1 = x1;
   py1 = y1;
 }
-void GUIElement::setSize(int32_t w, int32_t h)
+void GUIElement::getPosition(int32_t& w, int32_t& x, int32_t& y, int32_t& z) const
 {
-  x1 = x0 + w;
-  y1 = y0 + h;
+  int32_t p = 0, q = 0, r = 0, s = 0;
+  if (parent)
+  {
+    parent->getPosition(p, q, r, s);
+    w = p + px0 * (r-p) + x0;
+    x = q + py0 * (s-q) + y0;
+    y = p + px1 * (r-p) + x1;
+    z = q + py1 * (s-q) + y1;
+  }
+  else
+  {
+    w = px0 * screenWidth  + x0;
+    x = py0 * screenHeight + y0;
+    y = px1 * screenWidth  + x1;
+    z = py1 * screenHeight + y1;
+  }
 }
+/*
 void GUIElement::getSize(int32_t& w, int32_t& h) const
 {
   int32_t p0, q0, p1, q1;
@@ -59,3 +65,4 @@ void GUIElement::getSize(int32_t& w, int32_t& h) const
   w = p1 - p0;
   h = q1 - q0;
 }
+ */

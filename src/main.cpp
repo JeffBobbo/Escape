@@ -33,7 +33,7 @@ int screenHeight = 480;
 
 const double TILE_SIZE = 64.0;
 VisagePolygon* phasepointer = nullptr;
-GUILabel* label = nullptr;
+//GUILabel* label = nullptr;
 GUIWindow* root = nullptr;
 
 void draw()
@@ -98,7 +98,7 @@ void draw()
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
   glColor4f(1.0, 1.0, 1.0, 1.0);
   root->draw();
-  label->draw();
+  //label->draw();
 
 
   glMatrixMode(GL_MODELVIEW);
@@ -207,25 +207,25 @@ int main(int argc, char** argv)
 
   root = new GUIWindow();
   root->setRelative(0.0, 0.0, 1.0, 1.0);
-  root->setPosition(0, 0, 0, 0);
-  root->setBackgroundColour(0x3f3fFF1F);
+  root->setPosition(20, 20, -20, -20);
+  root->setBackgroundColour(0x3f3f3FAF);
   {
     GUIWindow* sub = new GUIWindow();
-    sub->setRelative(0.25, 0.25, 0.75, 0.75);
-    sub->setPosition(0, 0, 0, 0);
-    sub->setBackgroundColour(0xFF3f3f1F);
+    sub->setRelative(0.0, 0.0, 0.5, 0.5);
+    sub->setPosition(8, 8, -8, -8);
+    sub->setBackgroundColour(0xFF3f3f3F);
     root->addElement(sub);
     {
       GUIWindow* subsub = new GUIWindow();
-      subsub->setRelative(0.0, 0.0, 0.5, 0.5);
-      subsub->setPosition(0, 0, 0, 0);
-      subsub->setBackgroundColour(0x3fFF3f1F);
+      subsub->setRelative(0.5, 0.5, 1.0, 1.0);
+      subsub->setPosition(4, 4, -4, -4);
+      subsub->setBackgroundColour(0x3f3fFF3F);
       sub->addElement(subsub);
     }
   }
-  label = new GUILabel("Hello world");
-  label->setPosition(40, 40);
-  label->setTextColour(0xFF0000FF);
+  //label = new GUILabel("Hello world");
+  //label->setPosition(40, 40, 0, 0);
+  //label->setTextColour(0xFF0000FF);
 
   // begin glut loop
   glutMainLoop();
