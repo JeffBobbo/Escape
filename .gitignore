@@ -6,6 +6,7 @@
 
 # sublime text
 *.sublime-*
+*.tags*
 
 # visual studio
 *.suo
