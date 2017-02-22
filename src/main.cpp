@@ -19,13 +19,14 @@
 #include "colour.h"
 #include "image.h"
 
+#include "gui/allgui.h"
+
 // fps stuff
 int64_t frame = 0;
 millis_t timebase = 0;
 // extern stuff
 millis_t elapsed = 0, last, delta;
 Level* level;
-int window;
 
 int screenWidth = 640;
 int screenHeight = 480;
@@ -34,6 +35,8 @@ const int DEFAULT_WIDTH  = 640;
 const int DEFAULT_HEIGHT = 480;
 const double TILE_SIZE = 64.0;
 VisagePolygon* phasepointer = nullptr;
+GUILabel* label = nullptr;
+GUIWindow* window = nullptr;
 
 void draw()
 {
@@ -62,7 +65,7 @@ void draw()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  
+
 
   // draw the scene
   level->draw();
@@ -92,6 +95,14 @@ void draw()
     glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
     phasepointer->draw();
   }
+
+  glLoadIdentity();
+  glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
+  glColor4f(1.0, 1.0, 1.0, 1.0);
+  window->draw();
+  label->draw();
+
+
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
@@ -154,7 +165,7 @@ int main(int argc, char** argv)
   glutInitWindowPosition(-1, -1);
   glutInitWindowSize(640, 480);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-  window = glutCreateWindow(title);
+  glutCreateWindow(title);
 
   // enable blending
   glEnable(GL_BLEND);
@@ -163,6 +174,7 @@ int main(int argc, char** argv)
   // we're in 2d land, we don't need backface culling
   glDisable(GL_CULL_FACE);
   glDisable(GL_DEPTH_TEST); // don't need this either
+  glDisable(GL_LIGHTING);
   glShadeModel(GL_FLAT); // dunno what this is
 
   // background is black
@@ -195,6 +207,13 @@ int main(int argc, char** argv)
   phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
   phasepointer->setColour(0x7F7F7FFF);
 
+  label = new GUILabel("Hello world");
+  label->setPosition(40, 40);
+  label->setTextColour(0xFF0000FF);
+  window = new GUIWindow();
+  window->setPosition(60, 20);
+  window->setSize(60, 20);
+  window->setBackgroundColour(0x3f3fFF7F);
 
   // begin glut loop
   glutMainLoop();

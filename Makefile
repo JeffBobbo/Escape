@@ -15,15 +15,15 @@ release: CXXFLAGS+=-O3
 release: CPPFLAGS+=-DNDEBUG
 release: all
 
-all: $(MAIN) $(OBJECT) $(VISAGE)
-	$(CXX) $(CXXFLAGS) $(MAIN) $(OBJECT) $(VISAGE) -o $(EXEC) $(LDFLAGS)
+all: $(MAIN) $(OBJECT) $(VISAGE) $(GUI)
+	$(CXX) $(CXXFLAGS) $(MAIN) $(OBJECT) $(VISAGE) $(GUI) -o $(EXEC) $(LDFLAGS)
 
 %.o : %.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	$(warning Cleaning...)
-	@$(RM) $(MAIN) $(OBJECT) $(VISAGE)
+	@$(RM) $(MAIN) $(OBJECT) $(VISAGE) $(GUI)
 
 .PHONY: debug release all clean
 
