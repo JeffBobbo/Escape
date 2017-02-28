@@ -19,8 +19,6 @@
 #include "colour.h"
 #include "image.h"
 
-#include "gui/allgui.h"
-
 // fps stuff
 int64_t frame = 0;
 millis_t timebase = 0;
@@ -48,7 +46,10 @@ void draw()
     timebase = elapsed;
     frame = 0;
     std::stringstream ss;
-    ss << title << " - " << level->getName() << " - FPS: " << std::setprecision(2) << fps;
+    ss << title;
+    if (level->getName().size())
+      ss << " - " << level->getName();
+    ss << " - FPS: " << std::setprecision(2) << fps;
     glutSetWindowTitle(ss.str().c_str());
     timebase = elapsed;
     frame = 0;
@@ -77,19 +78,6 @@ void draw()
 
   if (level->numPhases())
   {
-    bindTexture("img/phase.png");
-    glEnable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(16.0f,           16.0f, 0.0f);
-    glTexCoord2f(1.0, 1.0);
-    glVertex3f(16.0f + 128.0f,  16.0f, 0.0f);
-    glTexCoord2f(1.0, 0.0);
-    glVertex3f(16.0f + 128.0f, 32.0f, 0.0f);
-    glTexCoord2f(0.0, 0.0);
-    glVertex3f(16.0f,          32.0f, 0.0f);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
     glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
     phasepointer->draw();
   }
@@ -200,32 +188,15 @@ int main(int argc, char** argv)
   // setup controls
   controls::init();
 
-  level = Level::prefab0();
+  // load visage data
+  //Visage::loadVisages();
+
+  level = Level::prefabLobby();
 
   phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
   phasepointer->setColour(0x7F7F7FFF);
 
-  root = new GUIWindow();
-  root->setRelative(0.0, 0.0, 1.0, 1.0);
-  root->setPosition(20, 20, -20, -20);
-  root->setBackgroundColour(0x3f3f3FAF);
-  {
-    GUIWindow* sub = new GUIWindow();
-    sub->setRelative(0.0, 0.0, 0.5, 0.5);
-    sub->setPosition(8, 8, -8, -8);
-    sub->setBackgroundColour(0xFF3f3f3F);
-    root->addElement(sub);
-    {
-      GUIWindow* subsub = new GUIWindow();
-      subsub->setRelative(0.5, 0.5, 1.0, 1.0);
-      subsub->setPosition(4, 4, -4, -4);
-      subsub->setBackgroundColour(0x3f3fFF3F);
-      sub->addElement(subsub);
-    }
-  }
-  //label = new GUILabel("Hello world");
-  //label->setPosition(40, 40, 0, 0);
-  //label->setTextColour(0xFF0000FF);
+  GUIElement::showMenuMain();
 
   // begin glut loop
   glutMainLoop();

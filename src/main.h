@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "object/object.h"
+#include "gui/allgui.h"
 #include "level.h"
 
 const char* const title = "Shifter";
@@ -12,6 +13,7 @@ const char* const title = "Shifter";
 extern Level* level;
 extern int32_t screenWidth;
 extern int32_t screenHeight;
+extern GUIWindow* root;
 
 
 #endif
