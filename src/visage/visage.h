@@ -5,7 +5,10 @@
 
 #include "animatrix.h"
 
-
+namespace rapidjson
+{
+  class Document;
+}
 class Visage
 {
 public:
@@ -25,6 +28,7 @@ public:
   }
 
   virtual inline Type type() const = 0;
+  //virtual void fromJSON(const rapidjson::Document& doc) = 0;
 
   virtual void draw()
   {
@@ -33,6 +37,9 @@ public:
   };
   virtual void addAnimatrix(Animatrix* const a) { animatrices.push_back(a); }
 
+
+  //static void loadVisages();
+  //static Visage* getVisage(const std::string& name);
 protected:
   std::vector<Animatrix* > animatrices;
 };
