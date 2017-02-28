@@ -28,7 +28,8 @@ public:
   ParticleSystem(size_t m, size_t r);
   virtual ~ParticleSystem()
   {
-    delete[] particles;
+    if (particles)
+      delete[] particles;
   }
 
   virtual inline Type type() const { return Type::PARTICLE; }
