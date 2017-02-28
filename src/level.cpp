@@ -2,6 +2,8 @@
 
 Level* Level::fromName(const std::string& name)
 {
+  if (name == "prefabLobby")
+    return Level::prefabLobby();
   if (name == "prefab0")
     return Level::prefab0();
   if (name == "prefab1")
@@ -36,8 +38,11 @@ void Level::idle()
   graph->idle();
   for (auto it : phases)
     it->idle();
-  player->idle();
-  player->move();
+  if (player)
+  {
+    player->idle();
+    player->move();
+  }
 }
 
 #include "gli.h"
@@ -49,7 +54,8 @@ void Level::draw()
   for (auto it : phases)
     it->draw();
 
-  player->draw(); // draw the player
+  if (player)
+    player->draw(); // draw the player
 }
 
 Exit* Level::getExit() const
