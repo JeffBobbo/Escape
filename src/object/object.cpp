@@ -23,7 +23,8 @@ void Object::draw()
   glLoadIdentity();
 
   // translate by the players position, so the camera follows the player
-  glTranslated(-level->getPlayer()->x, -level->getPlayer()->y, 0.0);
+  if (level->getPlayer())
+    glTranslated(-level->getPlayer()->x, -level->getPlayer()->y, 0.0);
 
   // transformations
   glTranslated(x, y, 0.0);
