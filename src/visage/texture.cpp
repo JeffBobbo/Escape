@@ -7,19 +7,56 @@
 #include "../colour.h"
 #include "../image.h"
 
-VisageTexture::VisageTexture(double w, double h, const std::string& f, double sx, double sy)
-  : file(f), sprite("")
+//#include "../../external/rapidjson/include/rapidjson/document.h"
+
+VisageTexture::VisageTexture()
+  : file(""), sprite("")
   , flip(false)
-  , scrollX(sx), scrollY(sy), offsetX(0.0), offsetY(0.0)
+  , scrollX(0.0), scrollY(0.0), offsetX(0.0), offsetY(0.0)
   , repeatX(1.0), repeatY(1.0)
 {
+}
+
+VisageTexture::VisageTexture(double w, double h, const std::string& f, double sx, double sy)
+  : VisageTexture()
+{
   // create a quad at the right size
+  setSize(w, h);
+  file = f;
+  if (file.length())
+    loadTexture(file);
+  flip = false;
+  scrollX = sx;
+  scrollY = sy;
+}
+
+/*
+void VisageTexture::fromJSON(const rapidjson::Document& doc)
+{
+  file = doc["texture"].GetString();
+  loadTexture(file);
+
+  if (doc.HasMember("scrollX"))
+    scrollX = doc["scrollX"].GetDouble();
+  if (doc.HasMember("scrollY"))
+    scrollY = doc["scrollY"].GetDouble();
+  if (doc.HasMember("offsetX"))
+    offsetX = doc["offsetX"].GetDouble();
+  if (doc.HasMember("offsetY"))
+    offsetY = doc["offsetY"].GetDouble();
+  if (doc.HasMember("repeatX"))
+    repeatX = doc["repeatX"].GetDouble();
+  if (doc.HasMember("repeatY"))
+    repeatY = doc["repeatY"].GetDouble();
+}
+ */
+
+void VisageTexture::setSize(double w, double h)
+{
   vertices[0] = static_cast<float>(-w/2.0); vertices[1] = static_cast<float>( h/2.0);
   vertices[2] = static_cast<float>(-w/2.0); vertices[3] = static_cast<float>(-h/2.0);
   vertices[4] = static_cast<float>( w/2.0); vertices[5] = static_cast<float>(-h/2.0);
   vertices[6] = static_cast<float>( w/2.0); vertices[7] = static_cast<float>( h/2.0);
-  loadTexture(file);
-  flip = false;
 }
 
 void VisageTexture::draw()
