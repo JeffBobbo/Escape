@@ -11,6 +11,7 @@
 class Level
 {
 public:
+  static Level* prefabLobby();
   static Level* prefab0();
   static Level* prefab1();
   static Level* prefabTest();

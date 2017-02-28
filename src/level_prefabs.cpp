@@ -7,6 +7,17 @@
 #include "util.h"
 #include "colour.h"
 
+Level* Level::prefabLobby()
+{
+  Level* level = new Level("");
+  Object* bg = new Object();
+  VisageTexture* vt = new VisageTexture(50, 50, "img/background/tile0.png");
+  vt->setRepeat(50.0, 50.0);
+  bg->setVisage(vt);
+  level->graph->insert(SceneGraph::Level::BACKGROUND, bg);
+  return level;
+}
+
 Level* Level::prefab0()
 {
   Level* level = new Level("Basic Training");
