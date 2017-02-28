@@ -14,6 +14,7 @@ src/object/player.o
 
 VISAGE=\
 src/visage/animatrix.o \
+src/visage/visage.o \
 src/visage/polygon.o \
 src/visage/particle.o \
 src/visage/texture.o
@@ -21,4 +22,5 @@ src/visage/texture.o
 GUI=\
 src/gui/element.o \
 src/gui/window.o \
-src/gui/label.o
+src/gui/label.o \
+src/gui/image.o
