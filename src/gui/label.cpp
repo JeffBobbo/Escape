@@ -29,7 +29,9 @@ void GUILabel::setTextColour(const uint32_t& c)
 void GUILabel::draw() const
 {
   glColor4d(col[0], col[1], col[2], col[3]);
-  glRasterPos2i(x0, y0);
+  int32_t a, b, c, d;
+  getPosition(a, b, c, d);
+  glRasterPos2i(a, b);
 
   for (auto it : text)
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, it);

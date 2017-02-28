@@ -2,6 +2,100 @@
 
 #include "../main.h"
 
+void GUIElement::showMenuMain()
+{
+  if (!root)
+  {
+    root = new GUIWindow();
+    root->setRelative(0.0, 0.0, 1.0, 1.0);
+    root->setPosition(0, 0, 0, 0);
+    root->setBackgroundColour(0x3f3f3FAF);
+  }
+  else
+  {
+    root->removeChildren();
+  }
+
+  {
+    GUILabel* title = new GUILabel("Shifter");
+    title->setRelative(0.5, 0.25, 0.5, 0.25);
+    title->setPosition(-20, -10, 20, 10);
+    title->setTextColour(0xFF0000FF);
+    root->addElement(title);
+    GUILabel* play = new GUILabel("Play!");
+    play->setRelative(0.5, 0.35, 0.5, 0.35);
+    play->setPosition(-20, -10, 20, 10);
+    play->setTextColour(0xFFFFFFFF);
+    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      int32_t a, b, c, d;
+      play->getPosition(a, b, c, d);
+      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+    }, [play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      play->setTextColour(0x00FF00FF);
+      return false;
+    });
+    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      int32_t a, b, c, d;
+      play->getPosition(a, b, c, d);
+      return !(a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+    }, [play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      play->setTextColour(0xFF0000FF);
+      return false;
+    });
+    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      if (!mouse::left())
+        return false;
+      int32_t a, b, c, d;
+      play->getPosition(a, b, c, d);
+      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+      }, [](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      delete level;
+      level = Level::fromName("prefab0");
+      GUIElement::showGameHud();
+      if (level == nullptr)
+      {
+        std::cerr << "Failed to load level" << std::endl;
+        glutLeaveMainLoop();
+      }
+      return true;
+    });
+    root->addElement(play);
+  }
+}
+
+void GUIElement::showGameHud()
+{
+  if (!root)
+  {
+    root = new GUIWindow();
+    root->setRelative(0.0, 0.0, 1.0, 1.0);
+    root->setPosition(0, 0, 0, 0);
+    // root->setBackgroundColour(0x3f3f3FAF);
+  }
+  else
+  {
+    root->removeChildren();
+  }
+  root->setBackgroundColour(0x00000000);
+
+  {
+    GUIImage* image = new GUIImage("img/phase.png");
+    image->setRelative(0.0, 0.0, 0.0, 0.0);
+    image->setPosition(16, 16, 16+128, 16+16);
+    image->setColour(0xFFFFFF7F);
+    root->addElement(image);
+  }
+}
+
 GUIElement::GUIElement()
   : x0(0), y0(0), x1(0), y1(0)
   , px0(0.0), py0(0.0), px1(0.0), py1(0.0)
@@ -66,3 +160,73 @@ void GUIElement::getSize(int32_t& w, int32_t& h) const
   h = q1 - q0;
 }
  */
+
+void GUIElement::registerListener(GUIElement::Event e, std::function<bool(void)> f)
+{
+  callbacks[e] = f;
+}
+
+void GUIElement::registerListener(GUIElement::Trigger t, GUIElement::Callback c)
+{
+  auto p = std::make_pair(t, c);
+  events.push_back(p);
+}
+
+bool GUIElement::callListener(GUIElement::Event e)
+{
+  return isListening(e) ? callbacks[e]() : false;
+}
+
+bool GUIElement::testListeners(const mouse::MouseState& m)
+{
+  if (mouse::left())
+  {
+    int32_t a, b, c, d;
+    getPosition(a, b, c, d);
+    if (a <= m.x && m.x <= c && b <= m.y && m.y <= d)
+      return callListener(GUIElement::Event::ON_CLICK);
+  }
+  return false;
+}
+
+bool GUIElement::testListeners(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
+{
+  bool r = false;
+  for (auto it : events)
+  {
+    if (it.first(ms, ks))
+      it.second(ms, ks);
+  }
+  return r;
+}
+
+bool GUIElement::onClickLeft(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
+{
+  (void)ks;
+  if (!mouse::left())
+    return false;
+
+  int32_t a, b, c, d;
+  getPosition(a, b, c, d);
+  return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+}
+bool GUIElement::onClickRight(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
+{
+  (void)ks;
+  if (!mouse::right())
+    return false;
+
+  int32_t a, b, c, d;
+  getPosition(a, b, c, d);
+  return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+}
+bool GUIElement::onClickMiddle(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
+{
+  (void)ks;
+  if (!mouse::middle())
+    return false;
+
+  int32_t a, b, c, d;
+  getPosition(a, b, c, d);
+  return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+}

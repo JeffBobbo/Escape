@@ -37,3 +37,23 @@ void GUIWindow::setBackgroundColour(const uint32_t& c)
   col[2] = ((c >>  8) & 255) / 255.0;
   col[3] = ((c      ) & 255) / 255.0;
 }
+
+bool GUIWindow::testListeners(const mouse::MouseState& m)
+{
+  for (auto it : elements)
+  {
+    if (it->testListeners(m))
+      return true;
+  }
+  return GUIElement::testListeners(m);
+}
+
+bool GUIWindow::testListeners(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
+{
+  for (auto it : elements)
+  {
+    if (it->testListeners(ms, ks))
+      return true;
+  }
+  return GUIElement::testListeners(ms, ks);
+}

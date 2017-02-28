@@ -4,28 +4,10 @@
 
 #include "util.h"
 #include "gli.h"
+#include "main.h"
 
-struct MouseButton
-{
-  int x;
-  int y;
-  int mod;
-  bool pressed;
-  millis_t last;
-};
-
-struct MouseState
-{
-  MouseButton buttons[3];
-  mouse::Wheel wheel;
-  int x;
-  int y;
-  double velx;
-  double vely;
-  millis_t last;
-};
-
-MouseState m;
+mouse::MouseState m;
+keyboard::KeyboardState k;
 
 bool mouse::left()   { return m.buttons[0].pressed; }
 bool mouse::middle() { return m.buttons[1].pressed; }
@@ -43,20 +25,31 @@ void mouse::velocity(double& x, double& y)
 
 void motion(const int x, const int y)
 {
+  mouse::MouseState ms = m;
+  /*
   // only update velocity if this event happened at a different time
   // this should stop any funny stuff with multiple events updating the
   // state
   if (last < elapsed)
   {
+  */
     m.velx = (x - m.x) / static_cast<double>(last - elapsed);
     m.vely = (y - m.y) / static_cast<double>(last - elapsed);
-  }
+  // }
   m.x = x;
   m.y = y;
-  last = elapsed;
+  // last = elapsed;
+
+  if (root)
+  {
+    if (root->testListeners(m, k))
+      m = ms;
+  }
 }
 void button(const int button, const int state, const int x, const int y)
 {
+  mouse::MouseState ms = m;
+
   if (button < 3)
   {
     m.buttons[button].x = x;
@@ -74,6 +67,12 @@ void button(const int button, const int state, const int x, const int y)
   }
   // just pass off to the motion callback
   motion(x, y);
+
+  if (root)
+  {
+    if (root->testListeners(m, k))
+      m = ms;
+  }
 }
 
 // unimplemented, glutMouseWheelFunc is unreliable
@@ -103,19 +102,6 @@ void mouse::registerCallbacks()
 /******************************************************************************/
 /* KEYBOARD */
 /******************************************************************************/
-struct KeyState
-{
-  bool pressed;
-  int mod;
-  millis_t last;
-};
-struct KeyboardState
-{
-  KeyState keys[400]; // ASCII takes 0..255, leaves plenty of extra room for special keys
-  millis_t last;
-};
-KeyboardState k;
-
 bool keyboard::pressed(const KeyCode id) { return k.keys[static_cast<int>(id)].pressed; }
 int keyboard::modifiers(const KeyCode id) { return k.keys[static_cast<int>(id)].mod; }
 millis_t keyboard::idle() { return last; }

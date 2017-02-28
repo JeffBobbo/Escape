@@ -10,8 +10,8 @@ public:
   GUIWindow();
   virtual ~GUIWindow()
   {
-    for (const GUIElement* e : elements)
-      delete e;
+    for (auto it : elements)
+      delete it;
   }
 
   virtual void draw() const;
@@ -19,6 +19,15 @@ public:
   void setBackgroundColour(const uint32_t& c);
 
   void addElement(GUIElement* e) { elements.push_back(e); e->setParent(this); }
+  void removeChildren()
+  {
+    for (auto it : elements)
+      delete it;
+    elements.clear();
+  }
+
+  virtual bool testListeners(const mouse::MouseState& m);
+  virtual bool testListeners(const mouse::MouseState& ms, const keyboard::KeyboardState& ks);
 
 private:
   double col[4];

@@ -13,6 +13,26 @@ namespace mouse
     UP,
     DOWN
   };
+  struct MouseButton
+  {
+    int x;
+    int y;
+    int mod;
+    bool pressed;
+    millis_t last;
+  };
+
+  struct MouseState
+  {
+    MouseButton buttons[3];
+    mouse::Wheel wheel;
+    int x;
+    int y;
+    double velx;
+    double vely;
+    millis_t last;
+  };
+
   bool left();
   bool middle();
   bool right();
@@ -27,6 +47,18 @@ namespace mouse
 #include "keys.h"
 namespace keyboard
 {
+  struct KeyState
+  {
+    bool pressed;
+    int mod;
+    millis_t last;
+  };
+  struct KeyboardState
+  {
+    KeyState keys[400]; // ASCII takes 0..255, leaves plenty of extra room for special keys
+    millis_t last;
+  };
+
   bool pressed(const KeyCode id);
   int modifiers(const KeyCode id);
   millis_t idle();
