@@ -5,7 +5,7 @@
 #include "../util.h"
 
 #include "../colour.h"
-#include "../image.h"
+#include "../imageloader.h"
 
 //#include "../../external/rapidjson/include/rapidjson/document.h"
 

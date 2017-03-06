@@ -1,7 +1,7 @@
 #include "image.h"
 
 #include "../gli.h"
-#include "../image.h"
+#include "../imageloader.h"
 
 GUIImage::GUIImage()
   : GUIElement()

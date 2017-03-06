@@ -17,7 +17,7 @@
 
 #include "visage/allvisage.h"
 #include "colour.h"
-#include "image.h"
+#include "imageloader.h"
 
 // fps stuff
 int64_t frame = 0;
@@ -47,7 +47,7 @@ void draw()
     frame = 0;
     std::stringstream ss;
     ss << title;
-    if (level->getName().size())
+    if (level && level->getName().size())
       ss << " - " << level->getName();
     ss << " - FPS: " << std::setprecision(2) << fps;
     glutSetWindowTitle(ss.str().c_str());
@@ -67,7 +67,8 @@ void draw()
 
 
   // draw the scene
-  level->draw();
+  if (level)
+    level->draw();
 
   // draw gui stuff on top
   glLoadIdentity();
@@ -76,16 +77,17 @@ void draw()
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
 
-  if (level->numPhases())
-  {
-    glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
-    phasepointer->draw();
-  }
+//  if (level->numPhases())
+//  {
+//    glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
+//    phasepointer->draw();
+//  }
 
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
   glColor4f(1.0, 1.0, 1.0, 1.0);
-  root->draw();
+  if (root)
+    root->draw();
   //label->draw();
 
 
@@ -101,29 +103,32 @@ void update()
   elapsed = glutGet(GLUT_ELAPSED_TIME);
   delta = elapsed - last;
 
-  if (level->completed())
+  if (level)
   {
-    Exit* e = level->getExit();
-    std::string next = e->getNext();
-    if (next.size())
+    if (level->completed())
     {
-      delete level;
-      level = Level::fromName(next);
-      if (level == nullptr)
+      Exit* e = level->getExit();
+      std::string next = e->getNext();
+      if (next.size())
       {
-        std::cerr << "Failed to load level " << next << std::endl;
+        delete level;
+        level = Level::fromName(next);
+        if (level == nullptr)
+        {
+          std::cerr << "Failed to load level " << next << std::endl;
+          glutLeaveMainLoop();
+          return;
+        }
+      }
+      else
+      {
+        // exit
         glutLeaveMainLoop();
         return;
       }
     }
-    else
-    {
-      // exit
-      glutLeaveMainLoop();
-      return;
-    }
+    level->idle();
   }
-  level->idle();
   glutPostRedisplay();
 }
 
@@ -191,7 +196,7 @@ int main(int argc, char** argv)
   // load visage data
   //Visage::loadVisages();
 
-  level = Level::prefabLobby();
+  //level = Level::prefabLobby();
 
   phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
   phasepointer->setColour(0x7F7F7FFF);
