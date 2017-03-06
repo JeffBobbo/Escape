@@ -123,17 +123,17 @@ void GUIElement::getPosition(int32_t& w, int32_t& x, int32_t& y, int32_t& z) con
   if (parent)
   {
     parent->getPosition(p, q, r, s);
-    w = p + px0 * (r-p) + x0;
-    x = q + py0 * (s-q) + y0;
-    y = p + px1 * (r-p) + x1;
-    z = q + py1 * (s-q) + y1;
+    w = p + static_cast<int32_t>(px0 * (r-p) + x0);
+    x = q + static_cast<int32_t>(py0 * (s-q) + y0);
+    y = p + static_cast<int32_t>(px1 * (r-p) + x1);
+    z = q + static_cast<int32_t>(py1 * (s-q) + y1);
   }
   else
   {
-    w = px0 * screenWidth  + x0;
-    x = py0 * screenHeight + y0;
-    y = px1 * screenWidth  + x1;
-    z = py1 * screenHeight + y1;
+    w = static_cast<int32_t>(px0 * screenWidth  + x0);
+    x = static_cast<int32_t>(py0 * screenHeight + y0);
+    y = static_cast<int32_t>(px1 * screenWidth  + x1);
+    z = static_cast<int32_t>(py1 * screenHeight + y1);
   }
 }
 /*
