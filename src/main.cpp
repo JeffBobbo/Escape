@@ -34,6 +34,8 @@ VisagePolygon* phasepointer = nullptr;
 //GUILabel* label = nullptr;
 GUIWindow* root = nullptr;
 
+const int32_t TARGET_FPS = 60;
+const int32_t FRAME_TIME = 1000/TARGET_FPS;
 void draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
@@ -49,7 +51,7 @@ void draw()
     ss << title;
     if (level && level->getName().size())
       ss << " - " << level->getName();
-    ss << " - FPS: " << std::setprecision(2) << fps;
+    ss << " - FPS: " << /*std::setprecision(2) <<*/ fps;
     glutSetWindowTitle(ss.str().c_str());
     timebase = elapsed;
     frame = 0;
@@ -63,9 +65,7 @@ void draw()
   // and switch back to model view to arrange our scene
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-
-
-
+  
   // draw the scene
   if (level)
     level->draw();
@@ -88,7 +88,6 @@ void draw()
   glColor4f(1.0, 1.0, 1.0, 1.0);
   if (root)
     root->draw();
-  //label->draw();
 
 
   glMatrixMode(GL_MODELVIEW);
@@ -97,11 +96,19 @@ void draw()
   glutSwapBuffers();
 }
 
+// TODO: FIX FPS issues
+uint64_t clast = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
+uint64_t cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
 void update()
 {
   last = elapsed;
   elapsed = glutGet(GLUT_ELAPSED_TIME);
   delta = elapsed - last;
+  
+  clast = cmill;
+  cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
+  std::cout << cmill-clast << std::endl;
+  std::this_thread::sleep_for(std::chrono::milliseconds(32-(cmill-clast)));
 
   if (level)
   {
