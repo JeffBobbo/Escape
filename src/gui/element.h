@@ -36,6 +36,9 @@ public:
   //virtual void getSize(int32_t& w, int32_t& h) const;
   virtual void setParent(GUIElement* e) { parent = e; }
 
+  bool isVisible() const;
+  inline void setVisible(bool v) { visible = v; }
+
   virtual void registerListener(GUIElement::Event e, std::function<bool(void)> f);
   virtual void registerListener(GUIElement::Trigger t, GUIElement::Callback c);
   virtual inline bool isListening(GUIElement::Event e) { return callbacks.find(e) != callbacks.end(); }
@@ -49,6 +52,7 @@ public:
 protected:
   int32_t x0, y0, x1, y1;
   double px0, py0, px1, py1;
+  bool visible;
   GUIElement* parent;
   std::map<GUIElement::Event, std::function<bool(void)> > callbacks;
   std::vector<std::pair<Trigger, Callback> > events;

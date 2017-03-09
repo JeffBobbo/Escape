@@ -21,6 +21,8 @@ GUIImage::GUIImage(const std::string&& t)
 
 void GUIImage::draw() const
 {
+  if (!isVisible())
+    return;
   bindTexture(image);
   glColor4d(col[0], col[1], col[2], col[3]);
   glEnable(GL_TEXTURE_2D);

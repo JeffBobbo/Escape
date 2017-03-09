@@ -91,7 +91,8 @@ void GUIElement::showGameHud()
     GUIImage* image = new GUIImage("img/phase.png");
     image->setRelative(0.0, 0.0, 0.0, 0.0);
     image->setPosition(16, 16, 16+128, 16+16);
-    image->setColour(0xFFFFFF7F);
+    image->setColour(0xFFFFFFFF);
+    image->setVisible(false);
     root->addElement(image);
   }
 }
@@ -99,6 +100,7 @@ void GUIElement::showGameHud()
 GUIElement::GUIElement()
   : x0(0), y0(0), x1(0), y1(0)
   , px0(0.0), py0(0.0), px1(0.0), py1(0.0)
+  , visible(true)
   , parent(nullptr)
 {
 }
@@ -160,6 +162,13 @@ void GUIElement::getSize(int32_t& w, int32_t& h) const
   h = q1 - q0;
 }
  */
+
+bool GUIElement::isVisible() const
+{
+  if (!visible)
+    return false;
+  return parent ? parent->isVisible() : true;
+}
 
 void GUIElement::registerListener(GUIElement::Event e, std::function<bool(void)> f)
 {
