@@ -80,7 +80,7 @@ void Platform::move()
 
 
 Door::Door(double w, double h, double u, double v, bool o, bool p)
-: Wall(w, h, u, v)
+: Object(w, h, u, v)
 {
   trigger = nullptr;
   open = o;
@@ -143,6 +143,7 @@ Exit::Exit(double u, double v, const std::string& n)
 Grid::Grid(double w, double h, double u, double v, phase_t p)
   : Object(w, h, u, v)
   , target(p)
+  , trigger(nullptr)
 {
   visage = new VisageComplex();
   {
@@ -185,6 +186,8 @@ Grid::Grid(double w, double h, double u, double v, phase_t p)
 
 void Grid::idle()
 {
+  if (trigger && trigger->on() == false)
+    return;
   if (level->phasePlayer() != target)
   {
     if (aabbOverlap(level->getPlayer()))

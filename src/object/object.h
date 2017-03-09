@@ -68,10 +68,10 @@ public:
   Wall(double w, double h, double u, double v)
   : Object(w, h, u, v)
   {
-    visage = VisagePolygon::rectangle(w, h);
-    static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
-    // visage = new VisageTexture(w, h, "img/background/tile1.png");
-    // static_cast<VisageTexture*>(visage)->setRepeat(w, h);
+    //visage = VisagePolygon::rectangle(w, h);
+    //static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
+    visage = new VisageTexture(w, h, "img/background/tile1.png");
+    static_cast<VisageTexture*>(visage)->setRepeat(w, h);
   }
   virtual ~Wall() {}
   virtual inline Type type() const { return Type::WALL; }
@@ -102,7 +102,7 @@ private:
 };
 
 class Button;
-class Door : public Wall
+class Door : public Object
 {
 public:
   Door(double w, double h, double u, double v, bool o, bool p = false);
@@ -182,10 +182,12 @@ public:
 
   virtual inline Type type() const { return Type::GRID; }
   virtual void idle();
-  virtual void draw() { Object::draw(); }
+  virtual void draw() { if (!trigger || trigger->on()) Object::draw(); }
+  inline void link(Button* l) { trigger = l; }
 
 private:
   phase_t target;
+  Button* trigger;
 };
 
 #endif
