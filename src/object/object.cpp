@@ -19,12 +19,7 @@ void Object::move()
 #include <iostream>
 void Object::draw()
 {
-  // reset
-  glLoadIdentity();
-
-  // translate by the players position, so the camera follows the player
-  if (level->getPlayer())
-    glTranslated(-level->getPlayer()->x, -level->getPlayer()->y, 0.0);
+  glPushMatrix();
 
   // transformations
   glTranslated(x, y, 0.0);
@@ -49,6 +44,8 @@ void Object::draw()
   }
   if (visage)
     visage->draw();
+
+  glPopMatrix();
 }
 
 bool Object::aabbOverlap(const Object* const o) const
