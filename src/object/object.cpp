@@ -95,7 +95,7 @@ Door::Door(double w, double h, double u, double v, bool o, bool p)
   else
     a->startY = h*0.9/2.0;
   vOpen->addAnimatrix(a);
-  vClose = visage;
+  vClose = visage = VisagePolygon::rectangle(w, h);
   static_cast<VisagePolygon*>(vClose)->setColour(0xafafafFF);
 }
 
