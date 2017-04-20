@@ -80,6 +80,7 @@ void Player::move()
   {
     v = gravity()/1.5;
     lastMove = elapsed;
+    lastJump = elapsed;
   }
 
   //if (keyboard::pressed(controls::bind(controls::Action::CROUCH)))
@@ -153,7 +154,11 @@ void Player::move()
   y = ny;
 
   std::stringstream sprite;
-  if (move)
+  if (v != 0.0)
+  {
+    sprite << "jumpfall" << std::min(((elapsed - lastJump) / 150), 5);
+  }
+  else if (move)
   {
     sprite << (walk ? "walk" : "run") << (elapsed / (walk ? 200 : 100)) % 8;
   }
