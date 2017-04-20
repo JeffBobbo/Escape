@@ -75,6 +75,8 @@ bool Object::satOverlap(const Object* const o) const
 
 void Platform::move()
 {
+  if (!period)
+    return;
   const double p = static_cast<double>(elapsed % period) / static_cast<double>(period);
   const double a = 2.0 * pi() * p;
   x = originx + std::cos(a) * radiusx;
@@ -83,7 +85,7 @@ void Platform::move()
 
 
 Door::Door(double w, double h, double u, double v, bool o, bool p)
-: Wall(w, h, u, v)
+: Object(w, h, u, v)
 {
   trigger = nullptr;
   open = o;
@@ -98,7 +100,7 @@ Door::Door(double w, double h, double u, double v, bool o, bool p)
   else
     a->startY = h*0.9/2.0;
   vOpen->addAnimatrix(a);
-  vClose = visage;
+  vClose = visage = VisagePolygon::rectangle(w, h);
   static_cast<VisagePolygon*>(vClose)->setColour(0xafafafFF);
 }
 

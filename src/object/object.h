@@ -10,7 +10,6 @@ public:
   enum class Type
   {
     OBJECT = 0,
-    WALL,
     PLAYER,
     PLATFORM,
     DOOR,
@@ -62,36 +61,25 @@ public:
   Visage* visage;
 };
 
-class Wall : public Object
+class Platform : public Object
 {
 public:
-  Wall(double w, double h, double u, double v)
+  Platform(double w, double h, double u, double v, double rx = 0.0, double ry = 0.0, millis_t p = 0)
   : Object(w, h, u, v)
-  {
-    visage = VisagePolygon::rectangle(w, h);
-    static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
-    // visage = new VisageTexture(w, h, "img/background/tile1.png");
-    // static_cast<VisageTexture*>(visage)->setRepeat(w, h);
-  }
-  virtual ~Wall() {}
-  virtual inline Type type() const { return Type::WALL; }
-  virtual inline bool isSolid() const { return true; }
-};
-
-class Platform : public Wall
-{
-public:
-  Platform(double w, double h, double u, double v, double rx, double ry, millis_t p)
-  : Wall(w, h, u, v)
   , radiusx(rx), radiusy(ry)
   , period(p)
   {
     originx = x;
     originy = y;
+    visage = VisagePolygon::rectangle(w, h);
+    static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
+    // visage = new VisageTexture(w, h, "img/background/tile1.png");
+    // static_cast<VisageTexture*>(visage)->setRepeat(w, h);
   }
   virtual ~Platform() {}
 
   virtual inline Type type() const { return Type::PLATFORM; }
+  virtual inline bool isSolid() const { return true; }
   virtual void move();
 private:
   double radiusx;
@@ -102,7 +90,7 @@ private:
 };
 
 class Button;
-class Door : public Wall
+class Door : public Object
 {
 public:
   Door(double w, double h, double u, double v, bool o, bool p = false);

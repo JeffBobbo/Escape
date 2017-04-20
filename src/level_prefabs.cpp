@@ -24,29 +24,29 @@ Level* Level::prefab0()
 
   // create objects
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(20.0, 1.0,  0.0, 0.0));
+    new Platform(20.0, 1.0,  0.0, 0.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(20.0, 1.0,  0.0, 10.0));
+    new Platform(20.0, 1.0,  0.0, 10.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(1.0, 10.0, -9.5, 5.0));
+    new Platform(1.0, 10.0, -9.5, 5.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(1.0, 10.0,  9.5, 5.0));
+    new Platform(1.0, 10.0,  9.5, 5.0));
 
   // staircase
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 1.0, 1.0, -6.0, 1.0));
+    new Platform( 1.0, 1.0, -6.0, 1.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 1.0, 2.0, -4.0, 1.5));
+    new Platform( 1.0, 2.0, -4.0, 1.5));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 1.0, 1.0, -3.0, 1.0));
+    new Platform( 1.0, 1.0, -3.0, 1.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 1.0, 3.0, -2.0, 2.0));
+    new Platform( 1.0, 3.0, -2.0, 2.0));
 
   // moving platform
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Platform(1.0, 0.5, 1.0, 2.5, 0.0, 2.5, 10000));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 1.0, 5.0, 2.0, 3.0));
+    new Platform( 1.0, 5.0, 2.0, 3.0));
 
   // second moving platform
   level->graph->insert(SceneGraph::Level::FOREGROUND,
@@ -54,7 +54,7 @@ Level* Level::prefab0()
 
   // exit
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall( 2.0, 0.5,   8.0, 4.75));
+    new Platform( 2.0, 0.5,   8.0, 4.75));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Exit(8.0, 5.5, "prefab1"));
 
@@ -69,17 +69,17 @@ Level* Level::prefab1()
   // create objects
   // the bounding box
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(15.0, 1.0, 7.5, 0.0));
+    new Platform(15.0, 1.0, 7.5, 0.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(15.0, 1.0, 7.5, 20.0));
+    new Platform(15.0, 1.0, 7.5, 20.0));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(1.0, 19.0, 0.5, 10));
+    new Platform(1.0, 19.0, 0.5, 10));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(1.0, 19.0, 14.5, 10));
+    new Platform(1.0, 19.0, 14.5, 10));
 
   // first level
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(11.0, 1.0, 6.5, 15.0));
+    new Platform(11.0, 1.0, 6.5, 15.0));
 
   Button* bd = new Button(11.0, 17.0, -1);
   level->graph->insert(SceneGraph::Level::FOREGROUND, bd);
@@ -89,11 +89,11 @@ Level* Level::prefab1()
 
   // second level
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(11.0, 1.0, 8.5, 10.0));
+    new Platform(11.0, 1.0, 8.5, 10.0));
 
   // third level
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Wall(11.0, 1.0, 6.5, 5.0));
+    new Platform(11.0, 1.0, 6.5, 5.0));
 
   // forth level
   Button* bg = new Button(1.5, 1.0, -1);
@@ -214,11 +214,11 @@ Level* Level::prefabTest()
   }
   {
     level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall(10.0, 0.3, 0.0, -0.85));
+      new Platform(10.0, 0.3, 0.0, -0.85));
     level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall(1.0, 0.3, -2.0, 0.3));
+      new Platform(1.0, 0.3, -2.0, 0.3));
     level->graph->insert(SceneGraph::Level::FOREGROUND,
-      new Wall(1.0, 0.3, -2.50, 1));
+      new Platform(1.0, 0.3, -2.50, 1));
   }
   level->phases.push_back(new SceneGraph());
   {
