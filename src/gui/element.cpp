@@ -87,6 +87,7 @@ void GUIElement::showGameHud()
   }
   root->setBackgroundColour(0x00000000);
 
+  /*
   {
     GUIImage* image = new GUIImage("img/phase.png");
     image->setRelative(0.0, 0.0, 0.0, 0.0);
@@ -94,6 +95,7 @@ void GUIElement::showGameHud()
     image->setColour(0xFFFFFF7F);
     root->addElement(image);
   }
+  */
 }
 
 GUIElement::GUIElement()
