@@ -30,7 +30,7 @@ int screenWidth = 640;
 int screenHeight = 480;
 
 const double TILE_SIZE = 64.0;
-VisagePolygon* phasepointer = nullptr;
+//VisagePolygon* phasepointer = nullptr;
 //GUILabel* label = nullptr;
 GUIWindow* root = nullptr;
 
@@ -76,11 +76,11 @@ void draw()
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
 
-  if (level->numPhases())
-  {
-    glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
-    phasepointer->draw();
-  }
+  //if (level->numPhases())
+  //{
+  //  glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
+  //  phasepointer->draw();
+  //}
 
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
@@ -193,8 +193,8 @@ int main(int argc, char** argv)
 
   level = Level::prefabLobby();
 
-  phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
-  phasepointer->setColour(0x7F7F7FFF);
+  //phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
+  //phasepointer->setColour(0x7F7F7FFF);
 
   GUIElement::showMenuMain();
 
