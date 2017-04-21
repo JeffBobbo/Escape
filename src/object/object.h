@@ -170,10 +170,12 @@ public:
 
   virtual inline Type type() const { return Type::GRID; }
   virtual void idle();
-  virtual void draw() { Object::draw(); }
+  virtual void draw() { if (!trigger || trigger->on()) Object::draw(); }
+  inline void link(Button* l) { trigger = l; }
 
 private:
   phase_t target;
+  Button* trigger;
 };
 
 #endif

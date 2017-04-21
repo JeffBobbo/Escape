@@ -14,6 +14,8 @@ GUIWindow::GUIWindow()
 
 void GUIWindow::draw() const
 {
+  if (!isVisible())
+    return;
   glColor4d(col[0], col[1], col[2], col[3]);
 
   int32_t p0, q0, p1, q1;

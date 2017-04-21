@@ -6,7 +6,7 @@ src/scenegraph.o \
 src/level.o \
 src/level_prefabs.o \
 src/util.o \
-src/image.o
+src/imageloader.o
 
 OBJECT=\
 src/object/object.o \

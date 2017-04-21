@@ -19,12 +19,7 @@ void Object::move()
 #include <iostream>
 void Object::draw()
 {
-  // reset
-  glLoadIdentity();
-
-  // translate by the players position, so the camera follows the player
-  if (level->getPlayer())
-    glTranslated(-level->getPlayer()->x, -level->getPlayer()->y, 0.0);
+  glPushMatrix();
 
   // transformations
   glTranslated(x, y, 0.0);
@@ -49,6 +44,8 @@ void Object::draw()
   }
   if (visage)
     visage->draw();
+
+  glPopMatrix();
 }
 
 bool Object::aabbOverlap(const Object* const o) const
@@ -148,6 +145,7 @@ Exit::Exit(double u, double v, const std::string& n)
 Grid::Grid(double w, double h, double u, double v, phase_t p)
   : Object(w, h, u, v)
   , target(p)
+  , trigger(nullptr)
 {
   visage = new VisageComplex();
   {
@@ -190,6 +188,8 @@ Grid::Grid(double w, double h, double u, double v, phase_t p)
 
 void Grid::idle()
 {
+  if (trigger && trigger->on() == false)
+    return;
   if (level->phasePlayer() != target)
   {
     if (aabbOverlap(level->getPlayer()))

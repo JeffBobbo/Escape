@@ -46,7 +46,7 @@ void Player::move()
   }
 
   static millis_t lastUse = 0;
-  if (elapsed - lastUse > 50 && keyboard::pressed(controls::bind(controls::Action::USE)))
+  if (elapsed - lastUse > 200 && keyboard::pressed(controls::bind(controls::Action::USE)))
   {
     lastUse = elapsed;
     for (auto o : level->getPhaseBase()->foreground())
@@ -89,12 +89,12 @@ void Player::move()
   if (keyboard::pressed(controls::bind(controls::Action::MOVE_LEFT)))
   {
     move = true;
-    nx -= (walk ? 0.75 : 1.5) * (delta / 1000.0) * 2.0;
+    nx -= (walk ? 1.5 : 3.0) * (delta / 1000.0);
   }
   if (keyboard::pressed(controls::bind(controls::Action::MOVE_RIGHT)))
   {
     move = true;
-    nx += (walk ? 0.75 : 1.5) * (delta / 1000.0) * 2.0;
+    nx += (walk ? 1.5 : 3.0) * (delta / 1000.0);
   }
   v -= gravity() * (delta / 1000.0);
   ny += v;// * (delta / 1000.0);

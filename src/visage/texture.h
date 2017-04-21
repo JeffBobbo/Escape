@@ -9,8 +9,6 @@
 #include "../util.h"
 #include "../gli.h"
 
-#include "../../external/stb_image.h"
-
 class VisageTexture : public Visage
 {
 public:

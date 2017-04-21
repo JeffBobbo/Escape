@@ -1,7 +1,7 @@
 #include "image.h"
 
 #include "../gli.h"
-#include "../image.h"
+#include "../imageloader.h"
 
 GUIImage::GUIImage()
   : GUIElement()
@@ -21,6 +21,8 @@ GUIImage::GUIImage(const std::string&& t)
 
 void GUIImage::draw() const
 {
+  if (!isVisible())
+    return;
   bindTexture(image);
   glColor4d(col[0], col[1], col[2], col[3]);
   glEnable(GL_TEXTURE_2D);
@@ -31,13 +33,13 @@ void GUIImage::draw() const
   getPosition(a, b, c, d);
 
   glTexCoord2f(0.0, 1.0);
-  glVertex3f(a, b, 0.0f);
+  glVertex3i(a, b, 0);
   glTexCoord2f(1.0, 1.0);
-  glVertex3f(c, b, 0.0f);
+  glVertex3i(c, b, 0);
   glTexCoord2f(1.0, 0.0);
-  glVertex3f(c, d, 0.0f);
+  glVertex3i(c, d, 0);
   glTexCoord2f(0.0, 0.0);
-  glVertex3f(a, d, 0.0f);
+  glVertex3i(a, d, 0);
   glEnd();
   glDisable(GL_TEXTURE_2D);
 }

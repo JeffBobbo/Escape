@@ -81,7 +81,7 @@ Level* Level::prefab1()
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Platform(11.0, 1.0, 6.5, 15.0));
 
-  Button* bd = new Button(11.0, 17.0, -1);
+  Button* bd = new Button(11.0, 16.0, -1);
   level->graph->insert(SceneGraph::Level::FOREGROUND, bd);
   Door* d = new Door(2.0, 1.0, 13.0, 15.0, false, true);
   level->graph->insert(SceneGraph::Level::FOREGROUND, d);
@@ -99,8 +99,9 @@ Level* Level::prefab1()
   Button* bg = new Button(1.5, 1.0, -1);
   level->graph->insert(SceneGraph::Level::FOREGROUND, bg);
 
-  level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Grid(2.0, 4.0, 8.5, 2.5, 1));
+  Grid* g = new Grid(2.0, 4.0, 8.5, 2.5, 1);
+  g->link(bg);
+  level->graph->insert(SceneGraph::Level::FOREGROUND, g);
 
 
   level->phases.push_back(new SceneGraph());

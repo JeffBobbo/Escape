@@ -3,7 +3,7 @@
 #include "../gli.h"
 
 #include "../util.h"
-#include "../image.h"
+#include "../imageloader.h"
 
 double offset = 0.1;
 Particle::Particle()

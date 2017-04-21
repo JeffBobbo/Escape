@@ -1,4 +1,4 @@
-#include "image.h"
+#include "imageloader.h"
 
 #include <iostream>
 #include <utility>

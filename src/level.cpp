@@ -48,6 +48,9 @@ void Level::idle()
 #include "gli.h"
 void Level::draw()
 {
+  // translate by the players position, so the camera follows the player
+  if (getPlayer())
+    glTranslated(-getPlayer()->x, -getPlayer()->y, 0.0);
   graph->draw(); // draw everything in all phases first
 
   // draw everything else from the other phases
