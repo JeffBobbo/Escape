@@ -164,18 +164,10 @@ void Player::move()
   }
   else
   {
-    uint64_t t = elapsed - lastMove;
-    if (t > 2500)
-    {
-      if (t > 10000)
-        sprite << "death" << interpolate(0, 5, std::min(1.0, (t-10000)/500.0));
-      else
-        sprite << "stand";
-    }
+    if (elapsed - lastMove > 2500)
+      sprite << "stand";
     else
-    {
       sprite << "stance" << std::abs(((elapsed / 200) % 7) - 3);
-    }
   }
   VisageTexture* vt = static_cast<VisageTexture*>(visage);
   vt->setAtlasSprite(sprite.str());
