@@ -11,6 +11,7 @@ Animatrix::Animatrix()
   , startAngle(0.0), endAngle(0.0), rotation(0.0)
   , startX(0.0), startY(0.0), endX(0.0), endY(0.0)
   , visible(true)
+  , curAngle(0.0)
 {
 }
 
@@ -21,17 +22,13 @@ void Animatrix::apply() const
   if (!isVisible())
     return;
 
-  double offsetX = 0.0;
-  double offsetY = 0.0;
-  double angle = 0.0;
+  double offsetX = startX;
+  double offsetY = startY;
   double scalex = 1.0;
   double scaley = 1.0;
 
   double col[4];
   glGetDoublev(GL_CURRENT_COLOR, col);
-
-  offsetX += startX;
-  offsetY += startY;
 
   if (loop > 0)
   {
@@ -50,9 +47,15 @@ void Animatrix::apply() const
       scalex *= interpolate(startScaleX, endScaleX, p);
     if (startScaleY != endScaleY)
       scaley *= interpolate(startScaleY, endScaleY, p);
+    if (startAngle != endAngle)
+      curAngle = interpolate(startAngle, endAngle, p);
+  }
+  else
+  {
+    curAngle += rotation * (delta / 1000.0);
   }
   glTranslated(offsetX, offsetY, 0.0);
-  glRotated(angle, 0.0, 0.0, 1.0);
+  glRotated(curAngle, 0.0, 0.0, 1.0);
   glScaled(scalex, scaley, 1.0);
   glColor4dv(col);
 }

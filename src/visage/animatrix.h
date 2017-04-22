@@ -31,6 +31,7 @@ public:
   double startX, startY, endX, endY;
   bool visible;
 private:
+  mutable double curAngle;
 };
 
 #endif
