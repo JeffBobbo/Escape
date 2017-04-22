@@ -10,7 +10,8 @@ src/imageloader.o
 
 OBJECT=\
 src/object/object.o \
-src/object/player.o
+src/object/player.o \
+src/object/ai.o
 
 VISAGE=\
 src/visage/animatrix.o \

@@ -11,6 +11,7 @@ public:
   {
     OBJECT = 0,
     PLAYER,
+    AI,
     PLATFORM,
     DOOR,
     TRIGGER,
