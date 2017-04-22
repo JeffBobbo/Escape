@@ -17,8 +17,12 @@ Player::Player(double a, double b)
 
   facingRight = true;
   lastMove = 0;
+  startMove = 0;
+  lastUse = 0;
   v = 0.0;
   phase = 0;
+
+  steps = 0;
 }
 
 void Player::idle()
@@ -45,7 +49,6 @@ void Player::move()
     lastPhase = elapsed;
   }
 
-  static millis_t lastUse = 0;
   if (elapsed - lastUse > 200 && keyboard::pressed(controls::bind(controls::Action::USE)))
   {
     lastUse = elapsed;
@@ -96,6 +99,7 @@ void Player::move()
     move = true;
     nx += (walk ? 1.5 : 3.0) * (delta / 1000.0);
   }
+
   v -= gravity() * (delta / 1000.0);
   ny += v;// * (delta / 1000.0);
 
@@ -148,7 +152,15 @@ void Player::move()
   // if we move in x, face the correct way, otherwise keep facing the same way
   facingRight = (nx-x) != 0.0 ? (nx-x) > 0.0 : facingRight;
   if (nx-x != 0.0)
+  {
     lastMove = elapsed;
+    if (startMove == 0)
+      startMove = lastMove;
+  }
+  else
+  {
+    startMove = 0;
+  }
   // otherwise, set it appropriately.
   x = nx;
   y = ny;
@@ -160,7 +172,12 @@ void Player::move()
   }
   else if (move)
   {
-    sprite << (walk ? "walk" : "run") << (elapsed / (walk ? 200 : 100)) % 8;
+    static millis_t lastIndex = -1;
+    millis_t index = (elapsed-startMove) / (walk ? 200 : 100) % 8;
+    sprite << (walk ? "walk" : "run") << index;
+    if (index != lastIndex && (index == 0 || index == 4))
+      ++steps;
+    lastIndex = index;
   }
   else
   {

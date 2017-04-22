@@ -67,4 +67,9 @@ namespace keyboard
   void registerCallbacks();
 }
 
+namespace input
+{
+  void runEvents();
+}
+
 #endif

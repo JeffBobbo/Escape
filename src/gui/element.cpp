@@ -1,5 +1,7 @@
 #include "element.h"
 
+#include <sstream>
+
 #include "../main.h"
 
 void GUIElement::showMenuMain()
@@ -97,6 +99,25 @@ void GUIElement::showGameHud()
     root->addElement(image);
   }
   */
+  {
+    GUILabel* steps = new GUILabel();
+    steps->setRelative(0.0, 0.0, 0.0, 0.0);
+    steps->setPosition(16, 16, 16+128, 32);
+    steps->setTextColour(0xFFFFFFFF);
+    steps->setVisible(true);
+    steps->registerListener([](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      return true;
+    }, [steps](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      if (level && level->getPlayer())
+      {
+        std::stringstream ss;
+        ss << "Steps: " << level->getPlayer()->stepCount();
+        steps->setText(ss.str());
+      }
+      return true;
+    });
+    root->addElement(steps);
+  }
 }
 
 GUIElement::GUIElement()

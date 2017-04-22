@@ -65,7 +65,7 @@ void draw()
   // and switch back to model view to arrange our scene
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  
+
   // draw the scene
   if (level)
     level->draw();
@@ -86,6 +86,7 @@ void draw()
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
   glColor4f(1.0, 1.0, 1.0, 1.0);
+  input::runEvents();
   if (root)
     root->draw();
 
@@ -104,11 +105,11 @@ void update()
   last = elapsed;
   elapsed = glutGet(GLUT_ELAPSED_TIME);
   delta = elapsed - last;
-  
-  clast = cmill;
-  cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-  std::cout << cmill-clast << std::endl;
-  std::this_thread::sleep_for(std::chrono::milliseconds(32-(cmill-clast)));
+
+  //clast = cmill;
+  //cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
+  //std::cout << cmill-clast << std::endl;
+  //std::this_thread::sleep_for(std::chrono::milliseconds(32-(cmill-clast)));
 
   if (level)
   {

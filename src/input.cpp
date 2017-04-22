@@ -25,7 +25,6 @@ void mouse::velocity(double& x, double& y)
 
 void motion(const int x, const int y)
 {
-  mouse::MouseState ms = m;
   /*
   // only update velocity if this event happened at a different time
   // this should stop any funny stuff with multiple events updating the
@@ -39,17 +38,10 @@ void motion(const int x, const int y)
   m.x = x;
   m.y = y;
   // last = elapsed;
-
-  if (root)
-  {
-    if (root->testListeners(m, k))
-      m = ms;
-  }
 }
+
 void button(const int button, const int state, const int x, const int y)
 {
-  mouse::MouseState ms = m;
-
   if (button < 3)
   {
     m.buttons[button].x = x;
@@ -67,12 +59,6 @@ void button(const int button, const int state, const int x, const int y)
   }
   // just pass off to the motion callback
   motion(x, y);
-
-  if (root)
-  {
-    if (root->testListeners(m, k))
-      m = ms;
-  }
 }
 
 // unimplemented, glutMouseWheelFunc is unreliable
@@ -167,4 +153,11 @@ void keyboard::registerCallbacks()
   glutKeyboardUpFunc(kb_release);
   glutSpecialFunc(kb_spec_press);
   glutSpecialFunc(kb_spec_release);
+}
+
+
+void input::runEvents()
+{
+  if (root)
+    root->testListeners(m, k);
 }
