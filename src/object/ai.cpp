@@ -30,7 +30,7 @@ void AI::move()
     double px = player->x - x;
     double py = player->y - y + 0.2;
 
-    double accelerate = 1.0 / 30.0;
+    double accelerate = 1.0 / 10.0;
     double nx = px * accelerate;
     double ny = py * accelerate;
 
