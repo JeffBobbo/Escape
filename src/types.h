@@ -128,4 +128,6 @@ struct millis_t
 typedef int32_t millis_t;
 #endif
 
+typedef int16_t health_t;
+
 #endif

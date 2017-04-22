@@ -22,16 +22,32 @@ Player::Player(double a, double b)
   v = 0.0;
   phase = 0;
 
+  health = 50;
+  maxHealth = 100;
+  lastDamage = elapsed;
+  lastHeal = elapsed;
+
   steps = 0;
+  jumps = 0;
 }
 
+#include <iostream>
 void Player::idle()
 {
+  if (health < maxHealth)
+  {
+    static const millis_t TICKS_PER_HEALTH = 200;
+    if (TICKS_PER_HEALTH < elapsed - lastHeal)
+    {
+      health_t toHeal = (elapsed - lastHeal) / TICKS_PER_HEALTH;
+      health += toHeal;
+      lastHeal += TICKS_PER_HEALTH * toHeal;
+    }
+  }
 }
 
 #include <algorithm>
 #include <sstream>
-#include <iostream>
 void Player::move()
 {
   double nx = x;
@@ -84,6 +100,7 @@ void Player::move()
     v = gravity()/1.5;
     lastMove = elapsed;
     lastJump = elapsed;
+    ++jumps;
   }
 
   //if (keyboard::pressed(controls::bind(controls::Action::CROUCH)))

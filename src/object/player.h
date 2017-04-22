@@ -16,6 +16,15 @@ public:
   virtual void move();
 
   inline uint32_t stepCount() const { return steps; }
+  inline uint32_t jumpCount() const { return jumps; }
+
+  inline const health_t& getHealth() const { return health; }
+  inline const health_t& getMaxHealth() const { return maxHealth; }
+  inline double getHealthPercentage() const
+  {
+    return static_cast<double>(health) / static_cast<double>(maxHealth);
+  }
+  inline bool isAlive() const { return health > 0; }
 
 private:
   bool facingRight;
@@ -25,7 +34,13 @@ private:
   millis_t lastJump;
   double v;
 
+  health_t health;
+  health_t maxHealth;
+  millis_t lastDamage;
+  millis_t lastHeal;
+
   uint32_t steps;
+  uint32_t jumps;
 };
 
 #endif

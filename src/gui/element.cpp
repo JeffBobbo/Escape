@@ -111,7 +111,9 @@ void GUIElement::showGameHud()
       if (level && level->getPlayer())
       {
         std::stringstream ss;
-        ss << "Steps: " << level->getPlayer()->stepCount();
+        ss << "Steps: " << level->getPlayer()->stepCount() << std::endl <<
+              "Jumps: " << level->getPlayer()->jumpCount() << std::endl <<
+              "Health: " << level->getPlayer()->getHealth();
         steps->setText(ss.str());
       }
       return true;
