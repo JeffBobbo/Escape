@@ -76,6 +76,14 @@ template <typename T> inline T interpolate(const T& a, const T& b, const double&
   return static_cast<T>((b - a) * p) + a;
 }
 
+template <typename T> inline void bound(T& t, const T& min, const T& max)
+{
+  if (t < min)
+    t = min;
+  else if (t > max)
+    t = max;
+}
+
 void seed(uint64_t s);
 inline void seed() { seed(0); }
 std::mt19937& getMT();

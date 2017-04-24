@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "../main.h"
+#include "../colour.h"
 
 void GUIElement::showMenuMain()
 {
@@ -27,7 +28,7 @@ void GUIElement::showMenuMain()
     GUILabel* play = new GUILabel("Play!");
     play->setRelative(0.5, 0.35, 0.5, 0.35);
     play->setPosition(-20, -10, 20, 10);
-    play->setTextColour(0xFFFFFFFF);
+    play->setTextColour(0xFF0000FF);
     play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
       (void)ks;
       int32_t a, b, c, d;
@@ -89,6 +90,38 @@ void GUIElement::showGameHud()
   }
   root->setBackgroundColour(0x00000000);
 
+  {
+    GUIImage* bleed = new GUIImage("img/damage.png");
+    bleed->setRelative(0.0, 0.0, 1.0, 1.0);
+    bleed->setPosition(0, 0, 0, 0);
+    bleed->setColour(0x00000000);
+    bleed->registerListener([](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      return true;
+    }, [bleed](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      if (level && level->getPlayer())
+      {
+        double frac = level->getPlayer()->getHealthPercentage();
+        if (frac == 1.0)
+        {
+          bleed->setVisible(false);
+        }
+        else
+        {
+          bleed->setVisible(true);
+          millis_t pulseRate = 500;//(frac < 0.25 ? 400 : (frac < 0.5 ? 600 : 800));//(frac + 0.25) * 1600.0;
+          millis_t pulse = (elapsed % pulseRate);
+          if (pulse > (pulseRate/2))
+            pulse = pulseRate - pulse;
+          double p = pulse / (pulseRate / 4.0);
+          uint32_t a = (1.0 - frac) * 255.0 * p;
+          bound(a, 0x0U, 0xFFU);
+          bleed->setColour(0xFF000000 | a);
+        }
+      }
+      return true;
+    });
+    root->addElement(bleed);
+  }
   /*
   {
     GUIImage* image = new GUIImage("img/phase.png");

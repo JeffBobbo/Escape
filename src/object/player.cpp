@@ -22,7 +22,7 @@ Player::Player(double a, double b)
   v = 0.0;
   phase = 0;
 
-  health = 50;
+  health = 1;
   maxHealth = 100;
   lastDamage = elapsed;
   lastHeal = elapsed;
