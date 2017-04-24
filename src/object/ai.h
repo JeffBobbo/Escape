@@ -19,4 +19,17 @@ private:
   double velx, vely;
 };
 
+class Sentry : public AI
+{
+public:
+  Sentry(double a, double b);
+  virtual ~Sentry();
+
+  virtual void idle();
+  virtual void move();
+private:
+  double turnRate;
+  double arc;
+};
+
 #endif

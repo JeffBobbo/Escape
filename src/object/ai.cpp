@@ -54,3 +54,15 @@ void AI::move()
   x += velx * (delta / 1000.0);
   y += vely * (delta / 1000.0);
 }
+
+Sentry::Sentry(double a, double b) : Object(0.5, 0.5, a, b), turnRate(pi()/4.0), arc(pi()/3.0)
+{
+}
+
+void Sentry::idle()
+{
+}
+
+void Sentry::move()
+{
+}
