@@ -30,6 +30,7 @@ public:
 private:
   double turnRate;
   double arc;
+  double midpoint;
 };
 
 #endif

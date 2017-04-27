@@ -45,6 +45,9 @@ Level* Level::prefab0()
   level->graph->insert(SceneGraph::Level::NPC,
     new AI(-2.0, 4.0));
 
+  level->graph->insert(SceneGraph::Level::NPC,
+    new Sentry(-2.5, 3.0));
+
   // moving platform
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Platform(1.0, 0.5, 1.0, 2.5, 0.0, 2.5, 10000));

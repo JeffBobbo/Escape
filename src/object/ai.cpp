@@ -5,7 +5,7 @@
 #include "../main.h"
 #include "../visage/allvisage.h"
 
-AI::AI(double a, double b) : Object(0.5, 0.5, a, b), maxSpeed(3.5)
+AI::AI(double a, double b) : Object(0.1, 0.1, a, b), maxSpeed(3.5)
 {
   visage = VisagePolygon::circle(0.1, 6);
   static_cast<VisagePolygon*>(visage)->setColour(0xAFAFAFFF);
@@ -55,7 +55,15 @@ void AI::move()
   y += vely * (delta / 1000.0);
 }
 
-Sentry::Sentry(double a, double b) : Object(0.5, 0.5, a, b), turnRate(pi()/4.0), arc(pi()/3.0)
+Sentry::Sentry(double a, double b) : AI(a, b), turnRate(45.0), arc(pi()/3.0), midpoint(-pi()/2.0)
+{
+  visage = VisagePolygon::rectangle(0.1, 0.5);
+  static_cast<VisagePolygon*>(visage)->setColour(0xAFAFAFFF);
+  phase = -1;
+  angle = midpoint;
+}
+
+Sentry::~Sentry()
 {
 }
 
@@ -65,4 +73,24 @@ void Sentry::idle()
 
 void Sentry::move()
 {
+  if (!level)
+    return;
+  const Player* const target = level->getPlayer();
+  if (!target)
+    return;
+
+  double tx = target->x;
+  double ty = target->y;
+  double ox = x;
+  double oy = y;
+  double a = degrees(std::atan2(oy - ty, ox - tx) + pi()/2.0) + 180.0;;
+
+  double d = a - (angle + 180.0);
+  while (d > 180.0)
+    d -= 360.0;
+  while (d < -180.0)
+    d += 360.0;
+
+  double na = (d < 0.0 ? -1.0 : 1.0) * std::min(std::abs(d), turnRate * (delta / 1000.0));
+  angle += na;
 }
