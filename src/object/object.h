@@ -44,13 +44,15 @@ public:
   virtual void draw();
 
   virtual inline bool isSolid() const { return false; }
-  virtual inline double distanceSquared(const Object* const o) const
+  inline double distanceSquared(const Object* const o) const
   {
     return (x-o->x)*(x-o->x)+(y-o->y)*(y-o->y);
   }
-  virtual inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
-  virtual bool aabbOverlap(const Object* const o) const;
-
+  inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
+  bool aabbOverlap(const Object* const o) const;
+  bool lineOfSight(const Object* const o) const;
+  bool intersect(const Vec2D& p0, const Vec2D& p1) const;
+  double angleTo(const Object* const o) const;
 
   double angle;
   double rotation;

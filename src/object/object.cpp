@@ -70,6 +70,114 @@ bool Object::satOverlap(const Object* const o) const
 }
 */
 
+bool Object::lineOfSight(const Object* const o) const
+{
+  if (!o)
+    return false;
+  if (!level)
+    return false;
+
+  //if (phase != o->phase)
+    //return false;
+
+  Vec2D origin = {x, y};
+  Vec2D target = {o->x, o->y};
+
+  const SceneGraph* const sg = phase == -1 ? level->getPhaseBase() : level->getPhase(phase);
+  for (auto obj : sg->level(SceneGraph::Level::PLAYER))
+  {
+    if (obj == this)
+      continue;
+    if (obj == o)
+      continue;
+    if (obj->intersect(origin, target))
+      return false;
+  }
+  for (auto obj : sg->level(SceneGraph::Level::NPC))
+  {
+    if (obj == this)
+      continue;
+    if (obj == o)
+      continue;
+    if (obj->intersect(origin, target))
+      return false;
+  }
+  for (auto obj : sg->level(SceneGraph::Level::FOREGROUND))
+  {
+    if (obj == this)
+      continue;
+    if (obj == o)
+      continue;
+    if (obj->intersect(origin, target))
+      return false;
+  }
+  return true;
+}
+
+// intersection algorithm adapted from http://stackoverflow.com/a/100165/5187801
+bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
+{
+  double minX = p0.x;
+  double maxX = p1.x;
+
+  if (p0.x > p1.x)
+  {
+    minX = p1.x;
+    maxX = p0.x;
+  }
+
+  // Find the intersection of the segment's and rectangle's x-projections
+  if (maxX > x+width/2.0)
+    maxX = x+width/2.0;
+
+  if (minX < x-width/2.0)
+    minX = x-width/2.0;
+
+  // if the projections do not intersect then return false
+  if (minX > maxX)
+    return false;
+
+  // Find corresponding min and max Y for min and max X we found before
+  double minY = p0.y;
+  double maxY = p1.y;
+
+  double dx = p1.x - p0.x;
+
+  if (std::abs(dx) > 0.0000001)
+  {
+    double a = (p1.y - p0.y) / dx;
+    double b = p0.y - a * p0.x;
+    minY = a * minX + b;
+    maxY = a * maxX + b;
+  }
+
+  if (minY > maxY)
+  {
+    double tmp = maxY;
+    maxY = minY;
+    minY = tmp;
+  }
+
+  // Find the intersection of the segment's and rectangle's y-projections
+  if (maxY > y+height/2.0)
+    maxY = y+height/2.0;
+
+  if (minY < y-height/2.0)
+    minY = y-height/2.0;
+
+  // if the projections do not intersect then return false
+  if (minY > maxY)
+    return false;
+
+  // we're done, and there's an intersection
+  return true;
+}
+
+double Object::angleTo(const Object* const o) const
+{
+  return std::atan2(o->y - y, o->x - x);
+}
+
 void Platform::move()
 {
   if (!period)

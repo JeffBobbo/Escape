@@ -55,28 +55,28 @@ void AI::move()
   y += vely * (delta / 1000.0);
 }
 
-Sentry::Sentry(double a, double b) : AI(a, b), turnRate(45.0), arc(pi()/3.0), midpoint(-pi()/2.0)
+Camera::Camera(double a, double b) : AI(a, b), turnRate(45.0)
 {
+  delete visage;
   visage = VisagePolygon::rectangle(0.1, 0.5);
   static_cast<VisagePolygon*>(visage)->setColour(0xAFAFAFFF);
   phase = -1;
-  angle = midpoint;
+  angle = 0.0;
 }
 
-Sentry::~Sentry()
+Camera::~Camera()
 {
 }
 
-void Sentry::idle()
+void Camera::idle()
 {
 }
 
-void Sentry::move()
+void Camera::move()
 {
-  if (!level)
-    return;
-  const Player* const target = level->getPlayer();
-  if (!target)
+  const Object* const target = level->getPlayer();
+
+  if (!lineOfSight(target))
     return;
 
   double tx = target->x;
@@ -93,4 +93,24 @@ void Sentry::move()
 
   double na = (d < 0.0 ? -1.0 : 1.0) * std::min(std::abs(d), turnRate * (delta / 1000.0));
   angle += na;
+}
+
+Turret::Turret(double a, double b) : Camera(a, b)
+{
+}
+
+Turret::~Turret()
+{
+}
+
+void Turret::move()
+{
+  Camera::move();
+
+  const Object* const target = level->getPlayer();
+  if (lineOfSight(target) && std::abs(angleTo(target) - angle) < pi() / 3)
+  {
+    // fire!
+
+  }
 }

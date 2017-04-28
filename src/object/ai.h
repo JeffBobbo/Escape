@@ -19,18 +19,26 @@ private:
   double velx, vely;
 };
 
-class Sentry : public AI
+class Camera : public AI
 {
 public:
-  Sentry(double a, double b);
-  virtual ~Sentry();
+  Camera(double a, double b);
+  virtual ~Camera();
 
   virtual void idle();
   virtual void move();
 private:
   double turnRate;
-  double arc;
-  double midpoint;
+};
+
+class Turret : public Camera
+{
+public:
+  Turret(double a, double b);
+  virtual ~Turret();
+
+  virtual void move();
+private:
 };
 
 #endif
