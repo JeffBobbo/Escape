@@ -71,6 +71,11 @@ inline double degrees(const double radians)
   return radians * ratio;
 }
 
+inline double angularDifference(const double r0, const double r1)
+{
+  return std::fmod(r1, pi() * 2.0) - std::fmod(r0, pi() * 2.0);
+}
+
 template <typename T> inline T interpolate(const T& a, const T& b, const double& p)
 {
   return static_cast<T>((b - a) * p) + a;
@@ -106,8 +111,10 @@ template <> inline double random<double>(const double min, const double max)
 class Vec2D
 {
 public:
+  Vec2D() : x(0.0), y(0.0) {}
   Vec2D(const double u, const double v) : x(u), y(v) {}
   Vec2D(const double d) : x(d), y(d) {}
+  Vec2D(const Vec2D& v) : x(v.x), y(v.y) {}
   Vec2D(Vec2D&& v) : x(v.x), y(v.y) {}
 
   Vec2D& operator=(const double d)
