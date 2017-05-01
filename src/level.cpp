@@ -31,6 +31,7 @@ Level::~Level()
   for (auto it : phases)
     delete it;
   delete graph;
+  delete player;
 }
 
 void Level::idle()
