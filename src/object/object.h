@@ -52,7 +52,7 @@ public:
   }
   inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
   bool aabbOverlap(const Object* const o) const;
-  Object* lineOfSight(const Object* const o) const;
+  Object* lineOfSight(const Object* const o, const bool ethereal = false) const;
   bool intersect(const Vec2D& p0, const Vec2D& p1) const;
   double angleTo(const Object* const o) const;
 

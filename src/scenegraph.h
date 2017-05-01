@@ -32,6 +32,11 @@ public:
   inline const std::vector<Object*>& level(const SceneGraph::Level level) const { return graph.at(level); }
   inline const std::vector<Object*>& foreground() const { return graph.at(Level::FOREGROUND); }
 
+  inline const std::map<Level, std::vector<Object*> >& layers() { return graph; }
+
+  inline std::map<Level, std::vector<Object*> >::const_iterator begin() const { return graph.begin(); }
+  inline std::map<Level, std::vector<Object*> >::const_iterator end() const { return graph.end(); }
+
 private:
   std::map<Level, std::vector<Object* > > graph;
 };

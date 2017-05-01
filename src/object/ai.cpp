@@ -114,7 +114,9 @@ void Turret::move()
     // fire!
     Vec2D pos(x, y);
     Projectile* p = new Projectile(pos, target);
-    p->velocity = Vec2D(2.0 * std::cos(radians(angle)), 2.0 * std::sin(radians(angle)));
+    const double speed = 10.0;
+    double a = angle * random(0.975, 1.025);
+    p->velocity = Vec2D(speed * std::cos(radians(a)), speed * std::sin(radians(a)));
     lastFire = elapsed;
     level->getPhaseBase()->insert(SceneGraph::Level::NPC, p);
   }

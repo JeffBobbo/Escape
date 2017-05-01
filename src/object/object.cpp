@@ -74,7 +74,7 @@ bool Object::satOverlap(const Object* const o) const
 }
 */
 
-Object* Object::lineOfSight(const Object* const o) const
+Object* Object::lineOfSight(const Object* const o, const bool ethereal) const
 {
   if (!o)
     return nullptr;
@@ -82,38 +82,23 @@ Object* Object::lineOfSight(const Object* const o) const
     return nullptr;
 
   //if (phase != o->phase)
-    //return false;
+    //return nullptr;
 
   Vec2D origin = {x, y};
   Vec2D target = {o->x, o->y};
 
   const SceneGraph* const sg = phase == -1 ? level->getPhaseBase() : level->getPhase(phase);
-  for (auto obj : sg->level(SceneGraph::Level::PLAYER))
+  for (auto& layer : *sg)
   {
-    if (obj == this)
-      continue;
-    if (obj == o)
-      continue;
-    if (obj->intersect(origin, target))
-      return obj;
-  }
-  for (auto obj : sg->level(SceneGraph::Level::NPC))
-  {
-    if (obj == this)
-      continue;
-    if (obj == o)
-      continue;
-    if (obj->intersect(origin, target))
-      return obj;
-  }
-  for (auto obj : sg->level(SceneGraph::Level::FOREGROUND))
-  {
-    if (obj == this)
-      continue;
-    if (obj == o)
-      continue;
-    if (obj->intersect(origin, target))
-      return obj;
+    for (auto& obj : layer.second)
+    {
+      if (obj == this)
+        continue;
+      if (obj == o)
+        continue;
+      if ((ethereal || obj->isSolid()) && obj->intersect(origin, target))
+        return obj;
+    }
   }
   return const_cast<Object*>(o);
 }
