@@ -2,7 +2,7 @@
 #define SCENEGRAPH_H_INCLUDE
 
 #include <map>
-#include <set>
+#include <vector>
 
 #include "object/object.h"
 
@@ -22,17 +22,18 @@ public:
   ~SceneGraph();
 
   void insert(const SceneGraph::Level level, Object* object);
-  bool remove(Object* const object);
+  //bool remove(Object* const object);
   void clear();
 
   void idle();
   void draw();
+  void cleanup();
 
-  inline const std::set<Object*>& level(const SceneGraph::Level level) const { return graph.at(level); }
-  inline const std::set<Object*>& foreground() const { return graph.at(Level::FOREGROUND); }
+  inline const std::vector<Object*>& level(const SceneGraph::Level level) const { return graph.at(level); }
+  inline const std::vector<Object*>& foreground() const { return graph.at(Level::FOREGROUND); }
 
 private:
-  std::map<Level, std::set<Object* > > graph;
+  std::map<Level, std::vector<Object* > > graph;
 };
 
 #endif

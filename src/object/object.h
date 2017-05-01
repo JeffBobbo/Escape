@@ -16,10 +16,11 @@ public:
     DOOR,
     TRIGGER,
     EXIT,
-    GRID
+    GRID,
+    PROJECTILE
   };
 
-  Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0)
+  Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0) : velocity(), born(elapsed)
   {
     angle = 0.0;
     rotation = 0.0;
@@ -29,6 +30,7 @@ public:
     height = h;
     visage = nullptr;
     phase = -1;
+    seppuku = false;
   }
 
   virtual ~Object()
@@ -50,18 +52,26 @@ public:
   }
   inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
   bool aabbOverlap(const Object* const o) const;
-  bool lineOfSight(const Object* const o) const;
+  Object* lineOfSight(const Object* const o) const;
   bool intersect(const Vec2D& p0, const Vec2D& p1) const;
   double angleTo(const Object* const o) const;
+
+  inline millis_t age() const { return elapsed - born; }
+  inline bool dying() const { return seppuku; }
 
   double angle;
   double rotation;
   double x;
   double y;
+  Vec2D velocity;
   double width;
   double height;
   phase_t phase;
   Visage* visage;
+  const millis_t born;
+
+protected:
+  bool seppuku;
 };
 
 class Platform : public Object
@@ -164,7 +174,6 @@ private:
   std::string name;
 };
 
-#include <iostream>
 class Grid : public Object
 {
 public:
@@ -179,6 +188,20 @@ public:
 private:
   phase_t target;
   Button* trigger;
+};
+
+class Projectile : public Object
+{
+public:
+  Projectile(const Vec2D& pos, Object* const t);
+  virtual ~Projectile() {};
+
+  virtual inline Type type() const { return Type::PROJECTILE; }
+  virtual void move();
+
+  inline Object* getTarget() const { return target; }
+private:
+  Object* const target;
 };
 
 #endif

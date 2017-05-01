@@ -14,6 +14,10 @@ void Object::move()
   angle += rotation * (delta / 1000.0);
   while (angle > 360.0)
     angle -= 360.0;
+
+  Vec2D moveby = velocity * (delta / 1000.0);
+  x += moveby.x;
+  y += moveby.y;
 }
 
 #include <iostream>
@@ -70,12 +74,12 @@ bool Object::satOverlap(const Object* const o) const
 }
 */
 
-bool Object::lineOfSight(const Object* const o) const
+Object* Object::lineOfSight(const Object* const o) const
 {
   if (!o)
-    return false;
+    return nullptr;
   if (!level)
-    return false;
+    return nullptr;
 
   //if (phase != o->phase)
     //return false;
@@ -91,7 +95,7 @@ bool Object::lineOfSight(const Object* const o) const
     if (obj == o)
       continue;
     if (obj->intersect(origin, target))
-      return false;
+      return obj;
   }
   for (auto obj : sg->level(SceneGraph::Level::NPC))
   {
@@ -100,7 +104,7 @@ bool Object::lineOfSight(const Object* const o) const
     if (obj == o)
       continue;
     if (obj->intersect(origin, target))
-      return false;
+      return obj;
   }
   for (auto obj : sg->level(SceneGraph::Level::FOREGROUND))
   {
@@ -109,9 +113,9 @@ bool Object::lineOfSight(const Object* const o) const
     if (obj == o)
       continue;
     if (obj->intersect(origin, target))
-      return false;
+      return obj;
   }
-  return true;
+  return const_cast<Object*>(o);
 }
 
 // intersection algorithm adapted from http://stackoverflow.com/a/100165/5187801
@@ -302,5 +306,35 @@ void Grid::idle()
   {
     if (aabbOverlap(level->getPlayer()))
       level->getPlayer()->phase = target;
+  }
+}
+
+Projectile::Projectile(const Vec2D& pos, Object* const t)
+  : Object(0.05, 0.05, pos.x, pos.y)
+  , target(t)
+{
+  visage = VisagePolygon::circle(0.05, 6);
+  static_cast<VisagePolygon*>(visage)->setColour(0xFF0000FF);
+}
+
+void Projectile::move()
+{
+  Vec2D oldpos(x, y);
+  Object::move();
+
+  if (age() > 1000)
+  {
+    seppuku = true;
+    return;
+  }
+
+  if (target && target->intersect(oldpos, {x, y}))
+  {
+    if (target->type() == Object::Type::PLAYER)
+    {
+      Player* const p = static_cast<Player*>(target);
+      p->makeImpact(10);
+      seppuku = true;
+    }
   }
 }

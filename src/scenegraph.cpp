@@ -7,12 +7,12 @@
 
 SceneGraph::SceneGraph()
 {
-  graph.insert(std::make_pair(Level::BACKGROUND, std::set<Object*>()));
-  graph.insert(std::make_pair(Level::SCENARY, std::set<Object*>()));
-  graph.insert(std::make_pair(Level::FOREGROUND, std::set<Object*>()));
-  graph.insert(std::make_pair(Level::NPC, std::set<Object*>()));
-  graph.insert(std::make_pair(Level::PLAYER, std::set<Object*>()));
-  graph.insert(std::make_pair(Level::EFFECTS, std::set<Object*>()));
+  graph.insert(std::make_pair(Level::BACKGROUND, std::vector<Object*>()));
+  graph.insert(std::make_pair(Level::SCENARY, std::vector<Object*>()));
+  graph.insert(std::make_pair(Level::FOREGROUND, std::vector<Object*>()));
+  graph.insert(std::make_pair(Level::NPC, std::vector<Object*>()));
+  graph.insert(std::make_pair(Level::PLAYER, std::vector<Object*>()));
+  graph.insert(std::make_pair(Level::EFFECTS, std::vector<Object*>()));
 }
 
 SceneGraph::~SceneGraph()
@@ -25,14 +25,16 @@ SceneGraph::~SceneGraph()
 }
 
 
+#include <iostream>
 void SceneGraph::insert(const SceneGraph::Level level, Object* object)
 {
   if (!object)
     return;
 
-  graph[level].insert(object);
+  graph[level].push_back(object);
 }
 
+/*
 bool SceneGraph::remove(Object* const object)
 {
   if (!object)
@@ -52,6 +54,7 @@ bool SceneGraph::remove(Object* const object)
   }
   return false;
 }
+*/
 
 void SceneGraph::clear()
 {
@@ -63,22 +66,50 @@ void SceneGraph::clear()
   }
 }
 
+//#include <iostream>
 void SceneGraph::idle()
 {
   for (auto it : graph)
   {
     for (Object* const o : it.second)
     {
-      o->idle();
-      o->move();
+      if (!o->dying())
+      {
+        o->idle();
+        o->move();
+      }
     }
   }
 }
+
 void SceneGraph::draw()
 {
   for (auto it : graph)
   {
     for (Object* const o : it.second)
-      o->draw();
+    {
+      if (!o->dying())
+        o->draw();
+    }
+  }
+}
+
+void SceneGraph::cleanup()
+{
+  for (auto& g : graph)
+  {
+    for (auto it = g.second.begin(); it != g.second.end(); )
+    {
+      Object* o = *it;
+      if (o->dying())
+      {
+        delete o;
+        it = g.second.erase(it);
+      }
+      else
+      {
+        ++it;
+      }
+    }
   }
 }

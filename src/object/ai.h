@@ -39,6 +39,7 @@ public:
 
   virtual void move();
 private:
+  millis_t lastFire;
 };
 
 #endif

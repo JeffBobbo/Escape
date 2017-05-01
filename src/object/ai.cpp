@@ -58,7 +58,7 @@ void AI::move()
 Camera::Camera(double a, double b) : AI(a, b), turnRate(45.0)
 {
   delete visage;
-  visage = VisagePolygon::rectangle(0.1, 0.5);
+  visage = VisagePolygon::rectangle(0.4, 0.1);
   static_cast<VisagePolygon*>(visage)->setColour(0xAFAFAFFF);
   phase = -1;
   angle = 0.0;
@@ -76,14 +76,14 @@ void Camera::move()
 {
   const Object* const target = level->getPlayer();
 
-  if (!lineOfSight(target))
+  if (lineOfSight(target) != target)
     return;
 
   double tx = target->x;
   double ty = target->y;
   double ox = x;
   double oy = y;
-  double a = degrees(std::atan2(oy - ty, ox - tx) + pi()/2.0) + 180.0;;
+  double a = degrees(std::atan2(oy - ty, ox - tx));
 
   double d = a - (angle + 180.0);
   while (d > 180.0)
@@ -97,6 +97,7 @@ void Camera::move()
 
 Turret::Turret(double a, double b) : Camera(a, b)
 {
+  lastFire = elapsed;
 }
 
 Turret::~Turret()
@@ -107,10 +108,14 @@ void Turret::move()
 {
   Camera::move();
 
-  const Object* const target = level->getPlayer();
-  if (lineOfSight(target) && std::abs(angleTo(target) - angle) < pi() / 3)
+  Object* const target = level->getPlayer();
+  if (elapsed - lastFire > 1000 && lineOfSight(target) == target)// && std::abs(angleTo(target) - radians(angle)) < pi() / 3.0)
   {
     // fire!
-
+    Vec2D pos(x, y);
+    Projectile* p = new Projectile(pos, target);
+    p->velocity = Vec2D(2.0 * std::cos(radians(angle)), 2.0 * std::sin(radians(angle)));
+    lastFire = elapsed;
+    level->getPhaseBase()->insert(SceneGraph::Level::NPC, p);
   }
 }

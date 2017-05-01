@@ -46,6 +46,13 @@ void Level::idle()
   }
 }
 
+void Level::cleanup()
+{
+  graph->cleanup();
+  for (auto g : phases)
+    g->cleanup();
+}
+
 #include "gli.h"
 void Level::draw()
 {

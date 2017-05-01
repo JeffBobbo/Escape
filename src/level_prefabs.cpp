@@ -46,7 +46,7 @@ Level* Level::prefab0()
     new AI(-2.0, 4.0));
 
   level->graph->insert(SceneGraph::Level::NPC,
-    new Camera(-2.75, 3.0));
+    new Turret(-2.75, 3.0));
 
   // moving platform
   level->graph->insert(SceneGraph::Level::FOREGROUND,
@@ -255,5 +255,30 @@ Level* Level::prefabTest()
   }
 
   level->player = new Player(0.0, 0.0);
+  return level;
+}
+
+Level* Level::prefabTestTurret()
+{
+  Level* level = new Level("Turret Test");
+
+  level->graph = new SceneGraph();
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Platform(10.0, 0.3, 0.0, -0.85));
+
+  //level->graph->insert(SceneGraph::Level::NPC,
+    //new Turret(2.0, 2.0));
+
+  level->player = new Player(0.0, 0.0);
+
+  // fire!
+  Vec2D pos(2.0, 2.0);
+  Projectile* p = new Projectile(pos, level->player);
+  p->velocity = Vec2D(2.0, 0.0);
+  //lastFire = elapsed;
+  std::cout << "Fire!" << std::endl;
+  level->getPhaseBase()->insert(SceneGraph::Level::NPC, p);
+
+
   return level;
 }

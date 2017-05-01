@@ -15,6 +15,7 @@ public:
   static Level* prefab0();
   static Level* prefab1();
   static Level* prefabTest();
+  static Level* prefabTestTurret();
   static Level* fromName(const std::string& name);
 
   Level();
@@ -24,8 +25,8 @@ public:
   inline const std::string& getName() const { return name; }
   inline phase_t numPhases() const { return static_cast<phase_t>(phases.size()); }
 
-  inline const SceneGraph* getPhaseBase() const { return graph; }
-  inline const SceneGraph* getPhase(phase_t p) const { return static_cast<size_t>(p) >= phases.size() ? nullptr : phases[p]; }
+  inline SceneGraph* getPhaseBase() const { return graph; }
+  inline SceneGraph* getPhase(phase_t p) const { return static_cast<size_t>(p) >= phases.size() ? nullptr : phases[p]; }
   inline phase_t phasePlayer() const { return player ? player->phase : -1; }
   inline Player* getPlayer() const { return player; }
 
@@ -33,6 +34,7 @@ public:
 
   void idle();
   void draw();
+  void cleanup();
 
   bool completed() const;
 
