@@ -16,13 +16,14 @@ Player::Player(double a, double b)
   setVisage(vt);
 
   facingRight = true;
-  lastMove = 0;
+  lastMove = elapsed;
   startMove = 0;
-  lastUse = 0;
+  lastUse = elapsed;
+  lastJump = elapsed;
   v = 0.0;
   phase = 0;
 
-  health = 1;
+  health = 100;
   maxHealth = 100;
   lastDamage = elapsed;
   lastHeal = elapsed;
@@ -37,11 +38,12 @@ void Player::idle()
   if (health < maxHealth)
   {
     static const millis_t TICKS_PER_HEALTH = 200;
-    if (TICKS_PER_HEALTH < elapsed - lastHeal)
+    millis_t last = std::max(lastHeal, lastDamage);
+    if (TICKS_PER_HEALTH < elapsed - last)
     {
-      health_t toHeal = (elapsed - lastHeal) / TICKS_PER_HEALTH;
+      health_t toHeal = (elapsed - last) / TICKS_PER_HEALTH;
       health += toHeal;
-      lastHeal += TICKS_PER_HEALTH * toHeal;
+      lastHeal = last + TICKS_PER_HEALTH * toHeal;
     }
   }
 }

@@ -25,6 +25,8 @@ public:
     return static_cast<double>(health) / static_cast<double>(maxHealth);
   }
   inline bool isAlive() const { return health > 0; }
+  void deltaHealth(const health_t& delta) { health += delta; }
+  void makeImpact(const health_t& damage) { health -= damage; lastDamage = elapsed; }
 
 private:
   bool facingRight;
