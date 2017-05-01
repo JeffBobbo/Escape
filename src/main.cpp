@@ -36,8 +36,18 @@ GUIWindow* root = nullptr;
 
 const int32_t TARGET_FPS = 60;
 const int32_t FRAME_TIME = 1000/TARGET_FPS;
+uint64_t clast = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
+uint64_t cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
 void draw()
 {
+  last = elapsed;
+  elapsed = glutGet(GLUT_ELAPSED_TIME);
+  delta = elapsed - last;
+//clast = cmill;
+//cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
+//std::cout << cmill-clast << std::endl;
+//std::this_thread::sleep_for(std::chrono::milliseconds(32-(cmill-clast)));
+
   glClear(GL_COLOR_BUFFER_BIT);
 
   // fps update
@@ -66,9 +76,35 @@ void draw()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  // draw the scene
+
   if (level)
+  {
+    if (level->completed())
+    {
+      Exit* e = level->getExit();
+      std::string next = e->getNext();
+      if (next.size())
+      {
+        delete level;
+        level = Level::fromName(next);
+        if (level == nullptr)
+        {
+          std::cerr << "Failed to load level " << next << std::endl;
+          glutLeaveMainLoop();
+          return;
+        }
+      }
+      else
+      {
+        // exit
+        glutLeaveMainLoop();
+        return;
+      }
+    }
+    level->idle();
+    level->cleanup();
     level->draw();
+  }
 
   // draw gui stuff on top
   glLoadIdentity();
@@ -98,46 +134,8 @@ void draw()
 }
 
 // TODO: FIX FPS issues
-uint64_t clast = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-uint64_t cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
 void update()
 {
-  last = elapsed;
-  elapsed = glutGet(GLUT_ELAPSED_TIME);
-  delta = elapsed - last;
-
-  //clast = cmill;
-  //cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-  //std::cout << cmill-clast << std::endl;
-  //std::this_thread::sleep_for(std::chrono::milliseconds(32-(cmill-clast)));
-
-  if (level)
-  {
-    if (level->completed())
-    {
-      Exit* e = level->getExit();
-      std::string next = e->getNext();
-      if (next.size())
-      {
-        delete level;
-        level = Level::fromName(next);
-        if (level == nullptr)
-        {
-          std::cerr << "Failed to load level " << next << std::endl;
-          glutLeaveMainLoop();
-          return;
-        }
-      }
-      else
-      {
-        // exit
-        glutLeaveMainLoop();
-        return;
-      }
-    }
-    level->idle();
-  }
-  glutPostRedisplay();
 }
 
 void reshape(int width, int height)
@@ -188,9 +186,9 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
 
   // set the display function callback
-  glutDisplayFunc(draw);
+  //glutDisplayFunc(draw);
   // set the idle (update) callback
-  glutIdleFunc(update);
+  glutIdleFunc(draw);
 
   // kb stuff
   keyboard::registerCallbacks();
@@ -204,12 +202,13 @@ int main(int argc, char** argv)
   // load visage data
   //Visage::loadVisages();
 
-  //level = Level::prefabLobby();
+  level = Level::prefabLobby();
 
   //phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
   //phasepointer->setColour(0x7F7F7FFF);
 
   GUIElement::showMenuMain();
+  //level = Level::prefabTestTurret();
 
   // begin glut loop
   glutMainLoop();
@@ -222,6 +221,10 @@ int main(int argc, char** argv)
   // cleanup
   if (level)
     delete level;
+
+  if (root)
+    delete root;
+
   // free up all the textures
   dropAllTextures();
 
