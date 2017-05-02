@@ -37,8 +37,8 @@ void Player::idle()
   if (health < maxHealth)
   {
     static const millis_t TICKS_PER_HEALTH = 200;
-    millis_t last = std::max(lastHeal, lastDamage);
-    if (TICKS_PER_HEALTH < elapsed - last)
+    millis_t last = std::max(lastHeal, lastDamage + 1000);
+    if (elapsed - last > TICKS_PER_HEALTH)
     {
       health_t toHeal = (elapsed - last) / TICKS_PER_HEALTH;
       health += toHeal;
