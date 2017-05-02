@@ -33,6 +33,7 @@ void Object::draw()
   glColor4d(1.0, 1.0, 1.0, 1.0);
 
   // now work out what the colour should be for the phase
+  /*
   if (phase >= 0 && phase != level->phasePlayer()) // only needs to be done if we're actually in a phase
   {
     // calculate the phases colour
@@ -46,6 +47,7 @@ void Object::draw()
 
     glColor4d(c.r, c.g, c.b, a);
   }
+  */
   if (visage)
     visage->draw();
 
@@ -94,7 +96,7 @@ Object* Object::lineOfSight(const Object* const o, const bool ethereal) const
   Vec2D origin = {x, y};
   Vec2D target = {o->x, o->y};
 
-  const SceneGraph* const sg = phase == -1 ? level->getPhaseBase() : level->getPhase(phase);
+  const SceneGraph* const sg = level->getGraph();
   for (auto& layer : *sg)
   {
     for (auto& obj : layer.second)
@@ -214,8 +216,7 @@ void Door::idle()
   }
   else
   {
-    if ((phase == -1 || phase == level->phasePlayer()) &&
-        distanceSquared(level->getPlayer()) < 2)
+    if (distanceSquared(level->getPlayer()) < 2)
       open = true;
     else
       open = false;
@@ -281,6 +282,7 @@ void Checkpoint::activate(const Player* const player)
   level->setCheckpoint(this);
 }
 
+/*
 Grid::Grid(double w, double h, double u, double v, phase_t p)
   : Object(w, h, u, v)
   , target(p)
@@ -335,6 +337,7 @@ void Grid::idle()
       level->getPlayer()->phase = target;
   }
 }
+*/
 
 Projectile::Projectile(const Vec2D& pos, Object* const t)
   : Object(0.05, 0.05, pos.x, pos.y)

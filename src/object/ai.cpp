@@ -12,7 +12,6 @@ AI::AI(double a, double b) : Object(0.1, 0.1, a, b), maxSpeed(3.5)
   Animatrix* anim = new Animatrix();
   anim->rotation = pi() * 64.0;
   visage->addAnimatrix(anim);
-  phase = -1;
   velx = 0.0;
   vely = 0.0;
 }
@@ -60,7 +59,6 @@ Camera::Camera(double a, double b) : AI(a, b), turnRate(45.0)
   delete visage;
   visage = VisagePolygon::rectangle(0.4, 0.1);
   static_cast<VisagePolygon*>(visage)->setColour(0xAFAFAFFF);
-  phase = -1;
   angle = 0.0;
 }
 
@@ -118,6 +116,6 @@ void Turret::move()
     double a = angle * random(0.975, 1.025);
     p->velocity = Vec2D(speed * std::cos(radians(a)), speed * std::sin(radians(a)));
     lastFire = elapsed;
-    level->getPhaseBase()->insert(SceneGraph::Level::NPC, p);
+    level->getGraph()->insert(SceneGraph::Level::NPC, p);
   }
 }

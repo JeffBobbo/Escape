@@ -122,16 +122,6 @@ void GUIElement::showGameHud()
     });
     root->addElement(bleed);
   }
-  /*
-  {
-    GUIImage* image = new GUIImage("img/phase.png");
-    image->setRelative(0.0, 0.0, 0.0, 0.0);
-    image->setPosition(16, 16, 16+128, 16+16);
-    image->setColour(0xFFFFFFFF);
-    image->setVisible(false);
-    root->addElement(image);
-  }
-  */
   {
     GUILabel* steps = new GUILabel();
     steps->setRelative(0.0, 0.0, 0.0, 0.0);

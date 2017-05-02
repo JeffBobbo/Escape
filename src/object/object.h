@@ -31,7 +31,6 @@ public:
     width = w;
     height = h;
     visage = nullptr;
-    phase = -1;
     seppuku = false;
   }
 
@@ -70,7 +69,6 @@ public:
   Vec2D velocity;
   double width;
   double height;
-  phase_t phase;
   Visage* visage;
   const millis_t born;
 
@@ -167,7 +165,7 @@ private:
 class Exit : public Object
 {
 public:
-  Exit(double u, double v, const std::string& n);
+  Exit(double u, double v, const std::string& n = "");
   virtual ~Exit() {}
 
   virtual inline Type type() const { return Type::EXIT; }
@@ -196,10 +194,11 @@ private:
   health_t hp;
 };
 
+/*
 class Grid : public Object
 {
 public:
-  Grid(double w, double h, double u, double v, phase_t p);
+  Grid(double w, double h, double u, double v);
   virtual ~Grid() {}
 
   virtual inline Type type() const { return Type::GRID; }
@@ -208,9 +207,9 @@ public:
   inline void link(Button* l) { trigger = l; }
 
 private:
-  phase_t target;
   Button* trigger;
 };
+*/
 
 class Projectile : public Object
 {

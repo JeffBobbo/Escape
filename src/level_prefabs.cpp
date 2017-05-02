@@ -105,18 +105,13 @@ Level* Level::prefab1()
     new Platform(11.0, 1.0, 6.5, 5.0));
 
   // forth level
-  Button* bg = new Button(1.5, 1.0, -1);
-  level->graph->insert(SceneGraph::Level::FOREGROUND, bg);
-
-  Grid* g = new Grid(2.0, 4.0, 8.5, 2.5, 1);
-  g->link(bg);
-  level->graph->insert(SceneGraph::Level::FOREGROUND, g);
-
+  Button* be = new Button(1.5, 1.0, -1);
+  level->graph->insert(SceneGraph::Level::FOREGROUND, be);
 
   level->phases.push_back(new SceneGraph());
   level->phases.push_back(new SceneGraph());
-  Exit* e = new Exit(13.0, 1.0, ""); // exit with no name means quit!
-  e->phase = 1;
+  Exit* e = new Exit(13.0, 1.0); // exit with no name means quit!
+  //be->link(e);
   level->phases.back()->insert(SceneGraph::Level::FOREGROUND, e);
 
   level->player = new Player(1.5, 15.0);
@@ -219,7 +214,6 @@ Level* Level::prefabTest()
     o->setVisage(ps);
     o->x = 2.75;
     o->y = 0.0;
-    o->phase = 0;
     level->phases.back()->insert(SceneGraph::Level::SCENARY, o);
   }
   {
@@ -233,27 +227,22 @@ Level* Level::prefabTest()
   level->phases.push_back(new SceneGraph());
   {
     Object* o = new Platform(1.0, 1.0, -5.0, 0.0, 2.0, 0.0, 5000);
-    o->phase = 1;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
   level->phases.push_back(new SceneGraph());
   {
     Object* o = new Platform(1.0, 1.0, 5.0, 0.0, 0.0, 2.0, 5000);
-    o->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
     Button* b = new Button(-2.5, 2, -1);
-    b->phase = 2;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, b);
 
     Door* d = new Door(0.2, 1.0, 2.5, -0.2, false);
-    d->phase = 2;
     d->link(b);
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, d);
   }
   level->phases.push_back(new SceneGraph());
   {
     Object* o = new Platform(1.0, 1.0, 0.0, 0.0, 0.0, 2.0, 2000);
-    o->phase = 3;
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
 
@@ -280,7 +269,7 @@ Level* Level::prefabTestTurret()
   p->velocity = Vec2D(2.0, 0.0);
   //lastFire = elapsed;
   std::cout << "Fire!" << std::endl;
-  level->getPhaseBase()->insert(SceneGraph::Level::NPC, p);
+  level->getGraph()->insert(SceneGraph::Level::NPC, p);
 
 
   return level;

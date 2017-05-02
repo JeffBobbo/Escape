@@ -59,7 +59,7 @@ struct phase_t
   inline operator bool() const { return d; }
 };
 #else
-typedef int16_t phase_t;
+//  typedef int16_t phase_t;
 #endif
 
 #ifdef MILLIS_FIX

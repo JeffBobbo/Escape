@@ -21,7 +21,6 @@ Player::Player(double a, double b)
   lastUse = elapsed;
   lastJump = elapsed;
   v = 0.0;
-  phase = 0;
 
   health = 100;
   maxHealth = 100;
@@ -55,22 +54,10 @@ void Player::move()
   double nx = x;
   double ny = y;
 
-  static millis_t lastPhase = 0;
-  if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_UP)) && level->numPhases())
-  {
-    phase = phase+1 % level->numPhases();
-    lastPhase = elapsed;
-  }
-  else if (elapsed - lastPhase > 500 && keyboard::pressed(controls::bind(controls::Action::PHASE_DOWN)) && level->numPhases())
-  {
-    phase = (phase-1+level->numPhases()) % level->numPhases();
-    lastPhase = elapsed;
-  }
-
   if (elapsed - lastUse > 200 && keyboard::pressed(controls::bind(controls::Action::USE)))
   {
     lastUse = elapsed;
-    for (auto o : level->getPhaseBase()->foreground())
+    for (auto o : level->getGraph()->foreground())
     {
       if (o->type() != Object::Type::TRIGGER)
         continue;
@@ -78,19 +65,6 @@ void Player::move()
       if (aabbOverlap(b))
       {
         b->set();
-      }
-    }
-    if (level->numPhases())
-    {
-      for (auto o : level->getPhase(phase)->foreground())
-      {
-        if (o->type() != Object::Type::TRIGGER)
-          continue;
-        Button* b = static_cast<Button*>(o);
-        if (aabbOverlap(b))
-        {
-          b->set();
-        }
       }
     }
   }
@@ -123,7 +97,7 @@ void Player::move()
   ny += v;// * (delta / 1000.0);
 
   // make sure we can move here
-  for (const Object* const o : level->getPhaseBase()->foreground())
+  for (const Object* const o : level->getGraph()->foreground())
   {
     if (o == this) // skip yourself
       continue;
@@ -144,28 +118,6 @@ void Player::move()
         ny+height/2.0 > o->y-o->height/2.0 &&
         ny-height/2.0 < o->y+o->height/2.0)
       nx = x;
-  }
-
-  if (phase != -1 && level->getPhase(phase))
-  {
-    for (const Object* const o : level->getPhase(phase)->foreground())
-    {
-      if (!o->isSolid()) // skip non-solids
-        continue;
-      if (x+width/4.0 > o->x-o->width/2.0 &&
-          x-width/4.0 < o->x+o->width/2.0 &&
-          ny+height/2.0 > o->y-o->height/2.0 &&
-          ny-height/2.0 < o->y+o->height/2.0)
-      {
-        ny = v <= 0 ? o->y+o->height/2.0+height/2.0 : y;
-        v = 0.0;
-      }
-      if (nx+width/4.0 > o->x-o->width/2.0 &&
-          nx-width/4.0 < o->x+o->width/2.0 &&
-          ny+height/2.0 > o->y-o->height/2.0 &&
-          ny-height/2.0 < o->y+o->height/2.0)
-          nx = x;
-    }
   }
 
   // if we move in x, face the correct way, otherwise keep facing the same way

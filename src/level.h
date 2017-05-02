@@ -23,11 +23,8 @@ public:
   ~Level();
 
   inline const std::string& getName() const { return name; }
-  inline phase_t numPhases() const { return static_cast<phase_t>(phases.size()); }
 
-  inline SceneGraph* getPhaseBase() const { return graph; }
-  inline SceneGraph* getPhase(phase_t p) const { return static_cast<size_t>(p) >= phases.size() ? nullptr : phases[p]; }
-  inline phase_t phasePlayer() const { return player ? player->phase : -1; }
+  inline SceneGraph* getGraph() const { return graph; }
   inline Player* getPlayer() const { return player; }
 
   Exit* getExit() const;
