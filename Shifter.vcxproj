@@ -127,6 +127,7 @@
     <ClInclude Include="src\keys.h" />
     <ClInclude Include="src\level.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\object\ai.h" />
     <ClInclude Include="src\object\allobject.h" />
     <ClInclude Include="src\object\object.h" />
     <ClInclude Include="src\object\player.h" />
@@ -152,6 +153,7 @@
     <ClCompile Include="src\level.cpp" />
     <ClCompile Include="src\level_prefabs.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\object\ai.cpp" />
     <ClCompile Include="src\object\object.cpp" />
     <ClCompile Include="src\object\player.cpp" />
     <ClCompile Include="src\scenegraph.cpp" />
