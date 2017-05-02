@@ -209,3 +209,26 @@ void Player::move()
   vt->setAtlasSprite(sprite.str());
   vt->setFlip(!facingRight);
 }
+
+void Player::death()
+{
+  Checkpoint* cp = level->getCheckpoint();
+  if (cp)
+  {
+    x = cp->x;
+    y = cp->y;
+    health = cp->getHealth();
+  }
+  else
+  {
+    glutLeaveMainLoop();
+  }
+}
+
+void Player::makeImpact(const health_t& damage)
+{
+  health -= damage;
+  lastDamage = elapsed;
+  if (health < 0)
+    death();
+}

@@ -52,6 +52,11 @@ void Object::draw()
   glPopMatrix();
 }
 
+void Object::death()
+{
+  seppuku = true;
+}
+
 bool Object::aabbOverlap(const Object* const o) const
 {
   Vec2D tb = boundingVolume();
@@ -244,22 +249,33 @@ Exit::Exit(double u, double v, const std::string& n)
 
 Checkpoint::Checkpoint(double u, double v)
   : Object(0.5, 0.5, u, v)
+  , active(false)
+  , hp(100)
 {
   visage = VisagePolygon::triangle(0.5, 0.5, 0.0);
   static_cast<VisagePolygon*>(visage)->setColour(0xFF0000FF);
 }
 
+void Checkpoint::idle()
+{
+  Player* p = level->getPlayer();
+  if (!active && aabbOverlap(p))
+    activate(p);
+}
+
 void Checkpoint::activate(const Player* const player)
 {
   VisagePolygon* vp = static_cast<VisagePolygon*>(visage);
+  /*
   {
     Animatrix* a = new Animatrix();
     a->startColour = 0xFF0000FF;
     a->endColour = 0x00FF00FF;
     a->start = 0;
-    a->end = 500;
+    a->end = 5000;
     vp->addAnimatrix(a);
   }
+  */
   vp->setColour(0x00FF00FF);
   hp = player->getHealth();
   level->setCheckpoint(this);
@@ -345,7 +361,7 @@ void Projectile::move()
     {
       Player* const p = static_cast<Player*>(target);
       p->makeImpact(10);
-      seppuku = true;
+      death();
     }
   }
 }

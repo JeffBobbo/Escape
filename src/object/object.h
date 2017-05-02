@@ -46,6 +46,7 @@ public:
   virtual void idle();
   virtual void move();
   virtual void draw();
+  virtual void death();
 
   virtual inline bool isSolid() const { return false; }
   inline double distanceSquared(const Object* const o) const
@@ -182,12 +183,16 @@ class Checkpoint : public Object
 public:
   Checkpoint(double u, double v);
   virtual ~Checkpoint() {}
-
+  
   virtual inline Type type() const { return Type::CHECKPOINT; }
+
+  virtual void idle();
 
   void activate(const Player* const player);
 
+  inline const health_t& getHealth() const { return hp; }
 private:
+  bool active;
   health_t hp;
 };
 

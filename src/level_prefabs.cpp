@@ -42,6 +42,9 @@ Level* Level::prefab0()
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Platform( 1.0, 3.0, -2.0, 2.0));
 
+  level->graph->insert(SceneGraph::Level::FOREGROUND,
+    new Checkpoint(-2.0, 4.0));
+
   level->graph->insert(SceneGraph::Level::NPC,
     new AI(-2.0, 4.0));
 
@@ -62,7 +65,7 @@ Level* Level::prefab0()
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Platform( 2.0, 0.5,   8.0, 4.75));
   level->graph->insert(SceneGraph::Level::FOREGROUND,
-    new Exit(8.0, 5.5, "prefab1"));
+    new Exit(8.0, 5.75, "prefab1"));
 
   level->player = new Player(-8.5, 0.0);
   return level;

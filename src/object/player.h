@@ -14,6 +14,7 @@ public:
   virtual inline Type type() const { return Type::PLAYER; }
   virtual void idle();
   virtual void move();
+  virtual void death();
 
   virtual inline Vec2D boundingVolume() const { return Vec2D(width/3.0, height); }
 
@@ -28,7 +29,7 @@ public:
   }
   inline bool isAlive() const { return health > 0; }
   void deltaHealth(const health_t& delta) { health += delta; }
-  void makeImpact(const health_t& damage) { health -= damage; lastDamage = elapsed; }
+  void makeImpact(const health_t& damage);
 
 private:
   bool facingRight;

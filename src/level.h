@@ -32,7 +32,8 @@ public:
 
   Exit* getExit() const;
   void setCheckpoint(Checkpoint* const cp) { checkpoint = cp; }
-
+  inline Checkpoint* getCheckpoint() const { return checkpoint; }
+  
   void idle();
   void draw();
   void cleanup();
