@@ -31,7 +31,7 @@ public:
   inline Player* getPlayer() const { return player; }
 
   Exit* getExit() const;
-  bool setCheckpoint(Checkpoint* const cp) { checkpoint = cp; }
+  void setCheckpoint(Checkpoint* const cp) { checkpoint = cp; }
 
   void idle();
   void draw();

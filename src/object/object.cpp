@@ -260,25 +260,9 @@ void Checkpoint::activate(const Player* const player)
     a->end = 500;
     vp->addAnimatrix(a);
   }
-  {
-    Animatrix* a = new Animatrix();
-    a->startSize = 1.0;
-    a->endSize = 1.25;
-    a->start = 0;
-    a->end = 250;
-    vp->addAnimatrix(a);
-  }
-  {
-    Animatrix* a = new Animatrix();
-    a->startSize = 1.20;
-    a->endSize = 1.0;
-    a->start = 250;
-    a->end = 500;
-    vp->addAnimatrix(a);
-  }
   vp->setColour(0x00FF00FF);
   hp = player->getHealth();
-  level->setCheckpoint(*this);
+  level->setCheckpoint(this);
 }
 
 Grid::Grid(double w, double h, double u, double v, phase_t p)

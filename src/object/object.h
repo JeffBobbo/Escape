@@ -4,6 +4,7 @@
 #include "../types.h"
 #include "../visage/allvisage.h"
 
+class Player;
 class Object
 {
 public:
