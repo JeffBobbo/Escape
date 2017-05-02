@@ -113,7 +113,7 @@ void GUIElement::showGameHud()
           if (pulse > (pulseRate/2))
             pulse = pulseRate - pulse;
           double p = pulse / (pulseRate / 4.0);
-          uint32_t a = (1.0 - frac) * 255.0 * p;
+          uint32_t a = static_cast<uint32_t>((1.0 - frac) * 255.0 * p);
           bound(a, 0x0U, 0xFFU);
           bleed->setColour(0xFF000000 | a);
         }
