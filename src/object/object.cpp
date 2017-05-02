@@ -54,10 +54,12 @@ void Object::draw()
 
 bool Object::aabbOverlap(const Object* const o) const
 {
-  return x-width/2.0 < o->x+o->width/2.0 &&
-         x+width/2.0 > o->x-o->width/2.0 &&
-         y-height/2.0 < o->y+o->height/2.0 &&
-         y+height/2.0 > o->y-o->height/2.0;
+  Vec2D tb = boundingVolume();
+  Vec2D ob = o->boundingVolume();
+  return x-tb.x/2.0 < o->x+ob.x/2.0 &&
+         x+tb.x/2.0 > o->x-ob.x/2.0 &&
+         y-tb.y/2.0 < o->y+ob.y/2.0 &&
+         y+tb.y/2.0 > o->y-ob.y/2.0;
 }
 
 /*
@@ -115,12 +117,13 @@ bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
     maxX = p0.x;
   }
 
+  Vec2D vol = boundingVolume();
   // Find the intersection of the segment's and rectangle's x-projections
-  if (maxX > x+width/2.0)
-    maxX = x+width/2.0;
+  if (maxX > x+vol.x/2.0)
+    maxX = x+vol.x/2.0;
 
-  if (minX < x-width/2.0)
-    minX = x-width/2.0;
+  if (minX < x-vol.x/2.0)
+    minX = x-vol.x/2.0;
 
   // if the projections do not intersect then return false
   if (minX > maxX)
@@ -148,11 +151,11 @@ bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
   }
 
   // Find the intersection of the segment's and rectangle's y-projections
-  if (maxY > y+height/2.0)
-    maxY = y+height/2.0;
+  if (maxY > y+vol.y/2.0)
+    maxY = y+vol.y/2.0;
 
-  if (minY < y-height/2.0)
-    minY = y-height/2.0;
+  if (minY < y-vol.y/2.0)
+    minY = y-vol.y/2.0;
 
   // if the projections do not intersect then return false
   if (minY > maxY)
@@ -169,7 +172,7 @@ double Object::angleTo(const Object* const o) const
 
 void Platform::move()
 {
-  if (!period)
+  if (period <= 0)
     return;
   const double p = static_cast<double>(elapsed % period) / static_cast<double>(period);
   const double a = 2.0 * pi() * p;
@@ -232,11 +235,50 @@ void Button::idle()
 }
 
 Exit::Exit(double u, double v, const std::string& n)
-  : Object(1.0, 1.0, u, v)
+  : Object(0.5, 0.5, u, v)
   , name(n)
 {
-  visage = VisagePolygon::triangle(1.0, 1.0, 0.0);
+  visage = VisagePolygon::triangle(0.5, 0.5, 0.0);
   static_cast<VisagePolygon*>(visage)->setColour(0xFFFF00FF);
+}
+
+Checkpoint::Checkpoint(double u, double v)
+  : Object(0.5, 0.5, u, v)
+{
+  visage = VisagePolygon::triangle(0.5, 0.5, 0.0);
+  static_cast<VisagePolygon*>(visage)->setColour(0xFF0000FF);
+}
+
+void Checkpoint::activate(const Player* const player)
+{
+  VisagePolygon* vp = static_cast<VisagePolygon*>(visage);
+  {
+    Animatrix* a = new Animatrix();
+    a->startColour = 0xFF0000FF;
+    a->endColour = 0x00FF00FF;
+    a->start = 0;
+    a->end = 500;
+    vp->addAnimatrix(a);
+  }
+  {
+    Animatrix* a = new Animatrix();
+    a->startSize = 1.0;
+    a->endSize = 1.25;
+    a->start = 0;
+    a->end = 250;
+    vp->addAnimatrix(a);
+  }
+  {
+    Animatrix* a = new Animatrix();
+    a->startSize = 1.20;
+    a->endSize = 1.0;
+    a->start = 250;
+    a->end = 500;
+    vp->addAnimatrix(a);
+  }
+  vp->setColour(0x00FF00FF);
+  hp = player->getHealth();
+  level->setCheckpoint(*this);
 }
 
 Grid::Grid(double w, double h, double u, double v, phase_t p)

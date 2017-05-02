@@ -16,6 +16,7 @@ public:
     DOOR,
     TRIGGER,
     EXIT,
+    CHECKPOINT,
     GRID,
     PROJECTILE
   };
@@ -51,6 +52,7 @@ public:
     return (x-o->x)*(x-o->x)+(y-o->y)*(y-o->y);
   }
   inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
+  virtual inline Vec2D boundingVolume() const { return Vec2D(width, height); }
   bool aabbOverlap(const Object* const o) const;
   Object* lineOfSight(const Object* const o, const bool ethereal = false) const;
   bool intersect(const Vec2D& p0, const Vec2D& p1) const;
@@ -164,7 +166,7 @@ class Exit : public Object
 {
 public:
   Exit(double u, double v, const std::string& n);
-  virtual ~Exit() {};
+  virtual ~Exit() {}
 
   virtual inline Type type() const { return Type::EXIT; }
 
@@ -172,6 +174,20 @@ public:
 
 private:
   std::string name;
+};
+
+class Checkpoint : public Object
+{
+public:
+  Checkpoint(double u, double v);
+  virtual ~Checkpoint() {}
+
+  virtual inline Type type() const { return Type::CHECKPOINT; }
+
+  void activate(const Player* const player);
+
+private:
+  health_t hp;
 };
 
 class Grid : public Object

@@ -15,6 +15,8 @@ public:
   virtual void idle();
   virtual void move();
 
+  virtual inline Vec2D boundingVolume() const { return Vec2D(width/3.0, height); }
+
   inline uint32_t stepCount() const { return steps; }
   inline uint32_t jumpCount() const { return jumps; }
 

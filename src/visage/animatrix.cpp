@@ -30,7 +30,7 @@ void Animatrix::apply() const
   double col[4];
   glGetDoublev(GL_CURRENT_COLOR, col);
 
-  if (loop > 0)
+  if (loop >= 0)
   {
     const double p = (tickCount() % (end-start)) / static_cast<double>(end-start);
 
