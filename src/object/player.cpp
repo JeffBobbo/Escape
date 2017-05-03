@@ -34,14 +34,17 @@ Player::Player(double a, double b)
 #include <iostream>
 void Player::idle()
 {
-  if (health < maxHealth)
+  if (health != maxHealth)
   {
     static const millis_t TICKS_PER_HEALTH = 200;
     millis_t last = std::max(lastHeal, lastDamage + 1000);
     if (elapsed - last > TICKS_PER_HEALTH)
     {
       health_t toHeal = (elapsed - last) / TICKS_PER_HEALTH;
-      health += toHeal;
+      if (health < maxHealth)
+        health += toHeal;
+      else
+        health -= toHeal;
       lastHeal = last + TICKS_PER_HEALTH * toHeal;
     }
   }
