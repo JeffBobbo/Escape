@@ -251,7 +251,8 @@ Exit::Exit(double u, double v, const std::string& n)
 Checkpoint::Checkpoint(double u, double v, bool s)
   : Object(0.5, 0.5, u, v)
   , spawn(s), active(s)
-  , hp(100)
+  , health(100), maxHealth(100)
+  , lastDamage(elapsed), lastHeal(elapsed)
 {
   if (!spawn)
   {
@@ -281,7 +282,10 @@ void Checkpoint::activate(const Player* const player)
   }
   */
   vp->setColour(0x00FF00FF);
-  hp = player->getHealth();
+  health = player->health;
+  maxHealth = player->maxHealth;
+  lastDamage = elapsed - player->lastDamage;
+  lastHeal = elapsed - player->lastHeal;
   level->setCheckpoint(this);
 }
 

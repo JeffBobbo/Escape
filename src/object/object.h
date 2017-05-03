@@ -178,6 +178,7 @@ private:
 
 class Checkpoint : public Object
 {
+  friend Player;
 public:
   Checkpoint(double u, double v, bool s = false);
   virtual ~Checkpoint() {}
@@ -188,11 +189,14 @@ public:
 
   void activate(const Player* const player);
 
-  inline const health_t& getHealth() const { return hp; }
+
 private:
   const bool spawn;
   bool active;
-  health_t hp;
+  health_t health;
+  health_t maxHealth;
+  millis_t lastDamage;
+  millis_t lastHeal;
 };
 
 /*

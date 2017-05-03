@@ -7,6 +7,7 @@
 
 class Player : public Object
 {
+  friend Checkpoint;
 public:
   Player(double a = 0.0, double b = 0.0);
   virtual ~Player() {}
@@ -30,6 +31,7 @@ public:
   inline bool isAlive() const { return health > 0; }
   void deltaHealth(const health_t& delta) { health += delta; }
   void makeImpact(const health_t& damage);
+
 
 private:
   bool facingRight;

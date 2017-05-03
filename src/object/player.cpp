@@ -169,7 +169,10 @@ void Player::death()
   {
     x = cp->x;
     y = cp->y;
-    health = cp->getHealth();
+    health = cp->health;
+    maxHealth = cp->maxHealth;
+    lastDamage = elapsed + cp->lastDamage;
+    lastHeal = elapsed + cp->lastHeal;
   }
   else
   {
