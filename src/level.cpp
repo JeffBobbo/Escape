@@ -93,5 +93,5 @@ Exit* Level::getExit() const
 bool Level::completed() const
 {
   Exit* e = getExit();
-  return e ? player->aabbOverlap(e) : false;
+  return e ? e->active() && player->aabbOverlap(e) : false;
 }

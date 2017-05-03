@@ -111,7 +111,7 @@ Level* Level::prefab1()
   level->phases.push_back(new SceneGraph());
   level->phases.push_back(new SceneGraph());
   Exit* e = new Exit(13.0, 1.0); // exit with no name means quit!
-  //be->link(e);
+  be->link(e);
   level->phases.back()->insert(SceneGraph::Level::FOREGROUND, e);
 
   level->addPlayer(new Player(1.5, 15.0));

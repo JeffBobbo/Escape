@@ -62,13 +62,11 @@ void Player::move()
     lastUse = elapsed;
     for (auto o : level->getGraph()->foreground())
     {
-      if (o->type() != Object::Type::TRIGGER)
+      Trigger* t = dynamic_cast<Trigger*>(o);
+      if (!t)
         continue;
-      Button* b = static_cast<Button*>(o);
-      if (aabbOverlap(b))
-      {
-        b->set();
-      }
+      if (aabbOverlap(o))
+        t->set();
     }
   }
 

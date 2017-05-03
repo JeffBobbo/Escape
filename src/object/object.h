@@ -4,6 +4,9 @@
 #include "../types.h"
 #include "../visage/allvisage.h"
 
+#include "trigger.h"
+//#include "actuator.h"
+
 class Player;
 class Object
 {
@@ -41,6 +44,7 @@ public:
   }
 
   virtual inline Type type() const { return Type::OBJECT; }
+
   inline void setVisage(Visage* v) { delete visage; visage = v; }
   virtual void idle();
   virtual void move();
@@ -86,10 +90,10 @@ public:
   {
     originx = x;
     originy = y;
-    visage = VisagePolygon::rectangle(w, h);
-    static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
-    // visage = new VisageTexture(w, h, "img/background/tile1.png");
-    // static_cast<VisageTexture*>(visage)->setRepeat(w, h);
+    //visage = VisagePolygon::rectangle(w, h);
+    //static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
+    visage = new VisageTexture(w, h, "img/background/tile1.png");
+    static_cast<VisageTexture*>(visage)->setRepeat(w, h);
   }
   virtual ~Platform() {}
 
@@ -105,7 +109,7 @@ private:
 };
 
 class Button;
-class Door : public Object
+class Door : public Object, public Actuator
 {
 public:
   Door(double w, double h, double u, double v, bool o, bool p = false);
@@ -128,17 +132,16 @@ public:
   virtual inline bool isSolid() const { return !open; }
   virtual void idle();
 
-  inline void link(Button* l) { trigger = l; }
+  virtual void actuate();
 
 private:
-  Button* trigger; // later change this to a Trigger object
   bool open;
   Visage* vOpen;
   Visage* vClose;
 };
 
 // turn into a generic trigger class
-class Button : public Object
+class Button : public Object, public Trigger
 {
 public:
   Button(double u, double v, millis_t t);
@@ -147,14 +150,16 @@ public:
   virtual inline Type type() const { return Type::TRIGGER; }
   virtual void idle();
 
-  inline void set()
-  {
-    last = timeout == -1 ? !last : elapsed;
-  }
-
-  inline bool on() const
+  virtual inline bool on() const
   {
     return timeout == -1 ? last != 0 : elapsed - last < timeout;
+  }
+
+  virtual inline void set()
+  {
+    last = timeout == -1 ? !last : elapsed;
+    if (actuator)
+      actuator->actuate();
   }
 
 private:
@@ -162,7 +167,7 @@ private:
   millis_t timeout;
 };
 
-class Exit : public Object
+class Exit : public Object, public Actuator
 {
 public:
   Exit(double u, double v, const std::string& n = "");
@@ -171,6 +176,8 @@ public:
   virtual inline Type type() const { return Type::EXIT; }
 
   inline std::string getNext() const { return name; }
+  virtual void actuate() {}
+  bool active() const;
 
 private:
   std::string name;

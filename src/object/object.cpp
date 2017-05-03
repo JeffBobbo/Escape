@@ -189,9 +189,8 @@ void Platform::move()
 
 
 Door::Door(double w, double h, double u, double v, bool o, bool p)
-: Object(w, h, u, v)
+: Object(w, h, u, v), Actuator()
 {
-  trigger = nullptr;
   open = o;
   if (p)
     vOpen = VisagePolygon::rectangle(w*0.1, h);
@@ -210,22 +209,28 @@ Door::Door(double w, double h, double u, double v, bool o, bool p)
 
 void Door::idle()
 {
-  if (trigger)
+  if (isLinked())
+    return;
+  if (distanceSquared(level->getPlayer()) < 2)
   {
-    open = trigger->on();
+    open = true;
+    visage = vOpen;
   }
   else
   {
-    if (distanceSquared(level->getPlayer()) < 2)
-      open = true;
-    else
-      open = false;
+    open = false;
+    visage = vClose;
   }
+}
+
+void Door::actuate()
+{
+  open = trigger->on();
   visage = open ? vOpen : vClose;
 }
 
 Button::Button(double u, double v, millis_t t)
-  : Object(0.25, 0.25, u, v)
+  : Object(0.25, 0.25, u, v), Trigger()
   , last(0), timeout(t)
 {
   visage = VisagePolygon::circle(0.1, 16);
@@ -246,6 +251,13 @@ Exit::Exit(double u, double v, const std::string& n)
 {
   visage = VisagePolygon::triangle(0.5, 0.5, 0.0);
   static_cast<VisagePolygon*>(visage)->setColour(0xFFFF00FF);
+}
+
+bool Exit::active() const
+{
+  if (trigger)
+    return trigger->on();
+  return true;
 }
 
 Checkpoint::Checkpoint(double u, double v, bool s)
