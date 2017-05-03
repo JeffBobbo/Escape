@@ -30,7 +30,13 @@ public:
   Exit* getExit() const;
   void setCheckpoint(Checkpoint* const cp) { checkpoint = cp; }
   inline Checkpoint* getCheckpoint() const { return checkpoint; }
-  
+  void addPlayer(Player* const p)
+  {
+    player = p;
+    checkpoint = new Checkpoint(p->x, p->y, true);
+    graph->insert(SceneGraph::Level::FOREGROUND, checkpoint);
+  }
+
   void idle();
   void draw();
   void cleanup();
@@ -43,7 +49,6 @@ private:
   // each scene graph represent a single phase
   std::vector<SceneGraph*> phases;
 
-  // include a reference to the player, for convenience
   Player* player;
   mutable Exit* out;
   Checkpoint* checkpoint;

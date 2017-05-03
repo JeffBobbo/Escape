@@ -179,9 +179,9 @@ private:
 class Checkpoint : public Object
 {
 public:
-  Checkpoint(double u, double v);
+  Checkpoint(double u, double v, bool s = false);
   virtual ~Checkpoint() {}
-  
+
   virtual inline Type type() const { return Type::CHECKPOINT; }
 
   virtual void idle();
@@ -190,6 +190,7 @@ public:
 
   inline const health_t& getHealth() const { return hp; }
 private:
+  const bool spawn;
   bool active;
   health_t hp;
 };

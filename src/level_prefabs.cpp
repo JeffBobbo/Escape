@@ -67,7 +67,7 @@ Level* Level::prefab0()
   level->graph->insert(SceneGraph::Level::FOREGROUND,
     new Exit(8.0, 5.75, "prefab1"));
 
-  level->player = new Player(-8.5, 0.0);
+  level->addPlayer(new Player(-8.5, 0.0));
   return level;
 }
 
@@ -114,7 +114,7 @@ Level* Level::prefab1()
   //be->link(e);
   level->phases.back()->insert(SceneGraph::Level::FOREGROUND, e);
 
-  level->player = new Player(1.5, 15.0);
+  level->addPlayer(new Player(1.5, 15.0));
   return level;
 }
 
@@ -246,7 +246,7 @@ Level* Level::prefabTest()
     level->phases.back()->insert(SceneGraph::Level::FOREGROUND, o);
   }
 
-  level->player = new Player(0.0, 0.0);
+  level->addPlayer(new Player(0.0, 0.0));
   return level;
 }
 
@@ -261,7 +261,7 @@ Level* Level::prefabTestTurret()
   //level->graph->insert(SceneGraph::Level::NPC,
     //new Turret(2.0, 2.0));
 
-  level->player = new Player(0.0, 0.0);
+  level->addPlayer(new Player(0.0, 0.0));
 
   // fire!
   Vec2D pos(2.0, 2.0);

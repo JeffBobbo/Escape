@@ -248,13 +248,16 @@ Exit::Exit(double u, double v, const std::string& n)
   static_cast<VisagePolygon*>(visage)->setColour(0xFFFF00FF);
 }
 
-Checkpoint::Checkpoint(double u, double v)
+Checkpoint::Checkpoint(double u, double v, bool s)
   : Object(0.5, 0.5, u, v)
-  , active(false)
+  , spawn(s), active(s)
   , hp(100)
 {
-  visage = VisagePolygon::triangle(0.5, 0.5, 0.0);
-  static_cast<VisagePolygon*>(visage)->setColour(0xFF0000FF);
+  if (!spawn)
+  {
+    visage = VisagePolygon::triangle(0.5, 0.5, 0.0);
+    static_cast<VisagePolygon*>(visage)->setColour(0xFF0000FF);
+  }
 }
 
 void Checkpoint::idle()
