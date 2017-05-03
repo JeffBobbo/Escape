@@ -181,6 +181,6 @@ void Player::makeImpact(const health_t& damage)
 {
   health -= damage;
   lastDamage = elapsed;
-  if (health < 0)
+  if (health <= 0)
     death();
 }
