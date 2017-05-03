@@ -2,9 +2,9 @@
 #define TRIGGER_H_INCLUDE
 
 class Actuator;
-
 class Trigger
 {
+  friend Actuator;
 public:
   Trigger() : actuator(nullptr) {}
   virtual ~Trigger() {}
@@ -12,31 +12,26 @@ public:
   virtual bool on() const = 0;
   virtual void set() = 0;
 
-  virtual void link(Actuator* const a)
-  {
-    actuator = const_cast<Actuator*>(a);
-    actuator->trigger = this;
-  }
+  void link(Actuator* a);
 
-private:
+  inline bool isLinked() const { return actuator != nullptr; }
+protected:
   Actuator* actuator;
 };
 
 class Actuator
 {
+  friend Trigger;
 public:
   Actuator() : trigger(nullptr) {}
   virtual ~Actuator() {}
 
   virtual void actuate() = 0;
 
-  virtual void link(const Trigger* const t)
-  {
-    trigger = const_cast<Trigger*>(t);
-    trigger->actuator = this;
-  }
+  void link(Trigger* t);
 
-private:
+  inline bool isLinked() const { return trigger != nullptr; }
+protected:
   Trigger* trigger;
 };
 

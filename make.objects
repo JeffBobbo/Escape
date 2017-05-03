@@ -9,6 +9,7 @@ src/util.o \
 src/imageloader.o
 
 OBJECT=\
+src/object/trigger.o \
 src/object/object.o \
 src/object/player.o \
 src/object/ai.o
