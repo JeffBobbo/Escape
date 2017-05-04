@@ -69,6 +69,15 @@ bool Object::aabbOverlap(const Object* const o) const
          y+tb.y/2.0 > o->y-ob.y/2.0;
 }
 
+bool Object::pointInside(const Vec2D& v) const
+{
+  Vec2D bv = boundingVolume();
+  return x-bv.x/2.0 < v.x &&
+         x+bv.x/2.0 > v.x &&
+         y-bv.y/2.0 < v.y &&
+         y+bv.y/2.0 > v.y;
+}
+
 /*
 bool Object::satOverlap(const Object* const o) const
 {
@@ -175,6 +184,50 @@ bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
 double Object::angleTo(const Object* const o) const
 {
   return std::atan2(o->y - y, o->x - x);
+}
+
+Platform::Platform(double w, double h, double u, double v, double rx, double ry, millis_t p)
+  : Object(w, h, u, v)
+  , radiusx(rx), radiusy(ry)
+  , period(p)
+{
+  originx = x;
+  originy = y;
+  //visage = VisagePolygon::rectangle(w, h);
+  //static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
+  if (p == 0)
+  {
+    visage = new VisageTexture(w, h, "img/background/tile1.png");
+    static_cast<VisageTexture*>(visage)->setRepeat(w, h);
+  }
+  else
+  {
+    visage = new VisageComplex();
+    {
+      VisageTexture* vt = new VisageTexture(w, h, "img/platforms.png");
+      vt->setAtlasSprite("platform2");
+      static_cast<VisageComplex*>(visage)->add(vt);
+    }
+    {
+      ParticleSystem* ps = new ParticleSystem(200, 100);
+      ps->setParticleImage("img/particle_soft.png");
+      ps->setColours(fromInt(0x003AD9FF), fromInt(0x90C3D400));
+      ps->lifeMin = 500;
+      ps->lifeMax = 875;
+      ps->sizeStart = 0.25;
+      ps->sizeEnd = 0.0625;
+      ps->speedStart = 0.9;
+      ps->speedEnd = 0.45;
+      ps->direction = -pi()/2.0;
+      ps->spray = pi()/8.0;
+      ps->collide = true;
+      ps->source = this;
+      Animatrix* a = new Animatrix();
+      a->startY = -h/2.0;
+      ps->addAnimatrix(a);
+      static_cast<VisageComplex*>(visage)->add(ps);
+    }
+  }
 }
 
 void Platform::move()

@@ -24,7 +24,7 @@ public:
 
   inline const std::string& getName() const { return name; }
 
-  inline SceneGraph* getGraph() const { return graph; }
+  inline const SceneGraph* getGraph() const { return graph; }
   inline Player* getPlayer() const { return player; }
 
   Exit* getExit() const;
@@ -36,6 +36,7 @@ public:
     checkpoint = new Checkpoint(p->x, p->y, true);
     graph->insert(SceneGraph::Level::FOREGROUND, checkpoint);
   }
+  void insert(const SceneGraph::Level l, Object* o) { graph->insert(l, o); }
 
   void idle();
   void draw();
@@ -47,7 +48,7 @@ private:
   std::string name;
   SceneGraph* graph;
   // each scene graph represent a single phase
-  std::vector<SceneGraph*> phases;
+  //std::vector<SceneGraph*> phases;
 
   Player* player;
   mutable Exit* out;

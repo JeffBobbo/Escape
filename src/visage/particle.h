@@ -8,6 +8,7 @@
 #include "../colour.h"
 #include "../gli.h"
 
+class Object;
 class Particle
 {
 public:
@@ -77,6 +78,8 @@ public:
   double offsetX;
   double offsetY;
   bool rectangle;
+  bool collide;
+  Object* source;
 
   std::string particle;
 };

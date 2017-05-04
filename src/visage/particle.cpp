@@ -4,6 +4,7 @@
 
 #include "../util.h"
 #include "../imageloader.h"
+#include "../main.h"
 
 double offset = 0.1;
 Particle::Particle()
@@ -22,6 +23,8 @@ ParticleSystem::ParticleSystem(size_t m, size_t r)
   , gravity(false)
   , offsetX(0.0), offsetY(0.0)
   , rectangle(false)
+  , collide(false)
+  , source(nullptr)
 {
   // allocate all the memory up front
   // this'll make memory usage initially higher, but means less allocations
@@ -89,6 +92,7 @@ void ParticleSystem::erase(Particle* p)
 void ParticleSystem::update()
 {
   Particle* p = particles;
+  const std::vector<Object*>& objects = level->getGraph()->foreground();
   while (p != last)
   {
     p->age += delta;
@@ -108,6 +112,25 @@ void ParticleSystem::update()
       // move
       p->pos[0] += p->vel[0] * (delta / 1000.0f);
       p->pos[1] += p->vel[1] * (delta / 1000.0f);
+
+      if (collide)
+      {
+        auto it = objects.begin();
+        for (; it != std::end(objects); ++it)
+        {
+          Object* o = *it;
+          if (o == source)
+            continue;
+          if (o->isSolid() && o->pointInside(Vec2D(p->pos[0], p->pos[1])))
+            break;
+        }
+        if (it != std::end(objects))
+        {
+          p->age = p->life;
+          ++p;
+          continue;
+        }
+      }
 
       // interpolate colours
       // do it in HSV space because it looks better, but is slightly slower
@@ -146,7 +169,7 @@ void ParticleSystem::update()
 void ParticleSystem::draw()
 {
   update();
-
+  Visage::draw();
   /*
   // pass all the vertex and colour data in one go
   glVertexPointer(3, GL_FLOAT, sizeof(Particle), particles->pos);
@@ -168,7 +191,7 @@ void ParticleSystem::draw()
   Particle* p = particles;
   double col[4];
   glGetDoublev(GL_CURRENT_COLOR, col);
-  if (particle.size())
+  if (particle.length())
   {
     bindTexture(particle);
     glEnable(GL_TEXTURE_2D);

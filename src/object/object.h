@@ -45,7 +45,7 @@ public:
 
   virtual inline Type type() const { return Type::OBJECT; }
 
-  inline void setVisage(Visage* v) { delete visage; visage = v; }
+  inline void setVisage(Visage* v) { if (visage) delete visage; visage = v; }
   virtual void idle();
   virtual void move();
   virtual void draw();
@@ -59,6 +59,7 @@ public:
   inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
   virtual inline Vec2D boundingVolume() const { return Vec2D(width, height); }
   bool aabbOverlap(const Object* const o) const;
+  bool pointInside(const Vec2D& v) const;
   Object* lineOfSight(const Object* const o, const bool ethereal = false) const;
   bool intersect(const Vec2D& p0, const Vec2D& p1) const;
   double angleTo(const Object* const o) const;
@@ -83,18 +84,7 @@ protected:
 class Platform : public Object
 {
 public:
-  Platform(double w, double h, double u, double v, double rx = 0.0, double ry = 0.0, millis_t p = 0)
-  : Object(w, h, u, v)
-  , radiusx(rx), radiusy(ry)
-  , period(p)
-  {
-    originx = x;
-    originy = y;
-    //visage = VisagePolygon::rectangle(w, h);
-    //static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
-    visage = new VisageTexture(w, h, "img/background/tile1.png");
-    static_cast<VisageTexture*>(visage)->setRepeat(w, h);
-  }
+  Platform(double w, double h, double u, double v, double rx = 0.0, double ry = 0.0, millis_t p = 0);
   virtual ~Platform() {}
 
   virtual inline Type type() const { return Type::PLATFORM; }

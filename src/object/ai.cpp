@@ -116,6 +116,6 @@ void Turret::move()
     double a = angle * random(0.975, 1.025);
     p->velocity = Vec2D(speed * std::cos(radians(a)), speed * std::sin(radians(a)));
     lastFire = elapsed;
-    level->getGraph()->insert(SceneGraph::Level::NPC, p);
+    level->insert(SceneGraph::Level::NPC, p);
   }
 }

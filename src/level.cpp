@@ -28,8 +28,8 @@ Level::Level(std::string n)
 
 Level::~Level()
 {
-  for (auto it : phases)
-    delete it;
+  //for (auto it : phases)
+    //delete it;
   delete graph;
   delete player;
 }
@@ -37,8 +37,8 @@ Level::~Level()
 void Level::idle()
 {
   graph->idle();
-  for (auto it : phases)
-    it->idle();
+  //for (auto it : phases)
+    //it->idle();
   if (player)
   {
     player->idle();
@@ -49,8 +49,8 @@ void Level::idle()
 void Level::cleanup()
 {
   graph->cleanup();
-  for (auto g : phases)
-    g->cleanup();
+  //for (auto g : phases)
+    //g->cleanup();
 }
 
 #include "gli.h"
@@ -62,8 +62,8 @@ void Level::draw()
   graph->draw(); // draw everything in all phases first
 
   // draw everything else from the other phases
-  for (auto it : phases)
-    it->draw();
+  //for (auto it : phases)
+    //it->draw();
 
   if (player)
     player->draw(); // draw the player
@@ -78,6 +78,7 @@ Exit* Level::getExit() const
       if (it->type() == Object::Type::EXIT)
         out = static_cast<Exit*>(it);
     }
+    /*
     for (auto p : phases)
     {
       for (auto it : p->foreground())
@@ -86,6 +87,7 @@ Exit* Level::getExit() const
           out = static_cast<Exit*>(it);
       }
     }
+    */
   }
   return out;
 }
