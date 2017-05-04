@@ -131,6 +131,7 @@
     <ClInclude Include="src\object\allobject.h" />
     <ClInclude Include="src\object\object.h" />
     <ClInclude Include="src\object\player.h" />
+    <ClInclude Include="src\object\trigger.h" />
     <ClInclude Include="src\scenegraph.h" />
     <ClInclude Include="src\types.h" />
     <ClInclude Include="src\util.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="src\object\ai.cpp" />
     <ClCompile Include="src\object\object.cpp" />
     <ClCompile Include="src\object\player.cpp" />
+    <ClCompile Include="src\object\trigger.cpp" />
     <ClCompile Include="src\scenegraph.cpp" />
     <ClCompile Include="src\util.cpp" />
     <ClCompile Include="src\visage\animatrix.cpp" />
