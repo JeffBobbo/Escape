@@ -25,34 +25,29 @@ void GUIElement::showMenuMain()
     title->setPosition(-20, -10, 20, 10);
     title->setTextColour(0xFF0000FF);
     root->addElement(title);
+
     GUILabel* play = new GUILabel("Play!");
     play->setRelative(0.5, 0.35, 0.5, 0.35);
     play->setPosition(-20, -10, 20, 10);
     play->setTextColour(0xFF0000FF);
     play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      return true;
+    }, [play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
       (void)ks;
       int32_t a, b, c, d;
       play->getPosition(a, b, c, d);
-      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
-    }, [play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ms;
-      (void)ks;
-      play->setTextColour(0x00FF00FF);
-      return false;
+      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
+        play->setTextColour(0x00FF00FF);
+      else
+        play->setTextColour(0xFF0000FF);
+      return true;
     });
     play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
       (void)ks;
-      int32_t a, b, c, d;
-      play->getPosition(a, b, c, d);
-      return !(a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
-    }, [play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ms;
-      (void)ks;
-      play->setTextColour(0xFF0000FF);
-      return false;
-    });
-    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ks;
+      if (keyboard::pressed(KeyCode::KEY_SPACE))
+        return true;
       if (!mouse::left())
         return false;
       int32_t a, b, c, d;
@@ -72,6 +67,36 @@ void GUIElement::showMenuMain()
       return true;
     });
     root->addElement(play);
+
+    GUILabel* quit = new GUILabel("Quit");
+    quit->setRelative(0.5, 0.35, 0.5, 0.35);
+    quit->setPosition(-20, 20, 20, 40);
+    quit->setTextColour(0xFF0000FF);
+    quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      if (!mouse::left())
+        return false;
+      int32_t a, b, c, d;
+      quit->getPosition(a, b, c, d);
+      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+    }, [quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      glutLeaveMainLoop();
+      return true;
+    });
+    quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      return true;
+    }, [quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      int32_t a, b, c, d;
+      quit->getPosition(a, b, c, d);
+      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
+        quit->setTextColour(0x00FF00FF);
+      else
+        quit->setTextColour(0xFF0000FF);
+      return true;
+    });
+    root->addElement(quit);
   }
 }
 
@@ -96,8 +121,12 @@ void GUIElement::showGameHud()
     bleed->setPosition(0, 0, 0, 0);
     bleed->setColour(0x00000000);
     bleed->registerListener([](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      (void)ms;
+      (void)ks;
       return true;
     }, [bleed](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      (void)ms;
+      (void)ks;
       if (level && level->getPlayer())
       {
         double frac = level->getPlayer()->getHealthPercentage();
@@ -218,32 +247,10 @@ bool GUIElement::isVisible() const
   return parent ? parent->isVisible() : true;
 }
 
-void GUIElement::registerListener(GUIElement::Event e, std::function<bool(void)> f)
-{
-  callbacks[e] = f;
-}
-
 void GUIElement::registerListener(GUIElement::Trigger t, GUIElement::Callback c)
 {
   auto p = std::make_pair(t, c);
   events.push_back(p);
-}
-
-bool GUIElement::callListener(GUIElement::Event e)
-{
-  return isListening(e) ? callbacks[e]() : false;
-}
-
-bool GUIElement::testListeners(const mouse::MouseState& m)
-{
-  if (mouse::left())
-  {
-    int32_t a, b, c, d;
-    getPosition(a, b, c, d);
-    if (a <= m.x && m.x <= c && b <= m.y && m.y <= d)
-      return callListener(GUIElement::Event::ON_CLICK);
-  }
-  return false;
 }
 
 bool GUIElement::testListeners(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
@@ -255,35 +262,4 @@ bool GUIElement::testListeners(const mouse::MouseState& ms, const keyboard::Keyb
       it.second(ms, ks);
   }
   return r;
-}
-
-bool GUIElement::onClickLeft(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
-{
-  (void)ks;
-  if (!mouse::left())
-    return false;
-
-  int32_t a, b, c, d;
-  getPosition(a, b, c, d);
-  return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
-}
-bool GUIElement::onClickRight(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
-{
-  (void)ks;
-  if (!mouse::right())
-    return false;
-
-  int32_t a, b, c, d;
-  getPosition(a, b, c, d);
-  return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
-}
-bool GUIElement::onClickMiddle(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
-{
-  (void)ks;
-  if (!mouse::middle())
-    return false;
-
-  int32_t a, b, c, d;
-  getPosition(a, b, c, d);
-  return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
 }

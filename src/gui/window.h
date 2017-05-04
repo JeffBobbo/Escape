@@ -26,7 +26,6 @@ public:
     elements.clear();
   }
 
-  virtual bool testListeners(const mouse::MouseState& m);
   virtual bool testListeners(const mouse::MouseState& ms, const keyboard::KeyboardState& ks);
 
 private:

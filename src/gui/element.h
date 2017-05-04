@@ -18,13 +18,6 @@ public:
   static void showMenuMain();
   static void showGameHud();
 
-  enum class Event
-  {
-    // MOUSE_IN,
-    // MOUSE_OUT,
-    // MOUSE_SCROLL,
-    ON_CLICK
-  };
   GUIElement();
   virtual ~GUIElement() {}
 
@@ -39,22 +32,14 @@ public:
   bool isVisible() const;
   inline void setVisible(bool v) { visible = v; }
 
-  virtual void registerListener(GUIElement::Event e, std::function<bool(void)> f);
   virtual void registerListener(GUIElement::Trigger t, GUIElement::Callback c);
-  virtual inline bool isListening(GUIElement::Event e) { return callbacks.find(e) != callbacks.end(); }
-  virtual bool callListener(GUIElement::Event e);
-  virtual bool testListeners(const mouse::MouseState& m);
   virtual bool testListeners(const mouse::MouseState& ms, const keyboard::KeyboardState& ks);
 
-  bool onClickLeft(const mouse::MouseState& ms, const keyboard::KeyboardState& ks);
-  bool onClickRight(const mouse::MouseState& ms, const keyboard::KeyboardState& ks);
-  bool onClickMiddle(const mouse::MouseState& ms, const keyboard::KeyboardState& ks);
 protected:
   int32_t x0, y0, x1, y1;
   double px0, py0, px1, py1;
   bool visible;
   GUIElement* parent;
-  std::map<GUIElement::Event, std::function<bool(void)> > callbacks;
   std::vector<std::pair<Trigger, Callback> > events;
 };
 
