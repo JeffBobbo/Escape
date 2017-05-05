@@ -53,5 +53,4 @@ void VisagePolygon::draw()
   for (const Vec2D* const v : vertices)
     glVertex3d(v->x, v->y, 0.0);
   glEnd();
-  glPopMatrix();
 }
