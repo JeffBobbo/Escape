@@ -5,7 +5,7 @@
 #include "../main.h"
 #include "../visage/allvisage.h"
 
-AI::AI(double a, double b) : Object(0.1, 0.1, a, b), maxSpeed(3.5)
+AI::AI(double w, double h, double u, double v) : Object(w, h, u, v), maxSpeed(3.5)
 {
   visage = VisagePolygon::circle(0.1, 6);
   static_cast<VisagePolygon*>(visage)->setColour(0xAFAFAFFF);
@@ -54,7 +54,7 @@ void AI::move()
   y += vely * (delta / 1000.0);
 }
 
-Camera::Camera(double a, double b) : AI(a, b), turnRate(45.0)
+Camera::Camera(double a, double b) : AI(0.4, 0.1, a, b), turnRate(60.0)
 {
   delete visage;
   visage = VisagePolygon::rectangle(0.4, 0.1);
@@ -74,20 +74,13 @@ void Camera::move()
 {
   const Object* const target = level->getPlayer();
 
+  if (!target)
+    return;
+
   if (lineOfSight(target) != target)
     return;
 
-  double tx = target->x;
-  double ty = target->y;
-  double ox = x;
-  double oy = y;
-  double a = degrees(std::atan2(oy - ty, ox - tx));
-
-  double d = a - (angle + 180.0);
-  while (d > 180.0)
-    d -= 360.0;
-  while (d < -180.0)
-    d += 360.0;
+  double d = degrees(angularDifference(angleTo(target), radians(angle)));
 
   double na = (d < 0.0 ? -1.0 : 1.0) * std::min(std::abs(d), turnRate * (delta / 1000.0));
   angle += na;
@@ -107,7 +100,11 @@ void Turret::move()
   Camera::move();
 
   Object* const target = level->getPlayer();
-  if (elapsed - lastFire > 1000 && lineOfSight(target) == target)// && std::abs(angleTo(target) - radians(angle)) < pi() / 3.0)
+  if (!target)
+    return;
+
+  static const millis_t RECOIL = 100;
+  if (elapsed - lastFire > RECOIL && lineOfSight(target) == target && std::abs(angularDifference(angleTo(target), radians(angle))) < pi() / 6.0)
   {
     // fire!
     Vec2D pos(x, y);

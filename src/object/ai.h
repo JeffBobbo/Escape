@@ -6,7 +6,7 @@
 class AI : public Object
 {
 public:
-  AI(double a, double b);
+  AI(double w, double h, double u, double v);
   virtual ~AI() {}
 
   virtual inline Type type() const { return Type::AI; }
