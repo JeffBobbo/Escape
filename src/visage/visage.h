@@ -27,7 +27,7 @@ public:
       delete a;
   }
 
-  virtual inline Type type() const = 0;
+  virtual Type type() const = 0;
   //virtual void fromJSON(const rapidjson::Document& doc) = 0;
 
   virtual void draw()
