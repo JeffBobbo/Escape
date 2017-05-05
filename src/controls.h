@@ -18,8 +18,6 @@ namespace controls
     WALK_MODIFIER,
 
     // interaction
-    PHASE_UP,
-    PHASE_DOWN,
     USE,
 
     // game controls

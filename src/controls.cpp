@@ -20,10 +20,6 @@ std::string controls::actionToString(const controls::Action a)
       return "CROUCH";
     case controls::Action::WALK_MODIFIER:
       return "WALK";
-    case controls::Action::PHASE_UP:
-      return "PHASE_UP";
-    case controls::Action::PHASE_DOWN:
-      return "PHASE_DOWN";
     case controls::Action::USE:
       return "USE";
     case controls::Action::PAUSE:
@@ -49,10 +45,6 @@ controls::Action controls::actionFromString(const std::string& s)
     return controls::Action::CROUCH;
   else if (s == "WALK")
     return controls::Action::WALK_MODIFIER;
-  else if (s == "PHASE_UP")
-    return controls::Action::PHASE_UP;
-  else if (s == "PHASE_DOWN")
-    return controls::Action::PHASE_DOWN;
   else if (s == "USE")
     return controls::Action::USE;
   else if (s == "PAUSE")
@@ -88,8 +80,6 @@ void loadDefaults()
   defaultmap.insert(std::make_pair(controls::Action::MOVE_RIGHT, KeyCode::KEY_d));
   defaultmap.insert(std::make_pair(controls::Action::WALK_MODIFIER, KeyCode::KEY_q));
 
-  defaultmap.insert(std::make_pair(controls::Action::PHASE_UP, KeyCode::KEY_v));
-  defaultmap.insert(std::make_pair(controls::Action::PHASE_DOWN, KeyCode::KEY_c));
   defaultmap.insert(std::make_pair(controls::Action::USE, KeyCode::KEY_e));
 
   defaultmap.insert(std::make_pair(controls::Action::PAUSE, KeyCode::KEY_p));
