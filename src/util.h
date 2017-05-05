@@ -73,7 +73,12 @@ inline double degrees(const double radians)
 
 inline double angularDifference(const double r0, const double r1)
 {
-  return std::fmod(r1, pi() * 2.0) - std::fmod(r0, pi() * 2.0);
+  double d = r0 - r1;
+  while (d > pi())
+    d -= pi() * 2.0;
+  while (d < -pi())
+    d += pi() * 2.0;
+  return d;
 }
 
 template <typename T> inline T interpolate(const T& a, const T& b, const double& p)
@@ -121,6 +126,12 @@ public:
   {
     x = d;
     y = d;
+    return *this;
+  }
+  Vec2D& operator=(const Vec2D& v)
+  {
+    x = v.x;
+    y = v.y;
     return *this;
   }
   Vec2D& operator=(Vec2D&& v)
