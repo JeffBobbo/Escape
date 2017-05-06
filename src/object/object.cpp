@@ -494,7 +494,7 @@ void Projectile::move()
     if (target->type() == Object::Type::PLAYER)
     {
       Player* const p = static_cast<Player*>(target);
-      p->makeImpact(10);
+      p->makeImpact(1);
       death();
     }
   }
