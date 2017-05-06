@@ -246,8 +246,8 @@ Platform::Platform(double w, double h, double u, double v, double rx, double ry,
       ps->speedEnd = 0.45;
       ps->direction = -pi()/2.0;
       ps->spray = pi()/8.0;
-      ps->collide = true;
-      ps->source = this;
+      //ps->collide = true;
+      //ps->source = this;
       Animatrix* a = new Animatrix();
       a->startY = -h/2.0;
       ps->addAnimatrix(a);
