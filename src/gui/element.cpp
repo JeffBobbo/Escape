@@ -26,48 +26,6 @@ void GUIElement::showMenuMain()
     title->setTextColour(0xFF0000FF);
     root->addElement(title);
 
-    GUILabel* play = new GUILabel("Play!");
-    play->setRelative(0.5, 0.35, 0.5, 0.35);
-    play->setPosition(-20, -10, 20, 10);
-    play->setTextColour(0xFF0000FF);
-    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ms;
-      (void)ks;
-      return true;
-    }, [play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ks;
-      int32_t a, b, c, d;
-      play->getPosition(a, b, c, d);
-      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
-        play->setTextColour(0x00FF00FF);
-      else
-        play->setTextColour(0xFF0000FF);
-      return true;
-    });
-    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ks;
-      if (keyboard::pressed(KeyCode::KEY_SPACE))
-        return true;
-      if (!mouse::left())
-        return false;
-      int32_t a, b, c, d;
-      play->getPosition(a, b, c, d);
-      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
-      }, [](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ms;
-      (void)ks;
-      delete level;
-      level = Level::fromName("prefab0");
-      GUIElement::showGameHud();
-      if (level == nullptr)
-      {
-        std::cerr << "Failed to load level" << std::endl;
-        glutLeaveMainLoop();
-      }
-      return true;
-    });
-    root->addElement(play);
-
     GUILabel* quit = new GUILabel("Quit");
     quit->setRelative(0.5, 0.35, 0.5, 0.35);
     quit->setPosition(-20, 20, 20, 40);
@@ -94,9 +52,51 @@ void GUIElement::showMenuMain()
         quit->setTextColour(0x00FF00FF);
       else
         quit->setTextColour(0xFF0000FF);
-      return true;
+      return false;
     });
     root->addElement(quit);
+
+    GUILabel* play = new GUILabel("Play!");
+    play->setRelative(0.5, 0.35, 0.5, 0.35);
+    play->setPosition(-20, -10, 20, 10);
+    play->setTextColour(0xFF0000FF);
+    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      return true;
+    }, [play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      int32_t a, b, c, d;
+      play->getPosition(a, b, c, d);
+      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
+        play->setTextColour(0x00FF00FF);
+      else
+        play->setTextColour(0xFF0000FF);
+      return false;
+    });
+    play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      if (keyboard::pressed(KeyCode::KEY_SPACE))
+        return true;
+      if (!mouse::left())
+        return false;
+      int32_t a, b, c, d;
+      play->getPosition(a, b, c, d);
+      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+    }, [](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      delete level;
+      level = Level::fromName("prefab0");
+      GUIElement::showGameHud();
+      if (level == nullptr)
+      {
+        std::cerr << "Failed to load level" << std::endl;
+        glutLeaveMainLoop();
+      }
+      return true;
+    });
+    root->addElement(play);
   }
 }
 
@@ -147,7 +147,7 @@ void GUIElement::showGameHud()
           bleed->setColour(0xFF000000 | a);
         }
       }
-      return true;
+      return false;
     });
     root->addElement(bleed);
   }
@@ -168,7 +168,7 @@ void GUIElement::showGameHud()
               "Health: " << level->getPlayer()->getHealth();
         steps->setText(ss.str());
       }
-      return true;
+      return false;
     });
     root->addElement(steps);
   }
@@ -259,7 +259,10 @@ bool GUIElement::testListeners(const mouse::MouseState& ms, const keyboard::Keyb
   for (auto it : events)
   {
     if (it.first(ms, ks))
-      it.second(ms, ks);
+    {
+      if (it.second(ms, ks))
+        break;
+    }
   }
   return r;
 }
