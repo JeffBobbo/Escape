@@ -15,5 +15,8 @@ extern int32_t screenWidth;
 extern int32_t screenHeight;
 extern GUIWindow* root;
 
+extern bool drawBoundingVolumes;
+extern bool drawBoxes;
+extern bool drawPaths;
 
 #endif

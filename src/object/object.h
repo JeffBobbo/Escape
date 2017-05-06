@@ -48,7 +48,7 @@ public:
   inline void setVisage(Visage* v) { if (visage) delete visage; visage = v; }
   virtual void idle();
   virtual void move();
-  virtual void draw();
+  virtual void draw() final;
   virtual void death();
 
   virtual inline bool isSolid() const { return false; }
@@ -90,6 +90,10 @@ public:
   virtual inline Type type() const { return Type::PLATFORM; }
   virtual inline bool isSolid() const { return true; }
   virtual void move();
+
+  inline bool stationary() const { return !period || (radiusx == 0.0 && radiusy == 0.0); }
+  void drawPath();
+
 private:
   double radiusx;
   double radiusy;

@@ -51,6 +51,32 @@ void Object::draw()
   if (visage)
     visage->draw();
 
+  if (drawBoundingVolumes)
+  {
+    Vec2D bv = boundingVolume();
+    glColor4d(1.0, 0.0, 0.0, 1.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(-bv.x/2.0, -bv.y/2.0, 0.0);
+    glVertex3d(-bv.x/2.0,  bv.y/2.0, 0.0);
+    glVertex3d( bv.x/2.0,  bv.y/2.0, 0.0);
+    glVertex3d( bv.x/2.0, -bv.y/2.0, 0.0);
+    glEnd();
+  }
+
+  if (drawBoxes)
+  {
+    glColor4d(0.0, 1.0, 0.0, 1.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(-width/2.0, -height/2.0, 0.0);
+    glVertex3d(-width/2.0,  height/2.0, 0.0);
+    glVertex3d( width/2.0,  height/2.0, 0.0);
+    glVertex3d( width/2.0, -height/2.0, 0.0);
+    glEnd();
+  }
+
+  if (drawPaths && type() == Object::Type::PLATFORM)
+    static_cast<Platform*>(this)->drawPath();
+
   glPopMatrix();
 }
 
@@ -238,6 +264,39 @@ void Platform::move()
   const double a = 2.0 * pi() * p;
   x = originx + std::cos(a) * radiusx;
   y = originy + std::sin(a) * radiusy;
+}
+
+void Platform::drawPath()
+{
+  if (stationary())
+    return;
+
+  glColor4d(1.0, 1.0, 0.0, 1.0);
+  if (radiusx == 0.0 || radiusy == 0.0)
+  {
+    glBegin(GL_LINES);
+    if (radiusx != 0.0)
+    {
+      glVertex3d(originx-x-radiusx, originy-y, 0.0);
+      glVertex3d(originx-x+radiusx, originy-y, 0.0);
+    }
+    else
+    {
+      glVertex3d(originx-x, originy-y-radiusy, 0.0);
+      glVertex3d(originx-x, originy-y+radiusy, 0.0);
+    }
+    glEnd();
+    return;
+  }
+
+  size_t points = 36;//static_cast<size_t>(36.0*radiusx*radiusy);
+  glBegin(GL_LINE_LOOP);
+  for (size_t i = 0; i < points; ++i)
+  {
+    double p = static_cast<double>(i) / static_cast<double>(points);
+    glVertex3d(originx-x + radiusx * std::cos((2.0 * pi()) * p), originy-y + radiusy * std::sin((2.0 * pi() * p)), 0.0);
+  }
+  glEnd();
 }
 
 

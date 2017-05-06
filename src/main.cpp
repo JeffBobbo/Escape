@@ -7,6 +7,8 @@
 #include <thread>
 #include <chrono>
 
+#include <cstring>
+
 #include "gli.h"
 
 #include "util.h"
@@ -25,6 +27,10 @@ millis_t timebase = 0;
 // extern stuff
 millis_t elapsed = 0, last, delta;
 Level* level;
+bool drawBoundingVolumes = false;
+bool drawBoxes = false;
+bool drawPaths = false;
+
 
 int screenWidth = 640;
 int screenHeight = 480;
@@ -157,6 +163,17 @@ void reshape(int width, int height)
 int main(int argc, char** argv)
 {
   seed();
+
+  for (int i = 0; i < argc; ++i)
+  {
+    const char* const a = argv[i];
+    if (std::strcmp(a, "-b") == 0)
+      drawBoxes = true;
+    if (std::strcmp(a, "-v") == 0)
+      drawBoundingVolumes = true;
+    if (std::strcmp(a, "-p") == 0)
+      drawPaths = true;
+  }
 
   glutInit(&argc, argv);
   glutInitWindowPosition(-1, -1);
