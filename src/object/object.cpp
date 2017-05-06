@@ -499,3 +499,46 @@ void Projectile::move()
     }
   }
 }
+
+Pusher::Pusher(double w, double h, double u, double v)
+  : Object(w, h, u, v)
+  , angle(0.0), spray(0.0), power(1.0)
+  , redirect(true)
+{
+  setAttributes(pi()/2.0, 0.0, 0.1, w);
+  createVisage();
+}
+
+void Pusher::idle()
+{
+  Player* p = level->getPlayer();
+
+  if (!aabbOverlap(p))
+    return;
+
+  if (redirect)
+  {
+    double s = random(-spray/2.0, spray/2.0);
+    p->setVelocity({std::cos(angle+s) * power, std::sin(angle+s) * power});
+  }
+}
+
+void Pusher::createVisage()
+{
+  ParticleSystem* ps = new ParticleSystem(200, 100);
+  ps->setParticleImage("img/particle_soft.png");
+  ps->setColours(fromInt(0xC4C4C4FF), fromInt(0xFFFFFF00));
+  ps->lifeMin = 50.0 * power;
+  ps->lifeMax = 75.0 * power;
+  ps->sizeStart = 0.5 * radius;
+  ps->sizeEnd = 0.5 * radius;
+  ps->speedStart = 0.2 * power;
+  ps->speedEnd = 0.1 * power;
+  ps->direction = angle;
+  ps->spray = spray+0.1;
+  ps->offsetX = radius;
+  ps->rectangle = true;
+  //ps->collide = true;
+  //ps->source = this;
+  setVisage(ps);
+}

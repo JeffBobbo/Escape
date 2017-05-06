@@ -22,7 +22,8 @@ public:
     EXIT,
     CHECKPOINT,
     GRID,
-    PROJECTILE
+    PROJECTILE,
+    PUSHER
   };
 
   Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0) : velocity(), born(elapsed)
@@ -63,6 +64,8 @@ public:
   Object* lineOfSight(const Object* const o, const bool ethereal = false) const;
   bool intersect(const Vec2D& p0, const Vec2D& p1) const;
   double angleTo(const Object* const o) const;
+
+  inline void setVelocity(const Vec2D& v) { velocity = v; }
 
   inline millis_t age() const { return elapsed - born; }
   inline bool dying() const { return seppuku; }
@@ -229,6 +232,33 @@ public:
   inline Object* getTarget() const { return target; }
 private:
   Object* const target;
+};
+
+class Pusher : public Object
+{
+public:
+  Pusher(double w, double h, double u, double v);
+  virtual ~Pusher() {};
+
+  virtual inline Type type() const { return Type::PUSHER; }
+  virtual void idle();
+
+  void setAttributes(double a, double s, double p, double r)
+  {
+    angle = a;
+    spray = s;
+    power = p;
+    radius = r;
+    createVisage();
+  }
+  void createVisage();
+
+private:
+  double angle;
+  double spray;
+  double power;
+  double radius;
+  bool redirect;
 };
 
 #endif

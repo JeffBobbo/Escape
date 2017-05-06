@@ -39,7 +39,6 @@ private:
   millis_t startMove;
   millis_t lastUse;
   millis_t lastJump;
-  double v;
 
   health_t health;
   health_t maxHealth;
