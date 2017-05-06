@@ -10,6 +10,8 @@ Level* Level::fromName(const std::string& name)
     return Level::prefab1();
   if (name == "prefabTest")
     return Level::prefabTest();
+  if (name == "prefabTestPusher")
+    return Level::prefabTestPusher();
   return nullptr;
 }
 

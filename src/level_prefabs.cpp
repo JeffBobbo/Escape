@@ -46,7 +46,7 @@ Level* Level::prefab0()
     new Checkpoint(-2.0, 4.0));
 
   level->insert(SceneGraph::Level::NPC,
-    new AI(-2.0, 4.0));
+    new AI(0.1, 0.1, -2.0, 4.0));
 
   level->insert(SceneGraph::Level::NPC,
     new Turret(-2.75, 3.0));
@@ -59,7 +59,11 @@ Level* Level::prefab0()
 
   // second moving platform
   level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform(1.0, 0.5, 4.0, 4.75, 0.0, 1.0, 10000));
+    new Platform(1.0, 0.25, 4.0, 4.75, 0.0, 0.0, 1));
+
+  Pusher* p = new Pusher(0.5, 0.5, 2.75, 0.5);
+  p->setAttributes(pi()/2.0 * 0.5, 0.0, 10.0, 0.5);
+  level->insert(SceneGraph::Level::FOREGROUND, p);
 
   // exit
   level->insert(SceneGraph::Level::FOREGROUND,
@@ -252,19 +256,31 @@ Level* Level::prefabTestTurret()
   level->insert(SceneGraph::Level::FOREGROUND,
     new Platform(10.0, 0.3, 0.0, -0.85));
 
-  //level->insert(SceneGraph::Level::NPC,
-    //new Turret(2.0, 2.0));
+  level->insert(SceneGraph::Level::NPC,
+    new Turret(-2.75, 0.5));
 
   level->addPlayer(new Player(0.0, 0.0));
 
-  // fire!
-  Vec2D pos(2.0, 2.0);
-  Projectile* p = new Projectile(pos, level->player);
-  p->velocity = Vec2D(2.0, 0.0);
-  //lastFire = elapsed;
-  std::cout << "Fire!" << std::endl;
-  level->insert(SceneGraph::Level::NPC, p);
+  return level;
+}
 
+Level* Level::prefabTestPusher()
+{
+  Level* level = new Level("Pusher Test");
+
+  level->graph = new SceneGraph();
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform(50.0, 1.0, 0.0, 0.0));
+
+  Pusher* p = new Pusher(0.5, 0.5, -5.0, 0.5);
+  p->setAttributes(pi()*2.0 * 0.25, 0.0, 10.0, 0.5);
+  level->insert(SceneGraph::Level::FOREGROUND, p);
+
+  p = new Pusher(0.5, 0.5, 5.0, 0.5);
+  p->setAttributes(pi()*2.0 * 0.25, 0.0, 10.0, 0.5);
+  level->insert(SceneGraph::Level::FOREGROUND, p);
+
+  level->addPlayer(new Player(0.0, 0.0));
 
   return level;
 }

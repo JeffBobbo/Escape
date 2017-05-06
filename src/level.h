@@ -16,6 +16,7 @@ public:
   static Level* prefab1();
   static Level* prefabTest();
   static Level* prefabTestTurret();
+  static Level* prefabTestPusher();
   static Level* fromName(const std::string& name);
 
   Level();
