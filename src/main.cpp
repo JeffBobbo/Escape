@@ -226,6 +226,7 @@ int main(int argc, char** argv)
 
   GUIElement::showMenuMain();
   //level = Level::prefabTestTurret();
+  //level = Level::prefabTestPusher();
 
   // begin glut loop
   glutMainLoop();

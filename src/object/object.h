@@ -259,7 +259,6 @@ public:
   void createVisage();
 
 private:
-  double angle;
   double spray;
   double power;
   double radius;

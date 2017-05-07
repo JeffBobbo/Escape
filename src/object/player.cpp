@@ -71,7 +71,7 @@ void Player::move()
   {
     if (keyboard::pressed(controls::bind(controls::Action::JUMP)))
     {
-      velocity.y = gravity()/1.5;
+      velocity.y = -gravity()/1.5;
       lastMove = elapsed;
       lastJump = elapsed;
       ++jumps;
@@ -88,15 +88,31 @@ void Player::move()
     const bool l = keyboard::pressed(controls::bind(controls::Action::MOVE_LEFT));
     const bool r = keyboard::pressed(controls::bind(controls::Action::MOVE_RIGHT));
     if (l && !r)
-      velocity.x = -std::min((walk ? 1.5 : 3.0), std::abs(velocity.x) + a);
+    {
+      if (velocity.y == 0.0)
+        velocity.x = -std::min((walk ? 1.5 : 3.0), std::abs(velocity.x) + a);
+      else
+        velocity.x = std::max(-4.5, velocity.x - a);
+    }
     else if (r && !l)
-      velocity.x =  std::min((walk ? 1.5 : 3.0), std::abs(velocity.x) + a);
+    {
+      if (velocity.y == 0.0)
+        velocity.x =  std::min((walk ? 1.5 : 3.0), std::abs(velocity.x) + a);
+      else
+        velocity.x = std::min(4.5, velocity.x + a);
+    }
+    else if (velocity.y > 0.0)
+    {
+      const double t = -velocity.y / gravity(); // how long it'll take to reach the top
+      const double dvx = (-velocity.x / t) * (delta / 1000.0);
+      velocity.x = std::abs(velocity.x) < std::abs(dvx) ? 0.0 : (velocity.x + dvx);
+    }
     else
-      velocity.x = (std::abs(velocity.x) < 0.1 ? 0.0 : (velocity.x < 0.0 ? -1.0 : 1.0) * (std::abs(velocity.x) - a));
+      velocity.x = std::abs(velocity.x) < a ? 0.0 : (velocity.x < 0.0 ? -1.0 : 1.0) * (std::abs(velocity.x) - a);
   }
 
   nx += velocity.x * (delta / 1000.0);
-  velocity.y -= gravity() * (delta / 1000.0);
+  velocity.y += gravity() * (delta / 1000.0);
   ny += velocity.y * (delta / 1000.0);
 
   // make sure we can move here

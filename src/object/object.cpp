@@ -546,7 +546,7 @@ void Projectile::move()
 
 Pusher::Pusher(double w, double h, double u, double v)
   : Object(w, h, u, v)
-  , angle(0.0), spray(0.0), power(1.0)
+  , spray(0.0), power(1.0)
   , redirect(true)
 {
   setAttributes(pi()/2.0, 0.0, 0.1, w);
@@ -560,11 +560,12 @@ void Pusher::idle()
   if (!aabbOverlap(p))
     return;
 
+  double s = random(-spray/2.0, spray/2.0);
+  Vec2D v(std::cos(radians(angle)+s) * power, std::sin(radians(angle)+s) * power);
   if (redirect)
-  {
-    double s = random(-spray/2.0, spray/2.0);
-    p->setVelocity({std::cos(angle+s) * power, std::sin(angle+s) * power});
-  }
+    p->velocity = v;
+  else
+    p->velocity += v;
 }
 
 void Pusher::createVisage()
@@ -578,9 +579,10 @@ void Pusher::createVisage()
   ps->sizeEnd = 0.5 * radius;
   ps->speedStart = 0.2 * power;
   ps->speedEnd = 0.1 * power;
-  ps->direction = angle;
-  ps->spray = spray+0.1;
+  ps->direction = 0.0;//theta;
+  ps->spray = spray;
   ps->offsetX = radius;
+  ps->offsetY = radius;
   ps->rectangle = true;
   //ps->collide = true;
   //ps->source = this;

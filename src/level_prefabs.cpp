@@ -270,14 +270,14 @@ Level* Level::prefabTestPusher()
 
   level->graph = new SceneGraph();
   level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform(50.0, 1.0, 0.0, 0.0));
+    new Platform(1000.0, 1.0, 0.0, 0.0));
 
   Pusher* p = new Pusher(0.5, 0.5, -5.0, 0.5);
-  p->setAttributes(pi()*2.0 * 0.25, 0.0, 10.0, 0.5);
+  p->setAttributes(90, 0.0, 10.0, 0.5);
   level->insert(SceneGraph::Level::FOREGROUND, p);
 
   p = new Pusher(0.5, 0.5, 5.0, 0.5);
-  p->setAttributes(pi()*2.0 * 0.25, 0.0, 10.0, 0.5);
+  p->setAttributes(45, 0.0, 20.0, 0.5);
   level->insert(SceneGraph::Level::FOREGROUND, p);
 
   level->addPlayer(new Player(0.0, 0.0));
