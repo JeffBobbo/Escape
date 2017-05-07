@@ -222,7 +222,7 @@ bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
   if (minY > maxY)
     return false;
 
-  // we're done, and there's an intersection
+  // there's an intersection
   return true;
 }
 
@@ -527,13 +527,14 @@ void Projectile::move()
     return;
   }
 
-  if (collisionTest() != nullptr)
+  Object* collide = collisionTest();
+  if (collide != nullptr && collide != target)
   {
     seppuku = true;
     return;
   }
 
-  if (target && target->intersect(oldpos, {x, y}))
+  if (target && (collide == target || target->intersect(oldpos, {x, y})))
   {
     if (target->type() == Object::Type::PLAYER)
     {
