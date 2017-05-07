@@ -228,7 +228,7 @@ public:
   }
   inline double angle() const
   {
-    return std::atan2(-y, x);
+    return std::atan2(y, x);
   }
 
   double dot(const Vec2D& v) const
