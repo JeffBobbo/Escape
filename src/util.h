@@ -210,10 +210,21 @@ public:
   {
     return std::sqrt(magnitudeSquared());
   }
+  inline void normalise()
+  {
+    const double length = magnitude();
+    if (length == 0.0)
+    {
+      x = 1.0;
+      y = 0.0;
+    }
+    else
+      *this /= length;
+  }
   inline Vec2D normalised() const
   {
     const double length = magnitude();
-    return length == 0 ? Vec2D(1.0, 0.0) : *this / length;
+    return length == 0.0 ? Vec2D(1.0, 0.0) : *this / length;
   }
   inline double angle() const
   {
@@ -229,12 +240,19 @@ public:
     return x*v.y+ y*v.x == 0.0;
   }
 
-  void rotate(double t)
+  void rotate(const double t)
   {
     const double tcos = std::cos(-t);
     const double tsin = std::sin(-t);
     x = x * tcos - y * tsin;
     y = x * tsin + y * tcos;
+  }
+
+  Vec2D rotated(const double t) const
+  {
+    const double tcos = std::cos(-t);
+    const double tsin = std::sin(-t);
+    return {x * tcos - y * tsin, x * tsin + y * tcos};
   }
 
   double x;
