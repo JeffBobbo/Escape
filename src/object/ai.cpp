@@ -77,7 +77,7 @@ void Camera::move()
   if (!target)
     return;
 
-  if (lineOfSight(target) != target)
+  if (hitScan(target) != target)
     return;
 
   double d = degrees(angularDifference(angleTo(target), radians(angle)));
@@ -104,14 +104,14 @@ void Turret::move()
     return;
 
   static const millis_t RECOIL = 100;
-  if (elapsed - lastFire > RECOIL && lineOfSight(target) == target && std::abs(angularDifference(angleTo(target), radians(angle))) < pi() / 6.0)
+  if (elapsed - lastFire > RECOIL && distance(target) < 10.0 && hitScan(target) == target && std::abs(angularDifference(angleTo(target), radians(angle))) < pi() / 6.0)
   {
+    static const double speed = 10.0;
+    const double a = angle * random(0.975, 1.025);
     // fire!
     Vec2D pos(x, y);
-    Projectile* p = new Projectile(pos, target);
-    const double speed = 10.0;
-    double a = angle * random(0.975, 1.025);
-    p->velocity = Vec2D(speed * std::cos(radians(a)), speed * std::sin(radians(a)));
+    Vec2D vel(speed * std::cos(radians(a)), speed * std::sin(radians(a)));
+    Projectile* p = new Projectile(1, pos, vel, target, this);
     lastFire = elapsed;
     level->insert(SceneGraph::Level::NPC, p);
   }

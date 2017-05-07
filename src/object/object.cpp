@@ -118,7 +118,7 @@ bool Object::satOverlap(const Object* const o) const
 }
 */
 
-Object* Object::lineOfSight(const Object* const o, const bool ethereal) const
+Object* Object::hitScan(const Object* const o, const bool ethereal) const
 {
   if (!o)
     return nullptr;
@@ -136,15 +136,34 @@ Object* Object::lineOfSight(const Object* const o, const bool ethereal) const
   {
     for (auto& obj : layer.second)
     {
-      if (obj == this)
+      if (obj == this) // don't include yourself
         continue;
-      if (obj == o)
+      if (obj == o) // don't include the target
         continue;
       if ((ethereal || obj->isSolid()) && obj->intersect(origin, target))
         return obj;
     }
   }
   return const_cast<Object*>(o);
+}
+
+Object* Object::collisionTest(const bool ethereal) const
+{
+  if (!level)
+    return nullptr;
+
+  const SceneGraph* const sg = level->getGraph();
+  for (auto& layer : *sg)
+  {
+    for (auto& obj : layer.second)
+    {
+      if (obj == this) // don't include yourself
+        continue;
+      if ((ethereal || obj->isSolid()) && aabbOverlap(obj))
+        return obj;
+    }
+  }
+  return nullptr;
 }
 
 // intersection algorithm adapted from http://stackoverflow.com/a/100165/5187801
@@ -470,12 +489,31 @@ void Grid::idle()
 }
 */
 
-Projectile::Projectile(const Vec2D& pos, Object* const t)
+Projectile::Projectile(const health_t& d, const Vec2D& pos, const Vec2D& vel, Object* const t, Object* const o)
   : Object(0.05, 0.05, pos.x, pos.y)
-  , target(t)
+  , target(t), owner(o)
+  , damage(d)
 {
-  visage = VisagePolygon::circle(0.05, 6);
-  static_cast<VisagePolygon*>(visage)->setColour(0xFF0000FF);
+  velocity = vel;
+  visage = new VisageComplex();
+  VisagePolygon* vp = VisagePolygon::circle(0.05, 6);
+  vp->setColour(0xFF0000FF);
+  static_cast<VisageComplex*>(visage)->add(vp);
+
+  ParticleSystem* ps = new ParticleSystem(200, 100);
+  ps->setParticleImage("img/particle_soft.png");
+  ps->setColours(fromInt(0xFF0000FF), fromInt(0x7FFF0000));
+  ps->lifeMin = 500.0;
+  ps->lifeMax = 750.0;
+  ps->sizeStart = 0.04;
+  ps->sizeEnd = 0.025;
+  ps->speedStart = vel.magnitude();//2;
+  ps->speedEnd = vel.magnitude();//1;
+  ps->direction = (-vel).angle();
+  ps->spray = 0;
+  ps->offsetX = 0.1;
+  ps->offsetY = 0.1;
+  static_cast<VisageComplex*>(visage)->add(ps);
 }
 
 void Projectile::move()
@@ -489,12 +527,18 @@ void Projectile::move()
     return;
   }
 
+  if (collisionTest() != nullptr)
+  {
+    seppuku = true;
+    return;
+  }
+
   if (target && target->intersect(oldpos, {x, y}))
   {
     if (target->type() == Object::Type::PLAYER)
     {
       Player* const p = static_cast<Player*>(target);
-      p->makeImpact(1);
+      p->makeImpact(damage);//, owner);
       death();
     }
   }

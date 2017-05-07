@@ -61,7 +61,8 @@ public:
   virtual inline Vec2D boundingVolume() const { return Vec2D(width, height); }
   bool aabbOverlap(const Object* const o) const;
   bool pointInside(const Vec2D& v) const;
-  Object* lineOfSight(const Object* const o, const bool ethereal = false) const;
+  Object* hitScan(const Object* const o, const bool ethereal = false) const;
+  Object* collisionTest(const bool ethereal = false) const;
   bool intersect(const Vec2D& p0, const Vec2D& p1) const;
   double angleTo(const Object* const o) const;
 
@@ -223,15 +224,19 @@ private:
 class Projectile : public Object
 {
 public:
-  Projectile(const Vec2D& pos, Object* const t);
+  Projectile(const health_t& d, const Vec2D& pos, const Vec2D& vel, Object* const t, Object* const o);
   virtual ~Projectile() {};
 
   virtual inline Type type() const { return Type::PROJECTILE; }
   virtual void move();
 
   inline Object* getTarget() const { return target; }
+  inline Object* getOwner() const { return owner; }
+
 private:
   Object* const target;
+  Object* const owner;
+  health_t damage;
 };
 
 class Pusher : public Object
