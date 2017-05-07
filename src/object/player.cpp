@@ -71,7 +71,7 @@ void Player::move()
   {
     if (keyboard::pressed(controls::bind(controls::Action::JUMP)))
     {
-      velocity.y = -gravity()/1.5;
+      velocity.y = -gravity()/1.75;
       lastMove = elapsed;
       lastJump = elapsed;
       ++jumps;
@@ -81,34 +81,36 @@ void Player::move()
   double nx = x;
   double ny = y;
 
-  const bool walk = keyboard::pressed(controls::bind(controls::Action::WALK_MODIFIER));
+  const bool air = velocity.y != 0.0; // TODO: On ground check
+  const bool walk = keyboard::pressed(controls::bind(controls::Action::WALK_MODIFIER)) && !air;
   {
-    static const double ACCELERATION = 30.0;
-    const double a = ACCELERATION * (delta / 1000.0) * velocity.y == 0.0 ? 1.0 : 0.125;
+    static const double ACCELERATION = 45.0;
+    static const double RUN_SPEED = 3.0;
+    static const double WALK_SPEED = 1.5;
     const bool l = keyboard::pressed(controls::bind(controls::Action::MOVE_LEFT));
     const bool r = keyboard::pressed(controls::bind(controls::Action::MOVE_RIGHT));
+    const double SPEED = (l ? -1.0 : 1.0) * (walk ? WALK_SPEED : RUN_SPEED);
+    double accel = (l ? -1.0 : 1.0) * ACCELERATION * (delta / 1000.0) * (velocity.y == 0.0 ? 1.0 : 0.25);
     if (l && !r)
     {
-      if (velocity.y == 0.0)
-        velocity.x = -std::min((walk ? 1.5 : 3.0), std::abs(velocity.x) + a);
+      if (velocity.x < SPEED)
+        velocity.x -= accel;
       else
-        velocity.x = std::max(-4.5, velocity.x - a);
+        velocity.x += accel;
     }
     else if (r && !l)
     {
-      if (velocity.y == 0.0)
-        velocity.x =  std::min((walk ? 1.5 : 3.0), std::abs(velocity.x) + a);
+      if (velocity.x > SPEED)
+        velocity.x -= accel;
       else
-        velocity.x = std::min(4.5, velocity.x + a);
-    }
-    else if (velocity.y > 0.0)
-    {
-      const double t = -velocity.y / gravity(); // how long it'll take to reach the top
-      const double dvx = (-velocity.x / t) * (delta / 1000.0);
-      velocity.x = std::abs(velocity.x) < std::abs(dvx) ? 0.0 : (velocity.x + dvx);
+        velocity.x += accel;
     }
     else
-      velocity.x = std::abs(velocity.x) < a ? 0.0 : (velocity.x < 0.0 ? -1.0 : 1.0) * (std::abs(velocity.x) - a);
+    {
+      if (velocity.y != 0.0)
+        accel /= 2.0;
+      velocity.x = std::abs(velocity.x) < accel ? 0.0 : (velocity.x < 0.0 ? -1.0 : 1.0) * (std::abs(velocity.x) - accel);
+    }
   }
 
   nx += velocity.x * (delta / 1000.0);
