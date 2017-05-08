@@ -12,7 +12,7 @@ void GUIElement::showMenuMain()
     root = new GUIWindow();
     root->setRelative(0.0, 0.0, 1.0, 1.0);
     root->setPosition(0, 0, 0, 0);
-    root->setBackgroundColour(0x3f3f3FAF);
+    root->setBackgroundColour(0x3f3f3F00);
   }
   else
   {
@@ -20,7 +20,7 @@ void GUIElement::showMenuMain()
   }
 
   {
-    GUILabel* title = new GUILabel("Shifter");
+    GUILabel* title = new GUILabel("Shifter", "sui_generis.ttf");
     title->setRelative(0.5, 0.25, 0.5, 0.25);
     title->setPosition(-20, -10, 20, 10);
     title->setTextColour(0xFF0000FF);
@@ -31,12 +31,15 @@ void GUIElement::showMenuMain()
     quit->setPosition(-20, 20, 20, 40);
     quit->setTextColour(0xFF0000FF);
     quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
       if (!mouse::left())
         return false;
       int32_t a, b, c, d;
       quit->getPosition(a, b, c, d);
       return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
     }, [quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
       glutLeaveMainLoop();
       return true;
     });
@@ -56,7 +59,7 @@ void GUIElement::showMenuMain()
     });
     root->addElement(quit);
 
-    GUILabel* play = new GUILabel("Play!");
+    GUILabel* play = new GUILabel("Play!", "sui_generis.ttf");
     play->setRelative(0.5, 0.35, 0.5, 0.35);
     play->setPosition(-20, -10, 20, 10);
     play->setTextColour(0xFF0000FF);
@@ -158,8 +161,12 @@ void GUIElement::showGameHud()
     steps->setTextColour(0xFFFFFFFF);
     steps->setVisible(true);
     steps->registerListener([](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      (void)ms;
+      (void)ks;
       return true;
     }, [steps](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) {
+      (void)ms;
+      (void)ks;
       if (level && level->getPlayer())
       {
         std::stringstream ss;

@@ -225,6 +225,7 @@ int main(int argc, char** argv)
   //phasepointer->setColour(0x7F7F7FFF);
 
   GUIElement::showMenuMain();
+  my_stbtt_initfont();
   //level = Level::prefabTestTurret();
   //level = Level::prefabTestPusher();
 
