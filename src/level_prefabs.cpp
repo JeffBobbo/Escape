@@ -46,7 +46,7 @@ Level* Level::prefab0()
     new Checkpoint(-2.0, 4.0));
 
   level->insert(SceneGraph::Level::NPC,
-    new AI(0.1, 0.1, -2.0, 4.0));
+    new Follower(0.1, 0.1, -2.0, 4.0));
 
   level->insert(SceneGraph::Level::NPC,
     new Turret(-2.75, 3.0));

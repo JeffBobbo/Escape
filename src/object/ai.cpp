@@ -5,53 +5,46 @@
 #include "../main.h"
 #include "../visage/allvisage.h"
 
-AI::AI(double w, double h, double u, double v) : Object(w, h, u, v), maxSpeed(3.5)
+Follower::Follower(double w, double h, double u, double v)
+ : AI(w, h, u, v)
+ , maxSpeed(3.5), accelerate(0.1)
+ , encountered(false)
 {
   visage = VisagePolygon::circle(0.1, 6);
   static_cast<VisagePolygon*>(visage)->setColour(0xAFAFAFFF);
   Animatrix* anim = new Animatrix();
   anim->rotation = pi() * 64.0;
   visage->addAnimatrix(anim);
-  velx = 0.0;
-  vely = 0.0;
 }
 
-void AI::idle()
+void Follower::idle()
 {
 }
 
-void AI::move()
+void Follower::move()
 {
   Player* const player = level->getPlayer();
   double dist = distanceSquared(player);
-  if (dist > 0.3 && dist <= 2.0)
+  if (encountered || (dist > 0.3 && dist <= 2.0))
   {
-    double px = player->x - x;
-    double py = player->y - y + 0.2;
+    encountered = true;
+    Vec2D v(player->x - x, player->y - y + 0.2);
+    velocity += v * accelerate;
 
-    double accelerate = 1.0 / 10.0;
-    double nx = px * accelerate;
-    double ny = py * accelerate;
-
-    velx += nx;
-    vely += ny;
-
-    double speed = std::sqrt(velx*velx + vely*vely);
+    double speed = velocity.magnitude();
     if (speed > maxSpeed)
     {
       double mod = maxSpeed / speed;
-      velx *= mod;
-      vely *= mod;
+      velocity *= mod;
       speed = maxSpeed;
     }
   }
   else if (dist > 2.0)
   {
-    velx -= velx * 0.75 * (delta / 1000.0);
-    vely -= vely * 0.75 * (delta / 1000.0);
+    velocity *= 0.25 * (delta / 1000.0);
   }
-  x += velx * (delta / 1000.0);
-  y += vely * (delta / 1000.0);
+  x += velocity.x * (delta / 1000.0);
+  y += velocity.y * (delta / 1000.0);
 }
 
 Camera::Camera(double a, double b) : AI(0.4, 0.1, a, b), turnRate(60.0)
