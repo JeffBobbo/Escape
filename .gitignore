@@ -21,5 +21,8 @@ x86/
 *.VC.db
 *.VC.VC.opendb
 
+# documentation
+docs/
+
 # game files
 controls.txt
