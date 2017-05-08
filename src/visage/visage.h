@@ -17,7 +17,8 @@ public:
     POLYGON = 0,
     COMPLEX,
     PARTICLE,
-    TEXTURE
+    TEXTURE,
+    TEXT
   };
 
   Visage() {}

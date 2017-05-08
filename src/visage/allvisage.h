@@ -3,3 +3,4 @@
 #include "polygon.h"
 #include "particle.h"
 #include "texture.h"
+#include "text.h"

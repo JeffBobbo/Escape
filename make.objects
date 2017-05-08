@@ -19,7 +19,8 @@ src/visage/animatrix.o \
 src/visage/visage.o \
 src/visage/polygon.o \
 src/visage/particle.o \
-src/visage/texture.o
+src/visage/texture.o \
+src/visage/text.o
 
 GUI=\
 src/gui/element.o \
