@@ -128,12 +128,21 @@ void Player::move()
 
     Vec2D ov = o->boundingVolume();
     // test y first
-    if (x+tv.x/2.0 > o->x-ov.x/2.0 &&
-        x-tv.x/2.0 < o->x+ov.x/2.0 &&
+    if ( x+tv.x/2.0 > o->x-ov.x/2.0 &&
+         x-tv.x/2.0 < o->x+ov.x/2.0 &&
         ny+tv.y/2.0 > o->y-ov.y/2.0 &&
         ny-tv.y/2.0 < o->y+ov.y/2.0)
     {
-      ny = velocity.y <= 0 ? o->y+ov.y/2.0+tv.y/2.0 : y;
+      if (ny - o->y > 0.0)
+        ny = o->y+ov.y/2.0+tv.y/2.0;
+      else
+        ny = o->y-ov.y/2.0-tv.y/2.0;
+
+      if (velocity.y < 0.0 && o->type() == Object::Type::PLATFORM && static_cast<const Platform*>(o)->stationary() == false)
+      {
+        nx += o->velocity.x;
+        ny += o->velocity.y;
+      }
       velocity.y = 0.0;
     }
     if (nx+tv.x/2.0 > o->x-ov.x/2.0 &&

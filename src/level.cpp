@@ -12,6 +12,9 @@ Level* Level::fromName(const std::string& name)
     return Level::prefabTest();
   if (name == "prefabTestPusher")
     return Level::prefabTestPusher();
+
+  if (name == "escape0")
+    return Level::escape0();
   return nullptr;
 }
 

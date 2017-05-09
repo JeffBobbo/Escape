@@ -2,22 +2,53 @@
 
 #include "../gli.h"
 
+#include "../main.h"
+#include "../fontmanager.h"
+#include "../../external/stb_truetype.h"
+
 GUILabel::GUILabel()
   : GUIElement()
   , text("")
-  , font("")
-{
-}
-
-GUILabel::GUILabel(const std::string&& t, const std::string&& f)
-  : GUIElement()
-  , text(t)
-  , font(f)
+  , font(""), size(12.0f)
 {
   col[0] = 1.0;
   col[1] = 1.0;
   col[2] = 1.0;
   col[3] = 1.0;
+}
+
+GUILabel::GUILabel(const std::string&& t, const std::string&& f, float sz)
+  : GUIElement()
+  , text(t)
+  , font(f), size(sz)
+{
+  col[0] = 1.0;
+  col[1] = 1.0;
+  col[2] = 1.0;
+  col[3] = 1.0;
+}
+
+void GUILabel::getPosition(int32_t& w, int32_t& x, int32_t& y, int32_t& z) const
+{
+  int32_t p = 0, q = 0, r = 0, s = 0;
+  float a = 0.0f, b = 0.0f, c = 0.0f;
+  if (font.length())
+    fontManager.get(font, size).size(text, a, b, c);
+  if (parent)
+  {
+    parent->getPosition(p, q, r, s);
+    w = p + static_cast<int32_t>(px0 * (r-p) + x0 + -a/2);
+    x = q + static_cast<int32_t>(py0 * (s-q) + y0 +  b);
+    y = p + static_cast<int32_t>(px1 * (r-p) + x1 + a/2);
+    z = q + static_cast<int32_t>(py1 * (s-q) + y1 + c);
+  }
+  else
+  {
+    w = static_cast<int32_t>(px0 * screenWidth  + x0 + -a/2);
+    x = static_cast<int32_t>(py0 * screenHeight + y0 + b);
+    y = static_cast<int32_t>(px1 * screenWidth  + x1 + a/2);
+    z = static_cast<int32_t>(py1 * screenHeight + y1 + c);
+  }
 }
 
 void GUILabel::setTextColour(const uint32_t& c)
@@ -27,28 +58,6 @@ void GUILabel::setTextColour(const uint32_t& c)
   col[2] = ((c >>  8) & 255) / 255.0;
   col[3] = ((c      ) & 255) / 255.0;
 }
-
-#define STB_TRUETYPE_IMPLEMENTATION
-#include "../../external/stb_truetype.h"
-
-unsigned char ttf_buffer[1<<20];
-unsigned char temp_bitmap[512*512];
-stbtt_bakedchar cdata[96];
-GLuint ftex;
-
-#include <iostream>
-void my_stbtt_initfont()
-{
-  fread(ttf_buffer, 1, 1<<20, fopen("font/sui_generis.ttf", "rb"));
-  stbtt_BakeFontBitmap(ttf_buffer,0, 32.0, temp_bitmap,512,512, 32,96, cdata); // no guarantee this fits!
-  // can free ttf_buffer at this point
-  glGenTextures(1, &ftex);
-  glBindTexture(GL_TEXTURE_2D, ftex);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, 512,512, 0, GL_ALPHA, GL_UNSIGNED_BYTE, temp_bitmap);
-  // can free temp_bitmap at this point
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-}
-
 
 void GUILabel::draw() const
 {
@@ -66,18 +75,21 @@ void GUILabel::draw() const
   }
   else
   {
-    float x = a;//50;
-    float y = b;//50;
-    // assume orthographic projection with units = screen pixels, origin at top left
+    const Font& f = fontManager.get(font, size);
+    float x = a;
+    float y = b;
+    float w, y0, y1;
+    f.size(text, w, y0, y1);
+    y -= y0;
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, ftex);
+    glBindTexture(GL_TEXTURE_2D, f.ftex);
     glBegin(GL_QUADS);
     for (char c : text)
     {
-      if (c >= 32)// && c < 128)
+      if (c >= ' ')
       {
         stbtt_aligned_quad q;
-        stbtt_GetBakedQuad(cdata, 512,512, c-32, &x,&y,&q,1);//1=opengl & d3d10+,0=d3d9
+        stbtt_GetBakedQuad(f.cdata, 512,512, c-' ', &x,&y,&q,1);
         glTexCoord2f(q.s0,q.t0); glVertex2f(q.x0,q.y0);
         glTexCoord2f(q.s1,q.t0); glVertex2f(q.x1,q.y0);
         glTexCoord2f(q.s1,q.t1); glVertex2f(q.x1,q.y1);

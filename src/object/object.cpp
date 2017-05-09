@@ -281,8 +281,11 @@ void Platform::move()
     return;
   const double p = static_cast<double>(elapsed % period) / static_cast<double>(period);
   const double a = 2.0 * pi() * p;
+  double ox = x, oy = y;
   x = originx + std::cos(a) * radiusx;
   y = originy + std::sin(a) * radiusy;
+  velocity.x = x - ox;
+  velocity.y = y - oy;
 }
 
 void Platform::drawPath()
@@ -546,9 +549,10 @@ void Projectile::move()
 }
 
 Pusher::Pusher(double w, double h, double u, double v)
-  : Object(w, h, u, v)
+  : Object(w, h, u, v), Actuator()
   , spray(0.0), power(1.0)
   , redirect(true)
+  , active(true)
 {
   setAttributes(pi()/2.0, 0.0, 0.1, w);
   createVisage();
@@ -556,6 +560,9 @@ Pusher::Pusher(double w, double h, double u, double v)
 
 void Pusher::idle()
 {
+  if (!active)
+    return;
+
   Player* p = level->getPlayer();
 
   if (!aabbOverlap(p))
@@ -569,21 +576,30 @@ void Pusher::idle()
     p->velocity += v;
 }
 
+void Pusher::actuate()
+{
+  active = trigger->on();
+  if (active)
+    setVisage(nullptr);
+  else
+    createVisage();
+}
+
 void Pusher::createVisage()
 {
   ParticleSystem* ps = new ParticleSystem(200, 100);
   ps->setParticleImage("img/particle_soft.png");
   ps->setColours(fromInt(0xC4C4C4FF), fromInt(0xFFFFFF00));
-  ps->lifeMin = 50.0 * power;
-  ps->lifeMax = 75.0 * power;
-  ps->sizeStart = 0.5 * radius;
-  ps->sizeEnd = 0.5 * radius;
+  ps->lifeMin = 25.0 * power;
+  ps->lifeMax = 50.0 * power;
+  ps->sizeStart = 0.4 * radius;
+  ps->sizeEnd = 0.2 * radius;
   ps->speedStart = 0.2 * power;
   ps->speedEnd = 0.1 * power;
   ps->direction = 0.0;//theta;
   ps->spray = spray;
-  ps->offsetX = radius;
-  ps->offsetY = radius;
+  ps->offsetX = radius - (std::max(ps->sizeStart, ps->sizeEnd));
+  ps->offsetY = radius - (std::max(ps->sizeStart, ps->sizeEnd));
   ps->rectangle = true;
   //ps->collide = true;
   //ps->source = this;

@@ -71,7 +71,7 @@ Level* Level::prefab0()
   level->insert(SceneGraph::Level::FOREGROUND,
     new Exit(8.0, 5.75, "prefab1"));
 
-  level->addPlayer(new Player(-8.5, 0.0));
+  level->addPlayer(new Player(-8.5, 1.0));
   return level;
 }
 
@@ -116,7 +116,7 @@ Level* Level::prefab1()
   be->link(e);
   level->insert(SceneGraph::Level::FOREGROUND, e);
 
-  level->addPlayer(new Player(1.5, 15.0));
+  level->addPlayer(new Player(1.5, 16.0));
   return level;
 }
 
@@ -124,7 +124,6 @@ Level* Level::prefabTest()
 {
   Level* level = new Level("Test Scene");
 
-  level->graph = new SceneGraph();
   // create objects
   {
     Object* o = new Object(1.6, 0.6, -0.2, -0.4);
@@ -252,7 +251,6 @@ Level* Level::prefabTestTurret()
 {
   Level* level = new Level("Turret Test");
 
-  level->graph = new SceneGraph();
   level->insert(SceneGraph::Level::FOREGROUND,
     new Platform(10.0, 0.3, 0.0, -0.85));
 
@@ -268,7 +266,6 @@ Level* Level::prefabTestPusher()
 {
   Level* level = new Level("Pusher Test");
 
-  level->graph = new SceneGraph();
   level->insert(SceneGraph::Level::FOREGROUND,
     new Platform(1000.0, 1.0, 0.0, 0.0));
 
@@ -282,5 +279,40 @@ Level* Level::prefabTestPusher()
 
   level->addPlayer(new Player(0.0, 0.0));
 
+  return level;
+}
+
+Level* Level::escape0()
+{
+  Level* level = new Level("The Chamber");
+
+  {
+    Platform* ground = new Platform(20.0, 1.0, 10.0, 0.5);
+    level->insert(SceneGraph::Level::FOREGROUND, ground);
+    Platform* wallLeft = new Platform(1.0, 10.0, 0.5, 6.0);
+    level->insert(SceneGraph::Level::FOREGROUND, wallLeft);
+    Platform* wallRight = new Platform(1.0, 5.0, 7.5, 3.5);
+    level->insert(SceneGraph::Level::FOREGROUND, wallRight);
+    Platform* cellCeil = new Platform(7.0, 1.0, 4.5, 7.5);
+    level->insert(SceneGraph::Level::FOREGROUND, cellCeil);
+  }
+
+  {
+    Pusher* p = new Pusher(0.5, 0.5, 6.75, 1.25);
+    Button* bd = new Button(6.5, 1.25, -1);
+    p->setAttributes(90, 0.0, 10.0, 0.5);
+    level->insert(SceneGraph::Level::FOREGROUND, p);
+    Door* d = new Door(0.5, 0.5, 6.75, 1.25, false, true);
+    d->link(bd);
+    level->insert(SceneGraph::Level::FOREGROUND, d);
+    level->insert(SceneGraph::Level::FOREGROUND, bd);
+  }
+
+  {
+    Camera* c = new Camera(1.25, 4.0);
+    level->insert(SceneGraph::Level::NPC, c);
+  }
+
+  level->addPlayer(new Player(1.5, 1.5));
   return level;
 }

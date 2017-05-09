@@ -20,15 +20,14 @@ void GUIElement::showMenuMain()
   }
 
   {
-    GUILabel* title = new GUILabel("Shifter", "sui_generis.ttf");
+    GUILabel* title = new GUILabel("Shifter", "sui_generis.ttf", 24);
     title->setRelative(0.5, 0.25, 0.5, 0.25);
-    title->setPosition(-20, -10, 20, 10);
     title->setTextColour(0xFF0000FF);
+    title->setAlignment(GUILabel::Alignment::CENTRE);
     root->addElement(title);
 
-    GUILabel* quit = new GUILabel("Quit");
-    quit->setRelative(0.5, 0.35, 0.5, 0.35);
-    quit->setPosition(-20, 20, 20, 40);
+    GUILabel* quit = new GUILabel("Quit", "sui_generis.ttf", 16);
+    quit->setRelative(0.5, 0.45, 0.5, 0.45);
     quit->setTextColour(0xFF0000FF);
     quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
       (void)ks;
@@ -59,9 +58,8 @@ void GUIElement::showMenuMain()
     });
     root->addElement(quit);
 
-    GUILabel* play = new GUILabel("Play!", "sui_generis.ttf");
+    GUILabel* play = new GUILabel("Play!", "sui_generis.ttf", 16);
     play->setRelative(0.5, 0.35, 0.5, 0.35);
-    play->setPosition(-20, -10, 20, 10);
     play->setTextColour(0xFF0000FF);
     play->registerListener([play](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
       (void)ms;

@@ -3,20 +3,33 @@
 #include "../gli.h"
 
 #include "../util.h"
-
+#include "../fontmanager.h"
+#include "../main.h"
 #include "../colour.h"
 
 //#include "../../external/rapidjson/include/rapidjson/document.h"
+#include "../../external/stb_truetype.h"
 
 VisageText::VisageText()
   : text("")
+  , font("sui_generis.ttf")
+  , size(12.0f)
 {
+  col[0] = 1.0;
+  col[1] = 1.0;
+  col[2] = 1.0;
+  col[3] = 1.0;
 }
 
-VisageText::VisageText(const std::string& str)
-  : VisageText()
+VisageText::VisageText(const std::string&& t, const std::string&& f, float sz)
+  : text(t)
+  , font(f)
+  , size(sz)
 {
-  text = str;
+  col[0] = 1.0;
+  col[1] = 1.0;
+  col[2] = 1.0;
+  col[3] = 1.0;
 }
 
 /*
@@ -44,36 +57,41 @@ void VisageText::draw()
 {
   Visage::draw();
 
-  glColor4d(1.0, 1.0, 1.0, 1.0);
+  glColor4dv(col);
+  /*
   glRasterPos2i(0, 0);
   for (auto it : text)
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, it);
+  */
 
-  /*
+  const Font& f = fontManager.get(font, size);
+  float w, y0, y1;
+  f.size(text, w, y0, y1);
+  float x = -w/2;
+  float y = -y0;
   glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, f.ftex);
   glBegin(GL_QUADS);
-
-  STSprite st;
-  if (sprite.size())
-    st = getSTCoords(file, sprite);
-  else
-    st = {(offsetX += scrollX * (delta / 1000.0)),
-           offsetX + repeatX,
-          (offsetY += scrollY * (delta / 1000.0)),
-           offsetY + repeatY
-    };
-
-  if (flip)
+  for (char c : text)
   {
-    double t = st.s0;
-    st.s0 = st.s1;
-    st.s1 = t;
+    if (c >= ' ')
+    {
+      stbtt_aligned_quad q;
+      stbtt_GetBakedQuad(f.cdata, 512,512, c-' ', &x,&y,&q,1);
+      glTexCoord2f(q.s0,q.t1); glVertex2f(q.x0/TILE_SIZE,q.y0/TILE_SIZE);
+      glTexCoord2f(q.s1,q.t1); glVertex2f(q.x1/TILE_SIZE,q.y0/TILE_SIZE);
+      glTexCoord2f(q.s1,q.t0); glVertex2f(q.x1/TILE_SIZE,q.y1/TILE_SIZE);
+      glTexCoord2f(q.s0,q.t0); glVertex2f(q.x0/TILE_SIZE,q.y1/TILE_SIZE);
+    }
   }
-  glTexCoord2d(st.s0, st.t0);  glVertex3f(vertices[0], vertices[1], 0.0f);
-  glTexCoord2d(st.s0, st.t1);  glVertex3f(vertices[2], vertices[3], 0.0f);
-  glTexCoord2d(st.s1, st.t1);  glVertex3f(vertices[4], vertices[5], 0.0f);
-  glTexCoord2d(st.s1, st.t0);  glVertex3f(vertices[6], vertices[7], 0.0f);
-  glEnd();
   glDisable(GL_TEXTURE_2D);
-   */
+  glEnd();
+}
+
+void VisageText::setTextColour(const uint32_t& c)
+{
+  col[0] = ((c >> 24) & 255) / 255.0;
+  col[1] = ((c >> 16) & 255) / 255.0;
+  col[2] = ((c >>  8) & 255) / 255.0;
+  col[3] = ((c      ) & 255) / 255.0;
 }

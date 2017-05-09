@@ -6,7 +6,8 @@ src/scenegraph.o \
 src/level.o \
 src/level_prefabs.o \
 src/util.o \
-src/imageloader.o
+src/imageloader.o \
+src/fontmanager.o
 
 OBJECT=\
 src/object/trigger.o \

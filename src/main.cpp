@@ -39,6 +39,7 @@ const double TILE_SIZE = 64.0;
 //VisagePolygon* phasepointer = nullptr;
 //GUILabel* label = nullptr;
 GUIWindow* root = nullptr;
+FontManager fontManager;
 
 const int32_t TARGET_FPS = 60;
 const int32_t FRAME_TIME = 1000/TARGET_FPS;
@@ -116,14 +117,6 @@ void draw()
   glLoadIdentity();
   glColor4f(1.0, 1.0, 1.0, 1.0);
   glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
-
-  //if (level->numPhases())
-  //{
-  //  glTranslated(16.0 + level->phasePlayer() * 126.0 /(level->numPhases()-1), 26.0, 0.0);
-  //  phasepointer->draw();
-  //}
 
   glLoadIdentity();
   glOrtho(0.0, screenWidth, screenHeight, 0.0, -1.0, 1.0);
@@ -131,10 +124,6 @@ void draw()
   input::runEvents();
   if (root)
     root->draw();
-
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
 
   glutSwapBuffers();
 }
@@ -164,15 +153,18 @@ int main(int argc, char** argv)
 {
   seed();
 
+  std::string load;
   for (int i = 0; i < argc; ++i)
   {
-    const char* const a = argv[i];
-    if (std::strcmp(a, "-b") == 0)
+    const std::string a = argv[i];
+    if (a == "-b")
       drawBoxes = true;
-    if (std::strcmp(a, "-v") == 0)
+    else if (a == "-v")
       drawBoundingVolumes = true;
-    if (std::strcmp(a, "-p") == 0)
+    else if (a == "-p")
       drawPaths = true;
+    else if (a.substr(0, 3) == "-l=")
+      load = std::string(a.substr(3));
   }
 
   glutInit(&argc, argv);
@@ -219,15 +211,17 @@ int main(int argc, char** argv)
   // load visage data
   //Visage::loadVisages();
 
-  level = Level::prefabLobby();
+  if (load.length())
+  {
+    std::cout << "Loading level " << load << std::endl;
+    level = Level::fromName(load);
+  }
+  else
+  {
+    GUIElement::showMenuMain();
+    level = Level::prefabLobby();
+  }
 
-  //phasepointer = VisagePolygon::triangle(8.0, -8.0, 0.0);
-  //phasepointer->setColour(0x7F7F7FFF);
-
-  GUIElement::showMenuMain();
-  my_stbtt_initfont();
-  //level = Level::prefabTestTurret();
-  //level = Level::prefabTestPusher();
 
   // begin glut loop
   glutMainLoop();

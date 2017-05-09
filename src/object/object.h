@@ -239,7 +239,7 @@ private:
   health_t damage;
 };
 
-class Pusher : public Object
+class Pusher : public Object, public Actuator
 {
 public:
   Pusher(double w, double h, double u, double v);
@@ -247,6 +247,8 @@ public:
 
   virtual inline Type type() const { return Type::PUSHER; }
   virtual void idle();
+
+  virtual void actuate();
 
   void setAttributes(double a, double s, double p, double r)
   {
@@ -263,6 +265,7 @@ private:
   double power;
   double radius;
   bool redirect;
+  bool active;
 };
 
 #endif
