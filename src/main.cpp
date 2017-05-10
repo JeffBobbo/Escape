@@ -214,7 +214,11 @@ int main(int argc, char** argv)
   if (load.length())
   {
     std::cout << "Loading level " << load << std::endl;
-    level = Level::fromName(load);
+    if ((level = Level::fromName(load)) == nullptr)
+    {
+      std::cout << "No such level" << std::endl;
+      return 0;
+    }
   }
   else
   {
