@@ -10,8 +10,9 @@
 
 class VisagePolygon : public Visage
 {
-public:
+protected:
   VisagePolygon() : colour(0xFFFFFFFF) {}
+public:
   virtual ~VisagePolygon()
   {
     for (Vec2D* v : vertices)
