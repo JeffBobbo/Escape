@@ -1,0 +1,60 @@
+\documentclass[english]{article}
+\usepackage{caption}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+
+\title{Escape\\ User Manual}
+\author{} % no author
+\date{} % no date
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\tableofcontents
+\section{Objective}
+Held captive in a poor contrustec cell, your goal is to escape!
+Your performance will be monitored by the installation of cameras.
+Your progress will be stalled by sentries.
+
+\section{Controls}
+\begin{table}[!h]
+\caption*{}
+\label{tab:control}
+\begin{tabular}{|c|c|}
+\hline
+Key & Action \\
+\hline
+`A' \& `D' & Move (left and right) \\
+\hline
+`E' & Use (perform action) \\
+\hline
+`SPACE' & Jump \\
+\hline
+`Q' & Walk modifier, move at half speed \\
+\hline
+\end{tabular}
+\end{table}
+Controls can be modified and saved in a file called `controls.txt'.
+
+\section{Debugging}
+`Escape' supports a small handful of command line arguments to assist with debugging.
+
+\begin{table}[!h]
+\caption*{}
+\label{tab:control}
+\begin{tabular}{|c|c|}
+\hline
+Flag & Effect \\
+\hline
+``-l=level'' & Loads `level' instead of the main menu. \\
+\hline
+``-v'' & Draws red bounding volumnes used for collision detection. \\
+\hline
+``-b'' & Draws green boxes showing the size of objects. \\
+\hline
+``-p'' & Draws the paths of moving platforms. \\
+\hline
+\end{tabular}
+\end{table}
+
+\end{document}
