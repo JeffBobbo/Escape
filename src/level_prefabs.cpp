@@ -61,7 +61,7 @@ Level* Level::prefab0()
   level->insert(SceneGraph::Level::FOREGROUND,
     new Platform(1.0, 0.25, 4.0, 4.75, 0.0, 0.0, 1));
 
-  Pusher* p = new Pusher(0.5, 0.5, 2.75, 0.5);
+  Pusher* p = new Pusher(0.5, 0.5, 2.75, 0.75);
   p->setAttributes(90.0, 0.0, 10.0, 0.5);
   level->insert(SceneGraph::Level::FOREGROUND, p);
 
