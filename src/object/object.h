@@ -27,17 +27,7 @@ public:
     EFFECT
   };
 
-  Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0) : velocity(), born(elapsed)
-  {
-    angle = 0.0;
-    rotation = 0.0;
-    x = u;
-    y = v;
-    width = w;
-    height = h;
-    visage = nullptr;
-    seppuku = false;
-  }
+  Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0);
 
   virtual ~Object()
   {
@@ -56,7 +46,7 @@ public:
   virtual inline bool isSolid() const { return false; }
   inline double distanceSquared(const Object* const o) const
   {
-    return (x-o->x)*(x-o->x)+(y-o->y)*(y-o->y);
+    return position.distanceSquared(o->getPosition());
   }
   inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
   virtual inline Vec2D boundingVolume() const { return Vec2D(width, height); }
@@ -67,15 +57,17 @@ public:
   bool intersect(const Vec2D& p0, const Vec2D& p1) const;
   double angleTo(const Object* const o) const;
 
+  inline void setPosition(const Vec2D& p) { position = p; }
+  inline const Vec2D& getPosition() const { return position; }
   inline void setVelocity(const Vec2D& v) { velocity = v; }
+  inline const Vec2D& getVelocity() const { return velocity; }
 
   inline millis_t age() const { return elapsed - born; }
   inline bool dying() const { return seppuku; }
 
   double angle;
   double rotation;
-  double x;
-  double y;
+  Vec2D position;
   Vec2D velocity;
   double width;
   double height;
@@ -103,8 +95,7 @@ private:
   double radiusx;
   double radiusy;
   millis_t period;
-  double originx;
-  double originy;
+  Vec2D origin;
 };
 
 class Button;

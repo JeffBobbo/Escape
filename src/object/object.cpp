@@ -4,6 +4,19 @@
 #include "../gli.h"
 #include "../visage/allvisage.h"
 
+Object::Object(double w, double h, double u, double v)
+ : position(u, v)
+ , velocity()
+ , born(elapsed)
+{
+  angle = 0.0;
+  rotation = 0.0;
+  width = w;
+  height = h;
+  visage = nullptr;
+  seppuku = false;
+}
+
 void Object::idle()
 {
 }
@@ -16,8 +29,7 @@ void Object::move()
     angle -= 360.0;
 
   Vec2D moveby = velocity * (delta / 1000.0);
-  x += moveby.x;
-  y += moveby.y;
+  position += moveby;
 }
 
 #include <iostream>
@@ -26,7 +38,7 @@ void Object::draw()
   glPushMatrix();
 
   // transformations
-  glTranslated(x, y, 0.0);
+  glTranslated(position.x, position.y, 0.0);
   glRotated(angle, 0.0, 0.0, 1.0);
 
   // reset the colour
@@ -89,19 +101,20 @@ bool Object::aabbOverlap(const Object* const o) const
 {
   Vec2D tb = boundingVolume();
   Vec2D ob = o->boundingVolume();
-  return x-tb.x/2.0 < o->x+ob.x/2.0 &&
-         x+tb.x/2.0 > o->x-ob.x/2.0 &&
-         y-tb.y/2.0 < o->y+ob.y/2.0 &&
-         y+tb.y/2.0 > o->y-ob.y/2.0;
+  const Vec2D& op = o->getPosition();
+  return position.x-tb.x/2.0 < op.x+ob.x/2.0 &&
+         position.x+tb.x/2.0 > op.x-ob.x/2.0 &&
+         position.y-tb.y/2.0 < op.y+ob.y/2.0 &&
+         position.y+tb.y/2.0 > op.y-ob.y/2.0;
 }
 
 bool Object::pointInside(const Vec2D& v) const
 {
   Vec2D bv = boundingVolume();
-  return x-bv.x/2.0 < v.x &&
-         x+bv.x/2.0 > v.x &&
-         y-bv.y/2.0 < v.y &&
-         y+bv.y/2.0 > v.y;
+  return position.x-bv.x/2.0 < v.x &&
+         position.x+bv.x/2.0 > v.x &&
+         position.y-bv.y/2.0 < v.y &&
+         position.y+bv.y/2.0 > v.y;
 }
 
 /*
@@ -128,8 +141,7 @@ Object* Object::hitScan(const Object* const o, const bool ethereal) const
   //if (phase != o->phase)
     //return nullptr;
 
-  Vec2D origin = {x, y};
-  Vec2D target = {o->x, o->y};
+  const Vec2D& target = o->getPosition();
 
   const SceneGraph* const sg = level->getGraph();
   for (auto& layer : *sg)
@@ -140,7 +152,7 @@ Object* Object::hitScan(const Object* const o, const bool ethereal) const
         continue;
       if (obj == o) // don't include the target
         continue;
-      if ((ethereal || obj->isSolid()) && obj->intersect(origin, target))
+      if ((ethereal || obj->isSolid()) && obj->intersect(position, target))
         return obj;
     }
   }
@@ -180,11 +192,11 @@ bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
 
   Vec2D vol = boundingVolume();
   // Find the intersection of the segment's and rectangle's x-projections
-  if (maxX > x+vol.x/2.0)
-    maxX = x+vol.x/2.0;
+  if (maxX > position.x+vol.x/2.0)
+    maxX = position.x+vol.x/2.0;
 
-  if (minX < x-vol.x/2.0)
-    minX = x-vol.x/2.0;
+  if (minX < position.x-vol.x/2.0)
+    minX = position.x-vol.x/2.0;
 
   // if the projections do not intersect then return false
   if (minX > maxX)
@@ -212,11 +224,11 @@ bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
   }
 
   // Find the intersection of the segment's and rectangle's y-projections
-  if (maxY > y+vol.y/2.0)
-    maxY = y+vol.y/2.0;
+  if (maxY > position.y+vol.y/2.0)
+    maxY = position.y+vol.y/2.0;
 
-  if (minY < y-vol.y/2.0)
-    minY = y-vol.y/2.0;
+  if (minY < position.y-vol.y/2.0)
+    minY = position.y-vol.y/2.0;
 
   // if the projections do not intersect then return false
   if (minY > maxY)
@@ -228,16 +240,16 @@ bool Object::intersect(const Vec2D& p0, const Vec2D& p1) const
 
 double Object::angleTo(const Object* const o) const
 {
-  return std::atan2(o->y - y, o->x - x);
+  Vec2D v = o->getPosition() - position;
+  return std::atan2(v.y, v.x);
 }
 
 Platform::Platform(double w, double h, double u, double v, double rx, double ry, millis_t p)
   : Object(w, h, u, v)
   , radiusx(rx), radiusy(ry)
   , period(p)
+  , origin(u, v)
 {
-  originx = x;
-  originy = y;
   //visage = VisagePolygon::rectangle(w, h);
   //static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
   if (p == 0)
@@ -281,11 +293,10 @@ void Platform::move()
     return;
   const double p = static_cast<double>(elapsed % period) / static_cast<double>(period);
   const double a = 2.0 * pi() * p;
-  double ox = x, oy = y;
-  x = originx + std::cos(a) * radiusx;
-  y = originy + std::sin(a) * radiusy;
-  velocity.x = x - ox;
-  velocity.y = y - oy;
+  Vec2D op = position;
+  position.x = origin.x + std::cos(a) * radiusx;
+  position.y = origin.y + std::sin(a) * radiusy;
+  velocity = position - op;
 }
 
 void Platform::drawPath()
@@ -299,13 +310,13 @@ void Platform::drawPath()
     glBegin(GL_LINES);
     if (radiusx != 0.0)
     {
-      glVertex3d(originx-x-radiusx, originy-y, 0.0);
-      glVertex3d(originx-x+radiusx, originy-y, 0.0);
+      glVertex3d(origin.x-position.x-radiusx, origin.y-position.y, 0.0);
+      glVertex3d(origin.x-position.x+radiusx, origin.y-position.y, 0.0);
     }
     else
     {
-      glVertex3d(originx-x, originy-y-radiusy, 0.0);
-      glVertex3d(originx-x, originy-y+radiusy, 0.0);
+      glVertex3d(origin.x-position.x, origin.y-position.y-radiusy, 0.0);
+      glVertex3d(origin.x-position.x, origin.y-position.y+radiusy, 0.0);
     }
     glEnd();
     return;
@@ -316,7 +327,7 @@ void Platform::drawPath()
   for (size_t i = 0; i < points; ++i)
   {
     double p = static_cast<double>(i) / static_cast<double>(points);
-    glVertex3d(originx-x + radiusx * std::cos((2.0 * pi()) * p), originy-y + radiusy * std::sin((2.0 * pi() * p)), 0.0);
+    glVertex3d(origin.x-position.x + radiusx * std::cos((2.0 * pi()) * p), origin.y-position.y + radiusy * std::sin((2.0 * pi() * p)), 0.0);
   }
   glEnd();
 }
@@ -540,7 +551,7 @@ Projectile::Projectile(const health_t& d, const Vec2D& pos, const Vec2D& vel, Ob
 
 void Projectile::move()
 {
-  Vec2D oldpos(x, y);
+  Vec2D oldpos = position;
   Object::move();
 
   if (age() > 1000)
@@ -556,7 +567,7 @@ void Projectile::move()
     return;
   }
 
-  if (target && (collide == target || target->intersect(oldpos, {x, y})))
+  if (target && (collide == target || target->intersect(oldpos, position)))
   {
     if (target->type() == Object::Type::PLAYER)
     {

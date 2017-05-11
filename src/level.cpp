@@ -63,7 +63,7 @@ void Level::draw()
 {
   // translate by the players position, so the camera follows the player
   if (player)
-    glTranslated(-player->x, -player->y, 0.0);
+    glTranslated(-player->getPosition().x, -player->getPosition().y, 0.0);
   graph->draw(); // draw everything in all phases first
 
   // draw everything else from the other phases

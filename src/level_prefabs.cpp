@@ -212,8 +212,7 @@ Level* Level::prefabTest()
     ps->direction = pi()/2;
     ps->setGravity(true);
     o->setVisage(ps);
-    o->x = 2.75;
-    o->y = 0.0;
+    o->position = Vec2D(2.75, 0.0);
     level->insert(SceneGraph::Level::SCENARY, o);
   }
   {

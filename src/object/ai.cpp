@@ -28,7 +28,7 @@ void Follower::move()
   if (encountered || (dist > 0.3 && dist <= 2.0))
   {
     encountered = true;
-    Vec2D v(player->x - x, player->y - y + 0.2);
+    Vec2D v = player->getPosition() - position + Vec2D(0.0, 0.2);
     velocity += v * accelerate;
 
     double speed = velocity.magnitude();
@@ -43,8 +43,7 @@ void Follower::move()
   {
     velocity *= 0.25 * (delta / 1000.0);
   }
-  x += velocity.x * (delta / 1000.0);
-  y += velocity.y * (delta / 1000.0);
+  position += velocity * (delta / 1000.0);
 }
 
 Camera::Camera(double a, double b) : AI(0.4, 0.1, a, b), turnRate(60.0)
@@ -125,7 +124,7 @@ void Turret::move()
       static const double speed = 10.0;
       const double a = angle * random(0.975, 1.025);
       // fire!
-      Vec2D pos(x + std::cos(radians(angle)) * 0.5, y + std::sin(radians(angle)) * 0.5);
+      Vec2D pos(position.x + std::cos(radians(angle)) * 0.5, position.y + std::sin(radians(angle)) * 0.5);
       Vec2D vel(speed * std::cos(radians(a)), speed * std::sin(radians(a)));
       Projectile* p = new Projectile(1, pos, vel, target, this);
       lastFire = elapsed;

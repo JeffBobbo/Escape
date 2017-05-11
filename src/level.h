@@ -36,7 +36,7 @@ public:
   void addPlayer(Player* const p)
   {
     player = p;
-    checkpoint = new Checkpoint(p->x, p->y, true);
+    checkpoint = new Checkpoint(p->getPosition().x, p->getPosition().y, true);
     graph->insert(SceneGraph::Level::FOREGROUND, checkpoint);
   }
   void insert(const SceneGraph::Level l, Object* o) { graph->insert(l, o); }

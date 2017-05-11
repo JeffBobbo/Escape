@@ -78,8 +78,8 @@ void Player::move()
     }
   }
 
-  double nx = x;
-  double ny = y;
+  double nx = position.x;
+  double ny = position.y;
 
   const bool air = velocity.y != 0.0; // TODO: On ground check
   const bool walk = keyboard::pressed(controls::bind(controls::Action::WALK_MODIFIER)) && !air;
@@ -127,16 +127,17 @@ void Player::move()
       continue;
 
     Vec2D ov = o->boundingVolume();
+    Vec2D op = o->getPosition();
     // test y first
-    if ( x+tv.x/2.0 > o->x-ov.x/2.0 &&
-         x-tv.x/2.0 < o->x+ov.x/2.0 &&
-        ny+tv.y/2.0 > o->y-ov.y/2.0 &&
-        ny-tv.y/2.0 < o->y+ov.y/2.0)
+    if ( position.x+tv.x/2.0 > op.x-ov.x/2.0 &&
+         position.x-tv.x/2.0 < op.x+ov.x/2.0 &&
+        ny+tv.y/2.0 > op.y-ov.y/2.0 &&
+        ny-tv.y/2.0 < op.y+ov.y/2.0)
     {
-      if (ny - o->y > 0.0)
-        ny = o->y+ov.y/2.0+tv.y/2.0;
+      if (ny - op.y > 0.0)
+        ny = op.y+ov.y/2.0+tv.y/2.0;
       else
-        ny = o->y-ov.y/2.0-tv.y/2.0;
+        ny = op.y-ov.y/2.0-tv.y/2.0;
 
       if (velocity.y < 0.0 && o->type() == Object::Type::PLATFORM && static_cast<const Platform*>(o)->stationary() == false)
       {
@@ -145,16 +146,16 @@ void Player::move()
       }
       velocity.y = 0.0;
     }
-    if (nx+tv.x/2.0 > o->x-ov.x/2.0 &&
-        nx-tv.x/2.0 < o->x+ov.x/2.0 &&
-        ny+tv.y/2.0 > o->y-ov.y/2.0 &&
-        ny-tv.y/2.0 < o->y+ov.y/2.0)
-      nx = x;
+    if (nx+tv.x/2.0 > op.x-ov.x/2.0 &&
+        nx-tv.x/2.0 < op.x+ov.x/2.0 &&
+        ny+tv.y/2.0 > op.y-ov.y/2.0 &&
+        ny-tv.y/2.0 < op.y+ov.y/2.0)
+      nx = position.x;
   }
 
   // if we move in x, face the correct way, otherwise keep facing the same way
-  facingRight = (nx-x) != 0.0 ? (nx-x) > 0.0 : facingRight;
-  if (nx-x != 0.0)
+  facingRight = (nx-position.x) != 0.0 ? (nx-position.x) > 0.0 : facingRight;
+  if (nx-position.x != 0.0)
   {
     lastMove = elapsed;
     if (startMove == 0)
@@ -165,8 +166,8 @@ void Player::move()
     startMove = 0;
   }
   // otherwise, set it appropriately.
-  x = nx;
-  y = ny;
+  position.x = nx;
+  position.y = ny;
 
   std::stringstream sprite;
   if (velocity.y != 0.0)
@@ -199,8 +200,7 @@ void Player::death()
   Checkpoint* cp = level->getCheckpoint();
   if (cp)
   {
-    x = cp->x;
-    y = cp->y;
+    position = cp->getPosition();
     health = cp->health;
     maxHealth = cp->maxHealth;
     lastDamage = elapsed + cp->lastDamage;
