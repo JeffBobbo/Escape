@@ -65,7 +65,7 @@ void draw()
     timebase = elapsed;
     frame = 0;
     std::stringstream ss;
-    ss << title;
+    ss << TITLE;
     if (level && level->getName().size())
       ss << " - " << level->getName();
     ss << " - FPS: " << /*std::setprecision(2) <<*/ fps;
@@ -171,7 +171,7 @@ int main(int argc, char** argv)
   glutInitWindowPosition(-1, -1);
   glutInitWindowSize(640, 480);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-  glutCreateWindow(title);
+  glutCreateWindow(TITLE);
 
   // enable blending
   glEnable(GL_BLEND);

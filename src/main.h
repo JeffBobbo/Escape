@@ -9,7 +9,7 @@
 #include "level.h"
 #include "fontmanager.h"
 
-const char* const title = "Escape";
+const char* const TITLE = "Escape";
 
 extern Level* level;
 extern int32_t screenWidth;
