@@ -1,4 +1,4 @@
-EXEC:=Shifter.out
+EXEC:=Escape.out
 
 include make.objects
 

@@ -20,7 +20,7 @@ void GUIElement::showMenuMain()
   }
 
   {
-    GUILabel* title = new GUILabel("Shifter", "sui_generis.ttf", 24);
+    GUILabel* title = new GUILabel(title, "sui_generis.ttf", 24);
     title->setRelative(0.5, 0.25, 0.5, 0.25);
     title->setTextColour(0xFF0000FF);
     title->setAlignment(GUILabel::Alignment::CENTRE);
