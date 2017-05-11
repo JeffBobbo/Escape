@@ -299,10 +299,10 @@ Level* Level::escape0()
 
   {
     Pusher* p = new Pusher(0.5, 0.5, 6.75, 1.25);
-    Button* bd = new Button(6.5, 1.25, -1);
+    Button* bd = new Button(6.5, 1.25, -1, "DESTROY THE AIR CONDITIONING UNIT");
     p->setAttributes(90, 0.0, 10.0, 0.5);
     level->insert(SceneGraph::Level::FOREGROUND, p);
-    Door* d = new Door(0.5, 0.5, 6.75, 1.25, false, true);
+    Door* d = new Door(0.5, 0.5, 6.75, 1.25, false);
     d->link(bd);
     level->insert(SceneGraph::Level::FOREGROUND, d);
     level->insert(SceneGraph::Level::FOREGROUND, bd);

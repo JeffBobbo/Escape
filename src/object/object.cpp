@@ -335,7 +335,7 @@ Door::Door(double w, double h, double u, double v, bool o, bool p)
   if (p)
     a->startX = w*0.9/2.0;
   else
-    a->startY = h*0.9/2.0;
+    a->startY = -h*0.9/2.0;
   vOpen->addAnimatrix(a);
   vClose = visage = VisagePolygon::rectangle(w, h);
   static_cast<VisagePolygon*>(vClose)->setColour(0xafafafFF);
@@ -363,16 +363,35 @@ void Door::actuate()
   visage = open ? vOpen : vClose;
 }
 
-Button::Button(double u, double v, millis_t t)
+Button::Button(double u, double v, millis_t t, const std::string&& a)
   : Object(0.25, 0.25, u, v), Trigger()
   , last(0), timeout(t)
+  , action(a)
+  , lastFlash(0)
 {
   visage = VisagePolygon::circle(0.1, 16);
   static_cast<VisagePolygon*>(visage)->setColour(0xff7f7fff);
 }
 
+#include "../controls.h"
+#include <sstream>
 void Button::idle()
 {
+  const Player* const p = level->getPlayer();
+  if (p && distance(p) < 1.0 && lastFlash + 1000 < elapsed)
+  {
+    KeyCode key = bind(controls::Action::USE);
+    std::stringstream msg;
+    msg << "PRESS " << std::toupper(static_cast<char>(key)) << " TO ";
+    if (action.length())
+      msg << action;
+    else
+      msg << " USE";
+
+    Effect* e = new Effect(position.x, position.y+0.5, 1000, new VisageText(msg.str(), "sui_generis.ttf", 12));
+    level->insert(SceneGraph::Level::FOREGROUND, e);
+    lastFlash = elapsed;
+  }
   if (on())
     static_cast<VisagePolygon*>(visage)->setColour(0xff0000ff);
   else
@@ -604,4 +623,17 @@ void Pusher::createVisage()
   //ps->collide = true;
   //ps->source = this;
   setVisage(ps);
+}
+
+Effect::Effect(double u, double v, const millis_t& life, Visage* const vis)
+ : Object(0.0, 0.0, u, v)
+ , lifespan(life)
+{
+  setVisage(vis);
+}
+
+void Effect::idle()
+{
+  if (born + lifespan < elapsed)
+    death();
 }

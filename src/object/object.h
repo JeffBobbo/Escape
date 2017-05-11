@@ -23,7 +23,8 @@ public:
     CHECKPOINT,
     GRID,
     PROJECTILE,
-    PUSHER
+    PUSHER,
+    EFFECT
   };
 
   Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0) : velocity(), born(elapsed)
@@ -142,7 +143,7 @@ private:
 class Button : public Object, public Trigger
 {
 public:
-  Button(double u, double v, millis_t t);
+  Button(double u, double v, millis_t t, const std::string&& a = "");
   virtual ~Button() {};
 
   virtual inline Type type() const { return Type::TRIGGER; }
@@ -163,6 +164,8 @@ public:
 private:
   millis_t last;
   millis_t timeout;
+  std::string action;
+  millis_t lastFlash;
 };
 
 class Exit : public Object, public Actuator
@@ -266,6 +269,20 @@ private:
   double radius;
   bool redirect;
   bool active;
+};
+
+class Effect : public Object
+{
+public:
+  Effect(double u, double v, const millis_t& life, Visage* const vis);
+  virtual ~Effect() {};
+
+  virtual inline Type type() const { return Type::EFFECT; }
+
+  virtual void idle();
+
+private:
+  millis_t lifespan;
 };
 
 #endif
