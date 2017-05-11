@@ -6,7 +6,7 @@
 #include "../input.h"
 #include "../visage/allvisage.h"
 #include "../visage/animatrix.h"
-
+#include "platform.h"
 #include "../controls.h"
 
 Player::Player(double a, double b)

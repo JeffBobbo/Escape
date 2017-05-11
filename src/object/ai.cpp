@@ -4,6 +4,7 @@
 
 #include "../main.h"
 #include "../visage/allvisage.h"
+#include "projectile.h"
 
 Follower::Follower(double w, double h, double u, double v)
  : AI(w, h, u, v)

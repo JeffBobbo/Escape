@@ -10,10 +10,20 @@ src/imageloader.o \
 src/fontmanager.o
 
 OBJECT=\
-src/object/trigger.o \
 src/object/object.o \
+src/object/trigger.o \
+\
+src/object/button.o \
+src/object/checkpoint.o \
+src/object/door.o \
+src/object/effect.o \
+src/object/exit.o \
+src/object/platform.o \
+src/object/projectile.o \
+src/object/pusher.o \
+\
+src/object/ai.o \
 src/object/player.o \
-src/object/ai.o
 
 VISAGE=\
 src/visage/animatrix.o \

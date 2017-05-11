@@ -5,6 +5,7 @@
 
 #include <iostream>
 
+class Checkpoint;
 class Player : public Object
 {
   friend Checkpoint;

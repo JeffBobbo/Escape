@@ -6,6 +6,8 @@
 #include <stdint.h>
 
 #include "scenegraph.h"
+#include "object/checkpoint.h"
+#include "object/exit.h"
 #include "object/player.h"
 
 class Level
