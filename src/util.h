@@ -210,6 +210,14 @@ public:
   {
     return std::sqrt(magnitudeSquared());
   }
+  inline double distanceSquared(const Vec2D& v) const
+  {
+    return (x-v.x)*(x-v.x) + (y-v.y)*(y-v.y);
+  }
+  inline double distance(const Vec2D& v) const
+  {
+    return std::sqrt(distanceSquared(v));
+  }
   inline void normalise()
   {
     const double length = magnitude();
