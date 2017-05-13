@@ -24,7 +24,7 @@ public:
     EFFECT
   };
 
-  Object(double w = 0.0, double h = 0.0, double u = 0.0, double v = 0.0);
+  Object(Vec2D sz = {0.0, 0.0}, Vec2D pos = {0.0, 0.0});
 
   virtual ~Object()
   {
@@ -46,7 +46,7 @@ public:
     return position.distanceSquared(o->getPosition());
   }
   inline double distance(const Object* const o) const { return std::sqrt(distanceSquared(o)); }
-  virtual inline Vec2D boundingVolume() const { return Vec2D(width, height); }
+  virtual inline Vec2D boundingVolume() const { return size; }
   bool aabbOverlap(const Object* const o) const;
   bool pointInside(const Vec2D& v) const;
   Object* hitScan(const Object* const o, const bool ethereal = false) const;
@@ -65,9 +65,8 @@ public:
   double angle;
   double rotation;
   Vec2D position;
+  Vec2D size;
   Vec2D velocity;
-  double width;
-  double height;
   Visage* visage;
   const millis_t born;
 

@@ -9,8 +9,8 @@
 #include "platform.h"
 #include "../controls.h"
 
-Player::Player(double a, double b)
-  : Object(1.0, 1.0, a, b)
+Player::Player(Vec2D pos)
+  : Object({1.0, 1.0}, pos)
 {
   VisageTexture* vt = new VisageTexture(1.0, 1.0, "img/character.png");
   setVisage(vt);

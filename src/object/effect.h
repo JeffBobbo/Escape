@@ -4,12 +4,13 @@
 #include "object.h"
 
 #include "../types.h"
+#include "../util.h"
 #include "../visage/visage.h"
 
 class Effect : public Object
 {
 public:
-  Effect(double u, double v, const millis_t& life, Visage* const vis);
+  Effect(Vec2D pos, const millis_t& life, Visage* const vis);
   virtual ~Effect() {};
 
   virtual inline Type type() const { return Type::EFFECT; }

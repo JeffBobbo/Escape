@@ -9,7 +9,7 @@
 class Projectile : public Object
 {
 public:
-  Projectile(const health_t& d, const Vec2D& pos, const Vec2D& vel, Object* const t, Object* const o);
+  Projectile(const health_t& d, const Vec2D pos, const Vec2D vel, Object* const t, Object* const o);
   virtual ~Projectile() {};
 
   virtual inline Type type() const { return Type::PROJECTILE; }

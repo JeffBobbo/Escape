@@ -5,24 +5,24 @@
 #include "../visage/allvisage.h"
 #include "../gli.h"
 
-Platform::Platform(double w, double h, double u, double v, double rx, double ry, millis_t p)
-  : Object(w, h, u, v)
+Platform::Platform(Vec2D sz, Vec2D pos, double rx, double ry, millis_t p)
+  : Object(sz, pos)
   , radiusx(rx), radiusy(ry)
   , period(p)
-  , origin(u, v)
+  , origin(position)
 {
   //visage = VisagePolygon::rectangle(w, h);
   //static_cast<VisagePolygon*>(visage)->setColour(0x7f7f7fFF);
   if (p == 0)
   {
-    visage = new VisageTexture(w, h, "img/background/tile1.png");
-    static_cast<VisageTexture*>(visage)->setRepeat(w, h);
+    visage = new VisageTexture(size.x, size.y, "img/background/tile1.png");
+    static_cast<VisageTexture*>(visage)->setRepeat(size.x, size.y);
   }
   else
   {
     visage = new VisageComplex();
     {
-      VisageTexture* vt = new VisageTexture(w, h, "img/platforms.png");
+      VisageTexture* vt = new VisageTexture(size.x, size.y, "img/platforms.png");
       vt->setAtlasSprite("platform2");
       static_cast<VisageComplex*>(visage)->add(vt);
     }
@@ -41,7 +41,7 @@ Platform::Platform(double w, double h, double u, double v, double rx, double ry,
       //ps->collide = true;
       //ps->source = this;
       Animatrix* a = new Animatrix();
-      a->startY = -h/2.0;
+      a->startY = -size.y/2.0;
       ps->addAnimatrix(a);
       static_cast<VisageComplex*>(visage)->add(ps);
     }

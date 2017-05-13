@@ -3,22 +3,22 @@
 #include "../main.h"
 #include "../visage/allvisage.h"
 
-Door::Door(double w, double h, double u, double v, bool o, bool p)
-: Object(w, h, u, v), Actuator()
+Door::Door(Vec2D sz, Vec2D pos, bool o, bool p)
+: Object(sz, pos), Actuator()
 {
   open = o;
   if (p)
-    vOpen = VisagePolygon::rectangle(w*0.1, h);
+    vOpen = VisagePolygon::rectangle(sz.x*0.1, sz.y);
   else
-    vOpen = VisagePolygon::rectangle(w, h*0.1);
+    vOpen = VisagePolygon::rectangle(sz.x, sz.y*0.1);
   static_cast<VisagePolygon*>(vOpen)->setColour(0xafafafFF);
   Animatrix* a = new Animatrix();
   if (p)
-    a->startX = w*0.9/2.0;
+    a->startX = sz.x*0.9/2.0;
   else
-    a->startY = -h*0.9/2.0;
+    a->startY = -sz.y*0.9/2.0;
   vOpen->addAnimatrix(a);
-  vClose = visage = VisagePolygon::rectangle(w, h);
+  vClose = visage = VisagePolygon::rectangle(sz.x, sz.y);
   static_cast<VisagePolygon*>(vClose)->setColour(0xafafafFF);
 }
 

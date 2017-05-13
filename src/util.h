@@ -118,7 +118,7 @@ class Vec2D
 public:
   Vec2D() : x(0.0), y(0.0) {}
   Vec2D(const double u, const double v) : x(u), y(v) {}
-  Vec2D(const double d) : x(d), y(d) {}
+  explicit Vec2D(const double d) : x(d), y(d) {}
   Vec2D(const Vec2D& v) : x(v.x), y(v.y) {}
   Vec2D(Vec2D&& v) : x(v.x), y(v.y) {}
 

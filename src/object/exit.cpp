@@ -2,8 +2,8 @@
 
 #include "../visage/polygon.h"
 
-Exit::Exit(double u, double v, const std::string& n)
-  : Object(0.5, 0.5, u, v)
+Exit::Exit(Vec2D pos, const std::string& n)
+  : Object({0.5, 0.5}, std::move(pos))
   , name(n)
 {
   visage = VisagePolygon::triangle(0.5, 0.5, 0.0);

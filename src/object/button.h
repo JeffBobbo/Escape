@@ -7,7 +7,7 @@
 class Button : public Object, public Trigger
 {
 public:
-  Button(double u, double v, millis_t t, const std::string&& a = "");
+  Button(Vec2D pos, millis_t t, const std::string&& a = "");
   virtual ~Button() {};
 
   virtual inline Type type() const { return Type::TRIGGER; }

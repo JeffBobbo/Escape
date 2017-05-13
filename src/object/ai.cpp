@@ -6,8 +6,8 @@
 #include "../visage/allvisage.h"
 #include "projectile.h"
 
-Follower::Follower(double w, double h, double u, double v)
- : AI(w, h, u, v)
+Follower::Follower(Vec2D sz, Vec2D pos)
+ : AI(sz, pos)
  , maxSpeed(3.5), accelerate(0.1)
  , encountered(false)
 {
@@ -47,10 +47,12 @@ void Follower::move()
   position += velocity * (delta / 1000.0);
 }
 
-Camera::Camera(double a, double b) : AI(0.4, 0.1, a, b), turnRate(60.0)
+Camera::Camera(Vec2D pos)
+ : AI({0.4, 0.2}, pos)
+ , turnRate(60.0)
 {
   delete visage;
-  visage = new VisageTexture(0.4, 0.1, "img/camera.png");
+  visage = new VisageTexture(0.4, 0.2, "img/camera.png");
   static_cast<VisageTexture*>(visage)->setAtlasSprite("standby");
   angle = 0.0;
 }
@@ -87,7 +89,7 @@ void Camera::move()
     static_cast<VisageTexture*>(visage)->setAtlasSprite("standby");
 }
 
-Turret::Turret(double a, double b) : Camera(a, b)
+Turret::Turret(Vec2D pos) : Camera(pos)
 {
   delete visage;
   visage = new VisageTexture(1, 1, "img/turret.png");

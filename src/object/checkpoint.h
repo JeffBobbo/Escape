@@ -3,13 +3,14 @@
 
 #include "object.h"
 #include "../types.h"
+#include "../util.h"
 
 class Player;
 class Checkpoint : public Object
 {
   friend Player;
 public:
-  Checkpoint(double u, double v, bool s = false);
+  Checkpoint(Vec2D pos, bool s = false);
   virtual ~Checkpoint() {}
 
   virtual inline Type type() const { return Type::CHECKPOINT; }

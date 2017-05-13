@@ -7,7 +7,7 @@
 class Pusher : public Object, public Actuator
 {
 public:
-  Pusher(double w, double h, double u, double v);
+  Pusher(Vec2D sz, Vec2D pos);
   virtual ~Pusher() {};
 
   virtual inline Type type() const { return Type::PUSHER; }
@@ -15,14 +15,7 @@ public:
 
   virtual void actuate();
 
-  void setAttributes(double a, double s, double p, double r)
-  {
-    angle = a;
-    spray = s;
-    power = p;
-    radius = r;
-    createVisage();
-  }
+  void setAttributes(double a, double s, double p, double r);
   void createVisage();
 
 private:

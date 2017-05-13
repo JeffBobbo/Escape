@@ -10,7 +10,7 @@ class Player : public Object
 {
   friend Checkpoint;
 public:
-  Player(double a = 0.0, double b = 0.0);
+  Player(Vec2D pos);
   virtual ~Player() {}
 
   virtual inline Type type() const { return Type::PLAYER; }
@@ -18,7 +18,7 @@ public:
   virtual void move();
   virtual void death();
 
-  virtual inline Vec2D boundingVolume() const { return Vec2D(width/3.0, height); }
+  virtual inline Vec2D boundingVolume() const { return Vec2D(size.x/3.0, size.y); }
 
   inline uint32_t stepCount() const { return steps; }
   inline uint32_t jumpCount() const { return jumps; }

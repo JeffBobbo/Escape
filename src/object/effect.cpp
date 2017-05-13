@@ -2,8 +2,8 @@
 
 #include "../visage/allvisage.h"
 
-Effect::Effect(double u, double v, const millis_t& life, Visage* const vis)
- : Object(0.0, 0.0, u, v)
+Effect::Effect(Vec2D pos, const millis_t& life, Visage* const vis)
+ : Object({0.0, 0.0}, pos)
  , lifespan(life)
 {
   setVisage(vis);

@@ -4,10 +4,12 @@
 #include "object.h"
 #include "trigger.h"
 
+#include "../util.h"
+
 class Door : public Object, public Actuator
 {
 public:
-  Door(double w, double h, double u, double v, bool o, bool p = false);
+  Door(Vec2D sz, Vec2D pos, bool o, bool p = false);
   virtual ~Door();
 
   virtual inline Type type() const { return Type::DOOR; }

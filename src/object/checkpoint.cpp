@@ -4,8 +4,8 @@
 #include "../main.h"
 #include "../visage/polygon.h"
 
-Checkpoint::Checkpoint(double u, double v, bool s)
-  : Object(0.5, 0.5, u, v)
+Checkpoint::Checkpoint(Vec2D pos, bool s)
+  : Object({0.5, 0.5}, std::move(pos))
   , spawn(s), active(s)
   , health(100), maxHealth(100)
   , lastDamage(elapsed), lastHeal(elapsed)

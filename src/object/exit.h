@@ -3,13 +3,14 @@
 
 #include "object.h"
 #include "trigger.h"
-
 #include <string>
+
+#include "../util.h"
 
 class Exit : public Object, public Actuator
 {
 public:
-  Exit(double u, double v, const std::string& n = "");
+  Exit(Vec2D pos, const std::string& n = "");
   virtual ~Exit() {}
 
   virtual inline Type type() const { return Type::EXIT; }

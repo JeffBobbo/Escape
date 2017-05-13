@@ -7,8 +7,8 @@
 #include "../main.h"
 #include "../controls.h"
 
-Button::Button(double u, double v, millis_t t, const std::string&& a)
-  : Object(0.25, 0.25, u, v), Trigger()
+Button::Button(Vec2D pos, millis_t t, const std::string&& a)
+  : Object({0.25, 0.25}, pos), Trigger()
   , last(0), timeout(t)
   , action(a)
   , lastFlash(0)
@@ -24,13 +24,14 @@ void Button::idle()
   {
     KeyCode key = bind(controls::Action::USE);
     std::stringstream msg;
-    msg << "PRESS " << std::toupper(static_cast<char>(key)) << " TO ";
+    msg << "PRESS " << static_cast<char>(std::toupper(static_cast<char>(key))) << " TO ";
     if (action.length())
       msg << action;
     else
       msg << " USE";
 
-    Effect* e = new Effect(position.x, position.y+0.5, 1000, new VisageText(msg.str(), "sui_generis.ttf", 12));
+    Vec2D p = position + Vec2D(0.0, 0.5);
+    Effect* e = new Effect(p, 1000, new VisageText(msg.str(), "sui_generis.ttf", 12));
     level->insert(SceneGraph::Level::FOREGROUND, e);
     lastFlash = elapsed;
   }

@@ -38,7 +38,8 @@ public:
   void addPlayer(Player* const p)
   {
     player = p;
-    checkpoint = new Checkpoint(p->getPosition().x, p->getPosition().y, true);
+    Vec2D pos = p->getPosition();
+    checkpoint = new Checkpoint(pos, true);
     graph->insert(SceneGraph::Level::FOREGROUND, checkpoint);
   }
   void insert(const SceneGraph::Level l, Object* o) { graph->insert(l, o); }

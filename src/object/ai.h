@@ -12,7 +12,7 @@ public:
     CAMERA,
     TURRET
   };
-  AI(double w, double h, double u, double v) : Object(w, h, u, v) {}
+  AI(Vec2D sz, Vec2D pos) : Object(sz, pos) {}
   virtual ~AI() {}
 
   virtual inline Type type() const final { return Type::AI; }
@@ -27,7 +27,7 @@ private:
 class Follower : public AI
 {
 public:
-  Follower(double w, double h, double u, double v);
+  Follower(Vec2D sz, Vec2D pos);
   virtual ~Follower() {};
 
   virtual inline Classification aiType() const { return Classification::FOLLOWER; }
@@ -43,7 +43,7 @@ private:
 class Camera : public AI
 {
 public:
-  Camera(double a, double b);
+  Camera(Vec2D pos);
   virtual ~Camera();
 
   virtual inline Classification aiType() const { return Classification::CAMERA; }
@@ -57,7 +57,7 @@ private:
 class Turret : public Camera
 {
 public:
-  Turret(double a, double b);
+  Turret(Vec2D pos);
   virtual ~Turret();
 
   virtual inline Classification aiType() const { return Classification::TURRET; }

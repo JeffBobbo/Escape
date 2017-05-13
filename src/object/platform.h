@@ -8,7 +8,7 @@
 class Platform : public Object
 {
 public:
-  Platform(double w, double h, double u, double v, double rx = 0.0, double ry = 0.0, millis_t p = 0);
+  Platform(Vec2D sz, Vec2D pos, double rx = 0.0, double ry = 0.0, millis_t p = 0);
   virtual ~Platform() {}
 
   virtual inline Type type() const { return Type::PLATFORM; }

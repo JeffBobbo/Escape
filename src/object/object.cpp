@@ -6,15 +6,14 @@
 #include "platform.h"
 
 
-Object::Object(double w, double h, double u, double v)
- : position(u, v)
+Object::Object(Vec2D sz, Vec2D pos)
+ : position(std::move(pos))
+ , size(std::move(sz))
  , velocity()
  , born(elapsed)
 {
   angle = 0.0;
   rotation = 0.0;
-  width = w;
-  height = h;
   visage = nullptr;
   seppuku = false;
 }
@@ -81,10 +80,10 @@ void Object::draw()
   {
     glColor4d(0.0, 1.0, 0.0, 1.0);
     glBegin(GL_LINE_LOOP);
-    glVertex3d(-width/2.0, -height/2.0, 0.0);
-    glVertex3d(-width/2.0,  height/2.0, 0.0);
-    glVertex3d( width/2.0,  height/2.0, 0.0);
-    glVertex3d( width/2.0, -height/2.0, 0.0);
+    glVertex3d(-size.x/2.0, -size.y/2.0, 0.0);
+    glVertex3d(-size.x/2.0,  size.y/2.0, 0.0);
+    glVertex3d( size.x/2.0,  size.y/2.0, 0.0);
+    glVertex3d( size.x/2.0, -size.y/2.0, 0.0);
     glEnd();
   }
 

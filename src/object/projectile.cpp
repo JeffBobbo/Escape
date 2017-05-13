@@ -5,8 +5,8 @@
 #include "player.h"
 #include "../visage/allvisage.h"
 
-Projectile::Projectile(const health_t& d, const Vec2D& pos, const Vec2D& vel, Object* const t, Object* const o)
-  : Object(0.05, 0.05, pos.x, pos.y)
+Projectile::Projectile(const health_t& d, const Vec2D pos, const Vec2D vel, Object* const t, Object* const o)
+  : Object({0.05, 0.05}, pos)
   , target(t), owner(o)
   , damage(d)
 {
