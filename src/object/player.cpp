@@ -105,7 +105,7 @@ void Player::move()
       else
         velocity.x += accel;
     }
-    else
+    else if (!r && !l)
     {
       if (velocity.y != 0.0)
         accel /= 2.0;
