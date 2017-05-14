@@ -2,6 +2,7 @@
 
 #include <map>
 #include <utility> // std::make_pair
+#include <cassert>
 
 std::map<controls::Action, KeyCode> defaultmap;
 std::map<controls::Action, KeyCode> controlmap;
@@ -64,9 +65,7 @@ KeyCode controls::bind(const Action a)
   if (it == controlmap.end())
   {
     it = defaultmap.find(a);
-    if (it != defaultmap.end())
-      return it->second;
-    exit(1);
+    assert(it != defaultmap.end());
   }
   return it->second;
 }
