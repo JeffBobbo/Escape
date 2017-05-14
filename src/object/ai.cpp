@@ -144,3 +144,27 @@ void Turret::move()
     static_cast<VisageTexture*>(visage)->setAtlasSprite("firing");
   }
 }
+
+Patrol::Patrol(Vec2D pos) : AI({1.1, 1.1}, pos)
+{
+  delete visage;
+  visage = new VisageTexture(1.1, 1.1, "img/character.png");
+  static_cast<VisageTexture*>(visage)->setAtlasSprite("stand");
+
+  Animatrix* a = new Animatrix();
+  a->startColour = 0x7F7F7FF;
+  visage->addAnimatrix(a);
+}
+
+Patrol::~Patrol()
+{
+}
+
+void Patrol::idle()
+{
+}
+
+void Patrol::move()
+{
+
+}

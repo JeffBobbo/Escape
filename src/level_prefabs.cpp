@@ -308,6 +308,8 @@ Level* Level::escape0()
   }
 
   {
+    Patrol* p = new Patrol({9.0, 1.5});
+    level->insert(SceneGraph::Level::NPC, p);
     Camera* c = new Camera({1.25, 4.0});
     level->insert(SceneGraph::Level::NPC, c);
   }
