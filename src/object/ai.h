@@ -10,7 +10,8 @@ public:
   {
     FOLLOWER,
     CAMERA,
-    TURRET
+    TURRET,
+    PATROL
   };
   AI(Vec2D sz, Vec2D pos) : Object(sz, pos) {}
   virtual ~AI() {}
@@ -65,6 +66,26 @@ public:
   virtual void move();
 private:
   millis_t lastFire;
+};
+
+class Platform;
+class Patrol : public AI
+{
+public:
+  Patrol(Vec2D pos, Platform* p);
+  virtual ~Patrol();
+
+  virtual inline Classification aiType() const { return Classification::PATROL; }
+
+  virtual void idle();
+  virtual void move();
+
+  virtual inline Vec2D boundingVolume() const { return Vec2D(size.x/3.0, size.y); }
+private:
+  Platform* platform;
+  bool facingRight;
+  millis_t startMove;
+  millis_t hit;
 };
 
 #endif

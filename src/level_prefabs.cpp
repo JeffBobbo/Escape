@@ -285,8 +285,8 @@ Level* Level::escape0()
 {
   Level* level = new Level("The Chamber");
 
+  Platform* ground = new Platform({20.0, 1.0}, {10.0, 0.5});
   {
-    Platform* ground = new Platform({20.0, 1.0}, {10.0, 0.5});
     level->insert(SceneGraph::Level::FOREGROUND, ground);
     Platform* wallLeft = new Platform({1.0, 10.0}, {0.5, 6.0});
     level->insert(SceneGraph::Level::FOREGROUND, wallLeft);
@@ -308,6 +308,8 @@ Level* Level::escape0()
   }
 
   {
+    Patrol* p = new Patrol({9.0, 1.5}, ground);
+    level->insert(SceneGraph::Level::NPC, p);
     Camera* c = new Camera({1.25, 4.0});
     level->insert(SceneGraph::Level::NPC, c);
   }
