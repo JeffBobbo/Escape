@@ -6,7 +6,7 @@
 
 Animatrix::Animatrix()
   : start(0), end(0), loop(0)
-  , startColour(0xFFFFFF), endColour(0xFFFFFF)
+  , startColour(0xFFFFFFFF), endColour(0xFFFFFFFF)
   , startScaleX(1.0), startScaleY(1.0), endScaleX(1.0), endScaleY(1.0)
   , startAngle(0.0), endAngle(0.0), rotation(0.0)
   , startX(0.0), startY(0.0), endX(0.0), endY(0.0)
@@ -27,8 +27,8 @@ void Animatrix::apply() const
   double scalex = 1.0;
   double scaley = 1.0;
 
-  double col[4];
-  glGetDoublev(GL_CURRENT_COLOR, col);
+  RGBA sCol = fromInt(startColour);
+  double col[4] = {sCol.r, sCol.g, sCol.b, sCol.a};
 
   if (loop > 0)
   {
@@ -36,7 +36,7 @@ void Animatrix::apply() const
 
     if (startColour != endColour)
     {
-      RGBA cf = interpolate(fromInt(startColour), fromInt(endColour), p);
+      RGBA cf = interpolate(sCol, fromInt(endColour), p);
       col[0] *= cf.r;
       col[1] *= cf.g;
       col[2] *= cf.b;

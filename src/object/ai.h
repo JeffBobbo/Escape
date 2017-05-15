@@ -68,10 +68,11 @@ private:
   millis_t lastFire;
 };
 
+class Platform;
 class Patrol : public AI
 {
 public:
-  Patrol(Vec2D pos);
+  Patrol(Vec2D pos, Platform* p);
   virtual ~Patrol();
 
   virtual inline Classification aiType() const { return Classification::PATROL; }
@@ -79,7 +80,9 @@ public:
   virtual void idle();
   virtual void move();
 private:
-
+  Platform* platform;
+  bool facingRight;
+  millis_t startMove;
 };
 
 #endif

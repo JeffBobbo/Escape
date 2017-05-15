@@ -1,9 +1,12 @@
 #include "ai.h"
 
+#include <sstream>
+
 #include <cmath>
 
 #include "../main.h"
 #include "../visage/allvisage.h"
+#include "platform.h"
 #include "projectile.h"
 
 Follower::Follower(Vec2D sz, Vec2D pos)
@@ -145,14 +148,18 @@ void Turret::move()
   }
 }
 
-Patrol::Patrol(Vec2D pos) : AI({1.1, 1.1}, pos)
+Patrol::Patrol(Vec2D pos, Platform* p)
+ : AI({1.0, 1.0}, pos)
+ , platform(p)
+ , facingRight(true)
+ , startMove(elapsed)
 {
   delete visage;
-  visage = new VisageTexture(1.1, 1.1, "img/character.png");
+  visage = new VisageTexture(1.0, 1.0, "img/character.png");
   static_cast<VisageTexture*>(visage)->setAtlasSprite("stand");
 
   Animatrix* a = new Animatrix();
-  a->startColour = 0x7F7F7FF;
+  a->startColour = 0x7F7F7FFF;
   visage->addAnimatrix(a);
 }
 
@@ -166,5 +173,68 @@ void Patrol::idle()
 
 void Patrol::move()
 {
+  position.y = platform->getPosition().y + (platform->getSize().y/2.0) + (size.y/2.0);
 
+  double nx = position.x, ny = position.y;
+  bool walk = true; // TODO: hitscan && facing
+  {
+    static const double RUN_SPEED = 3.0;
+    static const double WALK_SPEED = 1.5;
+    const double SPEED = (walk ? WALK_SPEED : RUN_SPEED);
+    if (facingRight)
+      velocity.x = SPEED;
+    else
+      velocity.x = -SPEED;
+  }
+
+  nx += velocity.x * (delta / 1000.0);
+
+  // make sure we can move here
+  Vec2D tv = boundingVolume();
+  for (const Object* const o : level->getGraph()->foreground())
+  {
+    if (o == this) // skip yourself
+      continue;
+    if (!o->isSolid()) // skip non-solids
+      continue;
+
+    Vec2D ov = o->boundingVolume();
+    Vec2D op = o->getPosition();
+    if (nx+tv.x/2.0 > op.x-ov.x/2.0 &&
+        nx-tv.x/2.0 < op.x+ov.x/2.0 &&
+        ny+tv.y/2.0 > op.y-ov.y/2.0 &&
+        ny-tv.y/2.0 < op.y+ov.y/2.0)
+    {
+      nx = position.x;
+      facingRight = !facingRight;
+    }
+  }
+
+  if (nx-size.x/2.0 < platform->getPosition().x - platform->getSize().x/2.0 ||
+      nx+size.x/2.0 > platform->getPosition().x + platform->getSize().x/2.0)
+  {
+    facingRight = !facingRight;
+  }
+
+  // if we move in x, face the correct way, otherwise keep facing the same way
+  //facingRight = (nx-position.x) != 0.0 ? (nx-position.x) > 0.0 : facingRight;
+  if (nx-position.x == 0.0)
+    startMove = 0;
+  // otherwise, set it appropriately.
+  position.x = nx;
+  position.y = ny;
+
+  std::stringstream sprite;
+  if (velocity.x != 0.0)
+  {
+    millis_t index = (elapsed-startMove) / (walk ? 200 : 100) % 8;
+    sprite << (walk ? "walk" : "run") << index;
+  }
+  else
+  {
+    sprite << "stand";
+  }
+  VisageTexture* vt = static_cast<VisageTexture*>(visage);
+  vt->setAtlasSprite(sprite.str());
+  vt->setFlip(!facingRight);
 }

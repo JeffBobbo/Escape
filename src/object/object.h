@@ -56,6 +56,8 @@ public:
 
   inline void setPosition(const Vec2D& p) { position = p; }
   inline const Vec2D& getPosition() const { return position; }
+  inline void setSize(const Vec2D& s) { size = s; }
+  inline const Vec2D& getSize() const { return size; }
   inline void setVelocity(const Vec2D& v) { velocity = v; }
   inline const Vec2D& getVelocity() const { return velocity; }
 
