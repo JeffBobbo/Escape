@@ -153,8 +153,8 @@ Patrol::Patrol(Vec2D pos, Platform* p)
  , platform(p)
  , facingRight(true)
  , startMove(elapsed)
+ , hit(0)
 {
-  delete visage;
   visage = new VisageTexture(1.0, 1.0, "img/character.png");
   static_cast<VisageTexture*>(visage)->setAtlasSprite("stand");
 
@@ -175,12 +175,28 @@ void Patrol::move()
 {
   position.y = platform->getPosition().y + (platform->getSize().y/2.0) + (size.y/2.0);
 
+  if (hit != 0)
+  {
+    millis_t t = elapsed - hit;
+    std::stringstream sprite;
+    double a = t/500.0;
+    if (a > 4.0)
+      death();
+    sprite << "death" << interpolate(0, 5, std::min(1.0, a));
+    VisageTexture* vt = static_cast<VisageTexture*>(visage);
+    vt->setAtlasSprite(sprite.str());
+    return;
+  }
+
+  Player* p = level->getPlayer();
+
   double nx = position.x, ny = position.y;
-  bool walk = true; // TODO: hitscan && facing
+  bool run = hitScan(p) == p &&
+    (facingRight ? p->getPosition().x > position.x : p->getPosition().x < position.x);
   {
     static const double RUN_SPEED = 3.0;
-    static const double WALK_SPEED = 1.5;
-    const double SPEED = (walk ? WALK_SPEED : RUN_SPEED);
+    static const double WALK_SPEED = 1.0;
+    const double SPEED = (run ? RUN_SPEED : WALK_SPEED);
     if (facingRight)
       velocity.x = SPEED;
     else
@@ -210,6 +226,19 @@ void Patrol::move()
     }
   }
 
+  if (!dying() && aabbOverlap(p))
+  {
+    const double a = angleTo(p);
+    if (p->getVelocity().y <= 0.0 && a > pi() * (1.0 / 4.0) && a < pi() * (3.0 / 4.0))
+    {
+      hit = elapsed;
+    }
+    else
+    {
+      p->makeImpact(100);
+    }
+  }
+
   if (nx-size.x/2.0 < platform->getPosition().x - platform->getSize().x/2.0 ||
       nx+size.x/2.0 > platform->getPosition().x + platform->getSize().x/2.0)
   {
@@ -227,8 +256,8 @@ void Patrol::move()
   std::stringstream sprite;
   if (velocity.x != 0.0)
   {
-    millis_t index = (elapsed-startMove) / (walk ? 200 : 100) % 8;
-    sprite << (walk ? "walk" : "run") << index;
+    millis_t index = (elapsed-startMove) / (run ? 100 : 200) % 8;
+    sprite << (run ? "run" : "walk") << index;
   }
   else
   {

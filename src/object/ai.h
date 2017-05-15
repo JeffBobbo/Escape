@@ -79,10 +79,13 @@ public:
 
   virtual void idle();
   virtual void move();
+
+  virtual inline Vec2D boundingVolume() const { return Vec2D(size.x/3.0, size.y); }
 private:
   Platform* platform;
   bool facingRight;
   millis_t startMove;
+  millis_t hit;
 };
 
 #endif
