@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9CD86BAD-56DE-4073-BD64-AABB25058689}</ProjectGuid>
-    <RootNamespace>Shifter</RootNamespace>
+    <RootNamespace>Escape</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -114,8 +114,10 @@
     <ClInclude Include="external\GL\freeglut_ext.h" />
     <ClInclude Include="external\GL\freeglut_std.h" />
     <ClInclude Include="external\stb_image.h" />
+    <ClInclude Include="external\stb_truetype.h" />
     <ClInclude Include="src\colour.h" />
     <ClInclude Include="src\controls.h" />
+    <ClInclude Include="src\fontmanager.h" />
     <ClInclude Include="src\gli.h" />
     <ClInclude Include="src\gui\allgui.h" />
     <ClInclude Include="src\gui\element.h" />
@@ -129,8 +131,16 @@
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\object\ai.h" />
     <ClInclude Include="src\object\allobject.h" />
+    <ClInclude Include="src\object\button.h" />
+    <ClInclude Include="src\object\checkpoint.h" />
+    <ClInclude Include="src\object\door.h" />
+    <ClInclude Include="src\object\effect.h" />
+    <ClInclude Include="src\object\exit.h" />
     <ClInclude Include="src\object\object.h" />
+    <ClInclude Include="src\object\platform.h" />
     <ClInclude Include="src\object\player.h" />
+    <ClInclude Include="src\object\projectile.h" />
+    <ClInclude Include="src\object\pusher.h" />
     <ClInclude Include="src\object\trigger.h" />
     <ClInclude Include="src\scenegraph.h" />
     <ClInclude Include="src\types.h" />
@@ -140,11 +150,13 @@
     <ClInclude Include="src\visage\complex.h" />
     <ClInclude Include="src\visage\particle.h" />
     <ClInclude Include="src\visage\polygon.h" />
+    <ClInclude Include="src\visage\text.h" />
     <ClInclude Include="src\visage\texture.h" />
     <ClInclude Include="src\visage\visage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\controls.cpp" />
+    <ClCompile Include="src\fontmanager.cpp" />
     <ClCompile Include="src\gui\element.cpp" />
     <ClCompile Include="src\gui\image.cpp" />
     <ClCompile Include="src\gui\label.cpp" />
@@ -155,14 +167,23 @@
     <ClCompile Include="src\level_prefabs.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\object\ai.cpp" />
+    <ClCompile Include="src\object\button.cpp" />
+    <ClCompile Include="src\object\checkpoint.cpp" />
+    <ClCompile Include="src\object\door.cpp" />
+    <ClCompile Include="src\object\effect.cpp" />
+    <ClCompile Include="src\object\exit.cpp" />
     <ClCompile Include="src\object\object.cpp" />
+    <ClCompile Include="src\object\platform.cpp" />
     <ClCompile Include="src\object\player.cpp" />
+    <ClCompile Include="src\object\projectile.cpp" />
+    <ClCompile Include="src\object\pusher.cpp" />
     <ClCompile Include="src\object\trigger.cpp" />
     <ClCompile Include="src\scenegraph.cpp" />
     <ClCompile Include="src\util.cpp" />
     <ClCompile Include="src\visage\animatrix.cpp" />
     <ClCompile Include="src\visage\particle.cpp" />
     <ClCompile Include="src\visage\polygon.cpp" />
+    <ClCompile Include="src\visage\text.cpp" />
     <ClCompile Include="src\visage\texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
