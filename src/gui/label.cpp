@@ -76,8 +76,8 @@ void GUILabel::draw() const
   else
   {
     const Font& f = fontManager.get(font, size);
-    float x = a;
-    float y = b;
+    float x = static_cast<float>(a);
+    float y = static_cast<float>(b);
     float w, y0, y1;
     f.size(text, w, y0, y1);
     y -= y0;
