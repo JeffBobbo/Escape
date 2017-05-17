@@ -6,12 +6,13 @@
 
 #include "../main.h"
 #include "../visage/allvisage.h"
+#include "effect.h"
 #include "platform.h"
 #include "projectile.h"
 
 Follower::Follower(Vec2D sz, Vec2D pos)
  : AI(sz, pos)
- , maxSpeed(3.5), accelerate(0.1)
+ , maxSpeed(3.0), accelerate(0.05)
  , encountered(false)
 {
   visage = VisagePolygon::circle(0.1, 6);
@@ -19,10 +20,6 @@ Follower::Follower(Vec2D sz, Vec2D pos)
   Animatrix* anim = new Animatrix();
   anim->rotation = pi() * 64.0;
   visage->addAnimatrix(anim);
-}
-
-void Follower::idle()
-{
 }
 
 void Follower::move()
@@ -47,7 +44,77 @@ void Follower::move()
   {
     velocity *= 0.25 * (delta / 1000.0);
   }
-  position += velocity * (delta / 1000.0);
+
+  Object::move();
+}
+
+Advisor::Advisor(Vec2D pos, const std::string&& a, const millis_t life)
+ : Follower({0.5, 0.5}, pos)
+ , advice(a)
+ , lifespan(life)
+{
+  VisageComplex* vc = new VisageComplex();
+  vc->add(new VisageTexture(0.5, 0.5, "img/drone.png"));
+  {
+    ParticleSystem* ps = new ParticleSystem(100, 100);
+    ps->object = this;
+    ps->setParticleImage("img/particle_soft.png");
+    ps->setColours(fromInt(0xF72A2AFF), fromInt(0xF5F538FF));
+    ps->lifeMin = 300;
+    ps->lifeMax = 500;
+    ps->sizeStart = 0.1;
+    ps->sizeEnd = 0.0;
+    ps->direction = -pi()/2.0;
+    ps->spray = 0.0;
+    ps->speedStart = 1.0;
+    ps->speedEnd = 0.5;
+    Animatrix* a = new Animatrix();
+    a->startX = -0.15;
+    a->startY = -0.20;
+    ps->addAnimatrix(a);
+    vc->add(ps);
+  }
+  {
+    ParticleSystem* ps = new ParticleSystem(100, 100);
+    ps->object = this;
+    ps->setParticleImage("img/particle_soft.png");
+    ps->setColours(fromInt(0xF72A2AFF), fromInt(0xF5F538FF));
+    ps->lifeMin = 300;
+    ps->lifeMax = 500;
+    ps->sizeStart = 0.1;
+    ps->sizeEnd = 0.0;
+    ps->direction = -pi()/2.0;
+    ps->spray = 0.0;
+    ps->speedStart = 1.0;
+    ps->speedEnd = 0.5;
+    Animatrix* a = new Animatrix();
+    a->startX =  0.15;
+    a->startY = -0.20;
+    ps->addAnimatrix(a);
+    vc->add(ps);
+  }
+  setVisage(vc);
+}
+
+void Advisor::idle()
+{
+  // stay alive while unencountered
+  if (!encountered)
+    lifespan += delta;
+
+  if (born + lifespan < elapsed)
+  {
+    death();
+    return;
+  }
+
+  if (encountered && !attached)
+  {
+    millis_t lifeRemaining = (born + lifespan) - elapsed;
+    Effect* e = new Effect(position + Vec2D(0.0, 0.5), lifeRemaining, new VisageText(advice, "sui_generis.ttf", 12));
+    level->insert(SceneGraph::Level::FOREGROUND, e);
+    attached = e;
+  }
 }
 
 Camera::Camera(Vec2D pos)
@@ -58,14 +125,6 @@ Camera::Camera(Vec2D pos)
   visage = new VisageTexture(0.4, 0.2, "img/camera.png");
   static_cast<VisageTexture*>(visage)->setAtlasSprite("standby");
   angle = 0.0;
-}
-
-Camera::~Camera()
-{
-}
-
-void Camera::idle()
-{
 }
 
 void Camera::move()
@@ -98,10 +157,6 @@ Turret::Turret(Vec2D pos) : Camera(pos)
   visage = new VisageTexture(1, 1, "img/turret.png");
   static_cast<VisageTexture*>(visage)->setAtlasSprite("standby");
   lastFire = elapsed;
-}
-
-Turret::~Turret()
-{
 }
 
 void Turret::move()
@@ -161,14 +216,6 @@ Patrol::Patrol(Vec2D pos, Platform* p)
   Animatrix* a = new Animatrix();
   a->startColour = 0x7F7F7FFF;
   visage->addAnimatrix(a);
-}
-
-Patrol::~Patrol()
-{
-}
-
-void Patrol::idle()
-{
 }
 
 void Patrol::move()

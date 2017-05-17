@@ -64,15 +64,16 @@ public:
   inline millis_t age() const { return elapsed - born; }
   inline bool dying() const { return seppuku; }
 
-  double angle;
-  double rotation;
+  inline void attach(Object* const to) { attached = to; }
+
   Vec2D position;
   Vec2D size;
   Vec2D velocity;
+protected:
+  double angle;
   Visage* visage;
   const millis_t born;
-
-protected:
+  Object* attached;
   bool seppuku;
 };
 

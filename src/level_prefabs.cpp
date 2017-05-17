@@ -308,6 +308,8 @@ Level* Level::escape0()
   }
 
   {
+    Advisor* a = new Advisor({7.5, 6.5}, "DOWN THERE IS A GUARD ON PATROL. JUMP ON IT TO SUBDUE IT.", 10000);
+    level->insert(SceneGraph::Level::NPC, a);
     Patrol* p = new Patrol({9.0, 1.5}, ground);
     level->insert(SceneGraph::Level::NPC, p);
     Camera* c = new Camera({1.25, 4.0});

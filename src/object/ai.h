@@ -9,6 +9,7 @@ public:
   enum class Classification
   {
     FOLLOWER,
+    ADVISOR,
     CAMERA,
     TURRET,
     PATROL
@@ -33,23 +34,38 @@ public:
 
   virtual inline Classification aiType() const { return Classification::FOLLOWER; }
 
-  virtual void idle();
+  virtual void idle() {}
   virtual void move();
 private:
   double maxSpeed;
   double accelerate;
+protected:
   bool encountered;
+};
+
+class Advisor : public Follower
+{
+public:
+  Advisor(Vec2D pos, const std::string&& a, const millis_t life);
+  virtual ~Advisor() {};
+
+  virtual inline Classification aiType() const { return Classification::ADVISOR; }
+
+  virtual void idle();
+private:
+  std::string advice;
+  millis_t lifespan;
 };
 
 class Camera : public AI
 {
 public:
   Camera(Vec2D pos);
-  virtual ~Camera();
+  virtual ~Camera() {}
 
   virtual inline Classification aiType() const { return Classification::CAMERA; }
 
-  virtual void idle();
+  virtual void idle() {}
   virtual void move();
 private:
   double turnRate;
@@ -59,7 +75,7 @@ class Turret : public Camera
 {
 public:
   Turret(Vec2D pos);
-  virtual ~Turret();
+  virtual ~Turret() {}
 
   virtual inline Classification aiType() const { return Classification::TURRET; }
 
@@ -73,11 +89,11 @@ class Patrol : public AI
 {
 public:
   Patrol(Vec2D pos, Platform* p);
-  virtual ~Patrol();
+  virtual ~Patrol() {}
 
   virtual inline Classification aiType() const { return Classification::PATROL; }
 
-  virtual void idle();
+  virtual void idle() {}
   virtual void move();
 
   virtual inline Vec2D boundingVolume() const { return Vec2D(size.x/3.0, size.y); }

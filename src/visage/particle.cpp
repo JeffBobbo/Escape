@@ -5,6 +5,7 @@
 #include "../util.h"
 #include "../imageloader.h"
 #include "../main.h"
+#include "../object/object.h"
 
 double offset = 0.1;
 Particle::Particle()
@@ -110,8 +111,10 @@ void ParticleSystem::update()
       p->vel[1] = static_cast<float>(s * std::sin(a));
 
       // move
-      p->pos[0] += p->vel[0] * (delta / 1000.0f);
-      p->pos[1] += p->vel[1] * (delta / 1000.0f);
+      double ox = object ? object->getVelocity().x : 0.0;
+      double oy = object ? object->getVelocity().y : 0.0;
+      p->pos[0] += p->vel[0] * (delta / 1000.0f) - ox * (delta / 1000.0);
+      p->pos[1] += p->vel[1] * (delta / 1000.0f) - oy * (delta / 1000.0);
 
       if (collide)
       {
@@ -186,8 +189,8 @@ void ParticleSystem::draw()
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
   */
-  // this is inefficient, what's above is much better, but it's the only way
-  // I can specify sizes individually for particles
+  // this is probably inefficient, what's above is much better, but it's the only way
+  // I can specify sizes individually for particles, afaik
   Particle* p = particles;
   double col[4];
   glGetDoublev(GL_CURRENT_COLOR, col);

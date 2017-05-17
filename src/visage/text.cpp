@@ -21,7 +21,7 @@ VisageText::VisageText()
   col[3] = 1.0;
 }
 
-VisageText::VisageText(const std::string&& t, const std::string&& f, float sz)
+VisageText::VisageText(const std::string& t, const std::string&& f, float sz)
   : text(t)
   , font(f)
   , size(sz)

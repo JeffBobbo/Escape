@@ -13,7 +13,7 @@ class VisageText : public Visage
 {
 public:
   VisageText();
-  VisageText(const std::string&& t, const std::string&& f, float sz);
+  VisageText(const std::string& t, const std::string&& f, float sz);
   virtual ~VisageText() {}
 
   virtual inline Type type() const { return Type::TEXT; }

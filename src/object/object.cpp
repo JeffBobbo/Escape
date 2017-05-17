@@ -10,12 +10,12 @@ Object::Object(Vec2D sz, Vec2D pos)
  : position(std::move(pos))
  , size(std::move(sz))
  , velocity()
+ , angle(0.0)
+ , visage(nullptr)
  , born(elapsed)
+ , attached(nullptr)
+ , seppuku(false)
 {
-  angle = 0.0;
-  rotation = 0.0;
-  visage = nullptr;
-  seppuku = false;
 }
 
 void Object::idle()
@@ -24,13 +24,11 @@ void Object::idle()
 
 void Object::move()
 {
-  // rotation
-  angle += rotation * (delta / 1000.0);
-  while (angle > 360.0)
-    angle -= 360.0;
-
   Vec2D moveby = velocity * (delta / 1000.0);
   position += moveby;
+
+  if (attached)
+    attached->position += moveby;
 }
 
 #include <iostream>

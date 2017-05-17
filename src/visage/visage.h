@@ -9,6 +9,7 @@ namespace rapidjson
 {
   class Document;
 }
+class Object;
 class Visage
 {
 public:
@@ -21,7 +22,7 @@ public:
     TEXT
   };
 
-  Visage() {}
+  Visage() : object(nullptr) {}
   virtual ~Visage()
   {
     for (Animatrix* a : animatrices)
@@ -38,9 +39,9 @@ public:
   };
   virtual void addAnimatrix(Animatrix* const a) { animatrices.push_back(a); }
 
-
   //static void loadVisages();
   //static Visage* getVisage(const std::string& name);
+  Object* object;
 protected:
   std::vector<Animatrix* > animatrices;
 };
