@@ -26,38 +26,6 @@ void GUIElement::showMenuMain()
     title->setAlignment(GUILabel::Alignment::CENTRE);
     root->addElement(title);
 
-    GUILabel* quit = new GUILabel("Quit", "sui_generis.ttf", 16);
-    quit->setRelative(0.5, 0.45, 0.5, 0.45);
-    quit->setTextColour(0xFF0000FF);
-    quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ks;
-      if (!mouse::left())
-        return false;
-      int32_t a, b, c, d;
-      quit->getPosition(a, b, c, d);
-      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
-    }, [quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ms;
-      (void)ks;
-      glutLeaveMainLoop();
-      return true;
-    });
-    quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ms;
-      (void)ks;
-      return true;
-    }, [quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
-      (void)ks;
-      int32_t a, b, c, d;
-      quit->getPosition(a, b, c, d);
-      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
-        quit->setTextColour(0x00FF00FF);
-      else
-        quit->setTextColour(0xFF0000FF);
-      return false;
-    });
-    root->addElement(quit);
-
     GUILabel* play = new GUILabel("Play!", "sui_generis.ttf", 16);
     play->setRelative(0.5, 0.35, 0.5, 0.35);
     play->setTextColour(0xFF0000FF);
@@ -98,6 +66,38 @@ void GUIElement::showMenuMain()
       return true;
     });
     root->addElement(play);
+
+    GUILabel* quit = new GUILabel("Quit", "sui_generis.ttf", 16);
+    quit->setRelative(0.5, 0.45, 0.5, 0.45);
+    quit->setTextColour(0xFF0000FF);
+    quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      if (!mouse::left())
+        return false;
+      int32_t a, b, c, d;
+      quit->getPosition(a, b, c, d);
+      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+    }, [quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      glutLeaveMainLoop();
+      return true;
+    });
+    quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      return true;
+    }, [quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      int32_t a, b, c, d;
+      quit->getPosition(a, b, c, d);
+      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
+        quit->setTextColour(0x00FF00FF);
+      else
+        quit->setTextColour(0xFF0000FF);
+      return false;
+    });
+    root->addElement(quit);
   }
 }
 
@@ -260,14 +260,13 @@ void GUIElement::registerListener(GUIElement::Trigger t, GUIElement::Callback c)
 
 bool GUIElement::testListeners(const mouse::MouseState& ms, const keyboard::KeyboardState& ks)
 {
-  bool r = false;
   for (auto it : events)
   {
     if (it.first(ms, ks))
     {
       if (it.second(ms, ks))
-        break;
+        return true;
     }
   }
-  return r;
+  return false;
 }
