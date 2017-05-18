@@ -68,6 +68,7 @@ Advisor::Advisor(Vec2D pos, const std::string&& a, const millis_t life)
     ps->spray = 0.0;
     ps->speedStart = 1.0;
     ps->speedEnd = 0.5;
+    ps->initialVelocity = true;
     Animatrix* a = new Animatrix();
     a->startX = -0.15;
     a->startY = -0.20;
@@ -87,6 +88,7 @@ Advisor::Advisor(Vec2D pos, const std::string&& a, const millis_t life)
     ps->spray = 0.0;
     ps->speedStart = 1.0;
     ps->speedEnd = 0.5;
+    ps->initialVelocity = true;
     Animatrix* a = new Animatrix();
     a->startX =  0.15;
     a->startY = -0.20;

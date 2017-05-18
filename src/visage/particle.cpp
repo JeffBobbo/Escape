@@ -26,6 +26,8 @@ ParticleSystem::ParticleSystem(size_t m, size_t r)
   , rectangle(false)
   , collide(false)
   , source(nullptr)
+  , initialVelocity(false)
+  , inheritVelocity(false)
 {
   // allocate all the memory up front
   // this'll make memory usage initially higher, but means less allocations
@@ -78,6 +80,11 @@ void ParticleSystem::add()
     double dir = direction + random(-spray/2.0, spray/2.0);
     last->vel[0] = static_cast<float>(speedStart * std::cos(dir));
     last->vel[1] = static_cast<float>(speedStart * std::sin(dir));
+    if (initialVelocity && object)
+    {
+      last->vel[0] += object->getVelocity().x;
+      last->vel[1] += object->getVelocity().y;
+    }
     last->vel[2] = 0.0f;
 
     ++last;
@@ -111,10 +118,13 @@ void ParticleSystem::update()
       p->vel[1] = static_cast<float>(s * std::sin(a));
 
       // move
-      double ox = object ? object->getVelocity().x : 0.0;
-      double oy = object ? object->getVelocity().y : 0.0;
-      p->pos[0] += p->vel[0] * (delta / 1000.0f) - ox * (delta / 1000.0);
-      p->pos[1] += p->vel[1] * (delta / 1000.0f) - oy * (delta / 1000.0);
+      p->pos[0] += p->vel[0] * (delta / 1000.0f);
+      p->pos[1] += p->vel[1] * (delta / 1000.0f);
+      if (!inheritVelocity && object)
+      {
+        p->pos[0] -= object->getVelocity().x * (delta / 1000.0);
+        p->pos[1] -= object->getVelocity().y * (delta / 1000.0);
+      }
 
       if (collide)
       {

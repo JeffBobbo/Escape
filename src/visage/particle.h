@@ -80,6 +80,8 @@ public:
   bool rectangle;
   bool collide;
   Object* source;
+  bool initialVelocity;
+  bool inheritVelocity;
 
   std::string particle;
 };
