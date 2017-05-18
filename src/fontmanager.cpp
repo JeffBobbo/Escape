@@ -3,11 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
-
-#include <cerrno>
-#include <cstring>
-
-#include <stdio.h>
+#include <fstream>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "../external/stb_truetype.h"
@@ -51,24 +47,13 @@ const Font& FontManager::get(const std::string& f, float sz)
 
 std::map<std::pair<std::string, float>, Font>::iterator FontManager::load(const std::string& f, float sz)
 {
-  unsigned char* ttf_buffer = new unsigned char[1<<20];
   unsigned char* temp_bitmap = new unsigned char[512*512];
-  std::string p = "font/" + f;
-  std::FILE* fh;
-  if (fopen_s(&fh, p.c_str(), "rb"))
-  {
-    char buf[100];
-    strerror_s(buf, 100, errno);
-	std::cerr << buf << std::endl;
-	throw std::string(buf);
-  }
-  fread(ttf_buffer, 1, 1 << 20, fh);
+  std::ifstream ifs("font/" + f, std::ios::binary);
+  std::string contents((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
 
   Font font;
-  // no guarantee this fits!
-  stbtt_BakeFontBitmap(ttf_buffer, 0, sz, temp_bitmap, 512, 512, 32, 96, font.cdata);
-  // can free ttf_buffer at this point
-  delete[] ttf_buffer;
+  // probably voodoo, but seems to work fine, so meh
+  stbtt_BakeFontBitmap(reinterpret_cast<const unsigned char*>(contents.c_str()), 0, sz, temp_bitmap, 512, 512, 32, 96, font.cdata);
   glGenTextures(1, &font.ftex);
   glBindTexture(GL_TEXTURE_2D, font.ftex);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, 512,512, 0, GL_ALPHA, GL_UNSIGNED_BYTE, temp_bitmap);
