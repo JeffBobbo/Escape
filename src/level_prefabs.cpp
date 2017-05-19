@@ -18,108 +18,6 @@ Level* Level::prefabLobby()
   return level;
 }
 
-Level* Level::prefab0()
-{
-  Level* level = new Level("Basic Training");
-
-  // create objects
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({20.0, 1.0},  {0.0, 0.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({20.0, 1.0},  {0.0, 10.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 10.0}, {-9.5, 5.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 10.0},  {9.5, 5.0}));
-
-  // staircase
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 1.0}, {-6.0, 1.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 2.0}, {-4.0, 1.5}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 1.0}, {-3.0, 1.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 3.0}, {-2.0, 2.0}));
-
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Checkpoint({-2.0, 4.0}));
-
-  level->insert(SceneGraph::Level::NPC,
-    new Follower({0.1, 0.1}, {-2.0, 4.0}));
-
-  level->insert(SceneGraph::Level::NPC,
-    new Turret({-2.75, 3.0}));
-
-  // moving platform
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 0.25}, {1.0, 2.875}, 0.0, 2.55, 10000));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 5.0}, {2.0, 3.0}));
-
-  // second moving platform
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 0.25}, {4.0, 4.75}, 0.0, 0.0, 1));
-
-  Pusher* p = new Pusher({0.5, 0.5}, {2.75, 0.75});
-  p->setAttributes(90.0, 0.0, 10.0, 0.5);
-  level->insert(SceneGraph::Level::FOREGROUND, p);
-
-  // exit
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({2.0, 0.5}, {8.0, 4.75}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Exit({8.0, 5.75}, "prefab1"));
-
-  level->addPlayer(new Player({-8.5, 1.0}));
-  return level;
-}
-
-Level* Level::prefab1()
-{
-  Level* level = new Level("As if you were selling Buttons at the Door");
-
-  // create objects
-  // the bounding box
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({15.0, 1.0}, {7.5, 0.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({15.0, 1.0}, {7.5, 20.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 19.0}, {0.5, 10.0}));
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({1.0, 19.0}, {14.5, 10}));
-
-  // first level
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({11.0, 1.0}, {6.5, 15.0}));
-
-  Button* bd = new Button({11.0, 16.0}, -1);
-  level->insert(SceneGraph::Level::FOREGROUND, bd);
-  Door* d = new Door({2.0, 1.0}, {13.0, 15.0}, false, true);
-  level->insert(SceneGraph::Level::FOREGROUND, d);
-  d->link(bd);
-
-  // second level
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({11.0, 1.0}, {8.5, 10.0}));
-
-  // third level
-  level->insert(SceneGraph::Level::FOREGROUND,
-    new Platform({11.0, 1.0}, {6.5, 5.0}));
-
-  // forth level
-  Button* be = new Button({1.5, 1.0}, -1);
-  level->insert(SceneGraph::Level::FOREGROUND, be);
-
-  Exit* e = new Exit({13.0, 1.0}); // exit with no name means quit!
-  be->link(e);
-  level->insert(SceneGraph::Level::FOREGROUND, e);
-
-  level->addPlayer(new Player({1.5, 16.0}));
-  return level;
-}
-
 Level* Level::prefabTest()
 {
   Level* level = new Level("Test Scene");
@@ -299,9 +197,12 @@ Level* Level::escape0()
   {
     Pusher* p = new Pusher({0.5, 0.5}, {6.75, 1.25});
     Button* bd = new Button({6.5, 1.25}, -1, "DESTROY THE AIR CONDITIONING UNIT");
+    bd->setVisage(nullptr);
     p->setAttributes(90, 0.0, 10.0, 0.5);
     level->insert(SceneGraph::Level::FOREGROUND, p);
     Door* d = new Door({0.5, 0.5}, {6.75, 1.25}, false);
+    d->setVisageOpen(nullptr);
+    d->setVisageClose(new VisageTexture(0.5, 0.5, "img/ac.png"));
     d->link(bd);
     level->insert(SceneGraph::Level::FOREGROUND, d);
     level->insert(SceneGraph::Level::FOREGROUND, bd);
@@ -318,6 +219,113 @@ Level* Level::escape0()
     level->insert(SceneGraph::Level::NPC, c);
   }
 
+  {
+    Exit* e = new Exit({19.5, 1.25}, "escape1");
+    level->insert(SceneGraph::Level::FOREGROUND, e);
+  }
+
   level->addPlayer(new Player({1.5, 1.5}));
+  return level;
+}
+
+Level* Level::escape1()
+{
+  Level* level = new Level("Out the door");
+
+  // create objects
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({20.0, 1.0},  {0.0, 0.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({20.0, 1.0},  {0.0, 10.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 10.0}, {-9.5, 5.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 10.0},  {9.5, 5.0}));
+
+  // staircase
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 1.0}, {-6.0, 1.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 2.0}, {-4.0, 1.5}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 1.0}, {-3.0, 1.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 3.0}, {-2.0, 2.0}));
+
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Checkpoint({-2.0, 4.0}));
+
+  level->insert(SceneGraph::Level::NPC,
+    new Follower({0.1, 0.1}, {-2.0, 4.0}));
+
+  level->insert(SceneGraph::Level::NPC,
+    new Turret({-2.75, 3.0}));
+
+  // moving platform
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 0.25}, {1.0, 2.875}, 0.0, 2.55, 10000));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 5.0}, {2.0, 3.0}));
+
+  // second moving platform
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 0.25}, {4.0, 4.75}, 0.0, 0.0, 1));
+
+  Pusher* p = new Pusher({0.5, 0.5}, {2.75, 0.75});
+  p->setAttributes(90.0, 0.0, 10.0, 0.5);
+  level->insert(SceneGraph::Level::FOREGROUND, p);
+
+  // exit
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({2.0, 0.5}, {8.0, 4.75}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Exit({8.0, 5.75}, "escape1"));
+
+  level->addPlayer(new Player({-8.5, 1.0}));
+  return level;
+}
+
+Level* Level::escape2()
+{
+  Level* level = new Level("Going down");
+
+  // create objects
+  // the bounding box
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({15.0, 1.0}, {7.5, 0.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({15.0, 1.0}, {7.5, 20.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 19.0}, {0.5, 10.0}));
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({1.0, 19.0}, {14.5, 10}));
+
+  // first level
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({11.0, 1.0}, {6.5, 15.0}));
+
+  Button* bd = new Button({11.0, 16.0}, -1);
+  level->insert(SceneGraph::Level::FOREGROUND, bd);
+  Door* d = new Door({2.0, 1.0}, {13.0, 15.0}, false, true);
+  level->insert(SceneGraph::Level::FOREGROUND, d);
+  d->link(bd);
+
+  // second level
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({11.0, 1.0}, {8.5, 10.0}));
+
+  // third level
+  level->insert(SceneGraph::Level::FOREGROUND,
+    new Platform({11.0, 1.0}, {6.5, 5.0}));
+
+  // forth level
+  Button* be = new Button({1.5, 1.0}, -1);
+  level->insert(SceneGraph::Level::FOREGROUND, be);
+
+  Exit* e = new Exit({13.0, 1.0}); // exit with no name means quit!
+  be->link(e);
+  level->insert(SceneGraph::Level::FOREGROUND, e);
+
+  level->addPlayer(new Player({1.5, 16.0}));
   return level;
 }

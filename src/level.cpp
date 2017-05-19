@@ -4,10 +4,6 @@ Level* Level::fromName(const std::string& name)
 {
   if (name == "prefabLobby")
     return Level::prefabLobby();
-  if (name == "prefab0")
-    return Level::prefab0();
-  if (name == "prefab1")
-    return Level::prefab1();
   if (name == "prefabTest")
     return Level::prefabTest();
   if (name == "prefabTestPusher")
@@ -15,6 +11,10 @@ Level* Level::fromName(const std::string& name)
 
   if (name == "escape0")
     return Level::escape0();
+  if (name == "escape1")
+    return Level::escape1();
+  if (name == "escape2")
+    return Level::escape2();
   return nullptr;
 }
 

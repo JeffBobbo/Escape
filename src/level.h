@@ -14,13 +14,13 @@ class Level
 {
 public:
   static Level* prefabLobby();
-  static Level* prefab0();
-  static Level* prefab1();
   static Level* prefabTest();
   static Level* prefabTestTurret();
   static Level* prefabTestPusher();
 
   static Level* escape0();
+  static Level* escape1();
+  static Level* escape2();
   static Level* fromName(const std::string& name);
 
   Level();

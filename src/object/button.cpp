@@ -35,8 +35,11 @@ void Button::idle()
     level->insert(SceneGraph::Level::FOREGROUND, e);
     lastFlash = elapsed;
   }
-  if (on())
-    static_cast<VisagePolygon*>(visage)->setColour(0xff0000ff);
-  else
-    static_cast<VisagePolygon*>(visage)->setColour(0xff7f7fff);
+  if (visage && visage->type() == Visage::Type::POLYGON)
+  {
+    if (on())
+      static_cast<VisagePolygon*>(visage)->setColour(0xff0000ff);
+    else
+      static_cast<VisagePolygon*>(visage)->setColour(0xff7f7fff);
+  }
 }

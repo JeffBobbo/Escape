@@ -58,3 +58,19 @@ void Door::actuate()
   open = trigger->on();
   visage = open ? vOpen : vClose;
 }
+
+void Door::setVisageOpen(Visage* const v)
+{
+  delete vOpen;
+  vOpen = v;
+  if (open)
+    visage = vOpen;
+}
+
+void Door::setVisageClose(Visage* const v)
+{
+  delete vClose;
+  vClose = v;
+  if (!open)
+    visage = vClose;
+}

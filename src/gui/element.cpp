@@ -62,7 +62,7 @@ void GUIElement::showMenuMain()
       (void)ms;
       (void)ks;
       delete level;
-      level = Level::fromName("prefab0");
+      level = Level::fromName("escape0");
       GUIElement::showGameHud();
       if (level == nullptr)
       {

@@ -18,6 +18,9 @@ public:
 
   virtual void actuate();
 
+  void setVisageOpen(Visage* const v);
+  void setVisageClose(Visage* const v);
+
 private:
   bool open;
   Visage* vOpen;
