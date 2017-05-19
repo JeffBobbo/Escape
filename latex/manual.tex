@@ -1,7 +1,14 @@
 \documentclass[english]{article}
 \usepackage{caption}
 \usepackage{geometry}
+\usepackage{graphicx}
 \geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+
+\def \imgres {1000} % dpi
+\def \maximgwidth {0.9\textwidth}     % percentage of text-area width to allow images to occupy
+\def \maximgheight {0.4\textheight}   % percentage of text-area height to allow images to occupy
+\newcommand{\sociablyinclude}[1]{\centering\includegraphics[width=\maximgwidth, height=\maximgheight, keepaspectratio, resolution=\imgres]{#1}}
+
 
 \title{Escape\\ User Manual}
 \author{} % no author
@@ -11,10 +18,12 @@
 \pagenumbering{gobble}
 \maketitle
 \tableofcontents
+
+\sociablyinclude{screenshot}
 \section{Objective}
-Held captive in a poor contrustec cell, your goal is to escape!
+Held captive in a poorly constructed cell, your goal is to escape!
 Your performance will be monitored by the installation of cameras.
-Your progress will be stalled by sentries.
+Your progress will be stalled by sentries and guards
 
 \section{Controls}
 \begin{table}[!h]
