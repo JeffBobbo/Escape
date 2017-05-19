@@ -41,19 +41,14 @@ const double TILE_SIZE = 64.0;
 GUIWindow* root = nullptr;
 FontManager fontManager;
 
-const int32_t TARGET_FPS = 60;
-const int32_t FRAME_TIME = 1000/TARGET_FPS;
-uint64_t clast = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-uint64_t cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
 void draw()
 {
   last = elapsed;
   elapsed = glutGet(GLUT_ELAPSED_TIME);
   delta = elapsed - last;
-//clast = cmill;
-//cmill = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-//std::cout << cmill-clast << std::endl;
-//std::this_thread::sleep_for(std::chrono::milliseconds(32-(cmill-clast)));
+  // cap delta time at 20fps
+  if (delta > 20)
+    delta = 20;
 
   glClear(GL_COLOR_BUFFER_BIT);
 

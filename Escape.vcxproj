@@ -163,6 +163,7 @@
     <ClCompile Include="src\gui\window.cpp" />
     <ClCompile Include="src\imageloader.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\keys.cpp" />
     <ClCompile Include="src\level.cpp" />
     <ClCompile Include="src\level_prefabs.cpp" />
     <ClCompile Include="src\main.cpp" />

@@ -292,7 +292,7 @@ Level* Level::escape0()
     level->insert(SceneGraph::Level::FOREGROUND, wallLeft);
     Platform* wallRight = new Platform({1.0, 5.0}, {7.5, 3.5});
     level->insert(SceneGraph::Level::FOREGROUND, wallRight);
-    Platform* cellCeil = new Platform({7.0, 1.0}, {4.5, 7.5});
+    Platform* cellCeil = new Platform({7.0, 1.0}, {4.5, 8.0});
     level->insert(SceneGraph::Level::FOREGROUND, cellCeil);
   }
 
@@ -308,7 +308,9 @@ Level* Level::escape0()
   }
 
   {
-    Advisor* a = new Advisor({7.5, 6.5}, "DOWN THERE IS A GUARD ON PATROL. JUMP ON IT TO SUBDUE IT.", 10000);
+    Platform* ledge = new Platform({1.0, 0.5}, {8.5, 2.5});
+    level->insert(SceneGraph::Level::FOREGROUND, ledge);
+    Advisor* a = new Advisor({9.0, 3.5}, "DOWN THERE IS A GUARD ON PATROL - JUMP ON IT TO SUBDUE IT.", 10000);
     level->insert(SceneGraph::Level::NPC, a);
     Patrol* p = new Patrol({9.0, 1.5}, ground);
     level->insert(SceneGraph::Level::NPC, p);

@@ -1,7 +1,7 @@
 #include "keys.h"
 
+#include <cctype>
 #include <iostream>
-#include <string>
 
 std::string keyCodeToString(const KeyCode code)
 {

@@ -78,10 +78,10 @@ void VisageText::draw()
     {
       stbtt_aligned_quad q;
       stbtt_GetBakedQuad(f.cdata, 512,512, c-' ', &x,&y,&q,1);
-      glTexCoord2f(q.s0,q.t1); glVertex2f(q.x0/TILE_SIZE,q.y0/TILE_SIZE);
-      glTexCoord2f(q.s1,q.t1); glVertex2f(q.x1/TILE_SIZE,q.y0/TILE_SIZE);
-      glTexCoord2f(q.s1,q.t0); glVertex2f(q.x1/TILE_SIZE,q.y1/TILE_SIZE);
-      glTexCoord2f(q.s0,q.t0); glVertex2f(q.x0/TILE_SIZE,q.y1/TILE_SIZE);
+      glTexCoord2f(q.s0,q.t1); glVertex2d(q.x0/TILE_SIZE,q.y0/TILE_SIZE);
+      glTexCoord2f(q.s1,q.t1); glVertex2d(q.x1/TILE_SIZE,q.y0/TILE_SIZE);
+      glTexCoord2f(q.s1,q.t0); glVertex2d(q.x1/TILE_SIZE,q.y1/TILE_SIZE);
+      glTexCoord2f(q.s0,q.t0); glVertex2d(q.x0/TILE_SIZE,q.y1/TILE_SIZE);
     }
   }
   glDisable(GL_TEXTURE_2D);

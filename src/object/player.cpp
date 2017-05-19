@@ -114,10 +114,12 @@ void Player::move()
   }
 
   nx += velocity.x * (delta / 1000.0);
-  velocity.y += gravity() * (delta / 1000.0);
+  if (elapsed > born) // hack fix to stop the player falling out of the level on load
+  // which doesn't work
+    velocity.y += gravity() * (delta / 1000.0);
   ny += velocity.y * (delta / 1000.0);
 
-  // make sure we can move here
+  // make sure we can move hered
   Vec2D tv = boundingVolume();
   for (const Object* const o : level->getGraph()->foreground())
   {

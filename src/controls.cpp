@@ -83,15 +83,15 @@ std::map<controls::Action, KeyCode> controls::allBinds()
 void loadDefaults()
 {
   defaultmap.insert(std::make_pair(controls::Action::JUMP, KeyCode::KEY_w));
-  defaultmap.insert(std::make_pair(controls::Action::CROUCH, KeyCode::KEY_s));
+  //defaultmap.insert(std::make_pair(controls::Action::CROUCH, KeyCode::KEY_s));
   defaultmap.insert(std::make_pair(controls::Action::MOVE_LEFT, KeyCode::KEY_a));
   defaultmap.insert(std::make_pair(controls::Action::MOVE_RIGHT, KeyCode::KEY_d));
   defaultmap.insert(std::make_pair(controls::Action::WALK_MODIFIER, KeyCode::KEY_q));
 
   defaultmap.insert(std::make_pair(controls::Action::USE, KeyCode::KEY_e));
 
-  defaultmap.insert(std::make_pair(controls::Action::PAUSE, KeyCode::KEY_p));
-  defaultmap.insert(std::make_pair(controls::Action::MUTE, KeyCode::KEY_m));
+  //defaultmap.insert(std::make_pair(controls::Action::PAUSE, KeyCode::KEY_p));
+  //defaultmap.insert(std::make_pair(controls::Action::MUTE, KeyCode::KEY_m));
 }
 
 #include <fstream>

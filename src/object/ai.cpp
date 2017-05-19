@@ -229,8 +229,8 @@ void Patrol::move()
     millis_t t = elapsed - hit;
     std::stringstream sprite;
     double a = t/500.0;
-    if (a > 4.0)
-      death();
+    //if (a > 4.0)
+      //death();
     sprite << "death" << interpolate(0, 5, std::min(1.0, a));
     VisageTexture* vt = static_cast<VisageTexture*>(visage);
     vt->setAtlasSprite(sprite.str());

@@ -1,7 +1,10 @@
 #ifndef KEYCODES_H_INCLUDE
 #define KEYCODES_H_INCLUDE
 
+#include <string>
+
 #include <stdint.h>
+
 #include "gli.h"
 
 enum class KeyCode : uint16_t
