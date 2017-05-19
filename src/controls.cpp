@@ -1,6 +1,5 @@
 #include "controls.h"
 
-#include <map>
 #include <utility> // std::make_pair
 #include <cassert>
 
@@ -68,6 +67,16 @@ KeyCode controls::bind(const Action a)
     assert(it != defaultmap.end());
   }
   return it->second;
+}
+
+std::map<controls::Action, KeyCode> controls::allBinds()
+{
+  std::map<controls::Action, KeyCode> binds;
+  for (auto it : controlmap)
+    binds.insert(std::make_pair(it.first, it.second));
+  for (auto it : defaultmap)
+    binds.insert(std::make_pair(it.first, it.second));
+  return binds;
 }
 
 

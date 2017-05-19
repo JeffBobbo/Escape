@@ -4,8 +4,9 @@
 
 #include "../main.h"
 #include "../colour.h"
+#include "../controls.h"
 
-void GUIElement::showMenuMain()
+void GUIElement::setupRoot()
 {
   if (!root)
   {
@@ -18,6 +19,11 @@ void GUIElement::showMenuMain()
   {
     root->removeChildren();
   }
+}
+
+void GUIElement::showMenuMain()
+{
+  setupRoot();
 
   {
     GUILabel* title = new GUILabel(TITLE, "sui_generis.ttf", 24);
@@ -67,8 +73,41 @@ void GUIElement::showMenuMain()
     });
     root->addElement(play);
 
+    GUILabel* controls = new GUILabel("Controls", "sui_generis.ttf", 16);
+    controls->setRelative(0.5, 0.45, 0.5, 0.45);
+    controls->setTextColour(0xFF0000FF);
+    controls->registerListener([controls](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      if (!mouse::left())
+        return false;
+      int32_t a, b, c, d;
+      controls->getPosition(a, b, c, d);
+      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+    }, [controls](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      showControlsMenu();
+      return true;
+    });
+    controls->registerListener([controls](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      return true;
+    }, [controls](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      int32_t a, b, c, d;
+      controls->getPosition(a, b, c, d);
+      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
+        controls->setTextColour(0x00FF00FF);
+      else
+        controls->setTextColour(0xFF0000FF);
+      return false;
+    });
+    root->addElement(controls);
+
+
     GUILabel* quit = new GUILabel("Quit", "sui_generis.ttf", 16);
-    quit->setRelative(0.5, 0.45, 0.5, 0.45);
+    quit->setRelative(0.5, 0.55, 0.5, 0.55);
     quit->setTextColour(0xFF0000FF);
     quit->registerListener([quit](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
       (void)ks;
@@ -101,19 +140,70 @@ void GUIElement::showMenuMain()
   }
 }
 
+void GUIElement::showControlsMenu()
+{
+  setupRoot();
+
+  {
+    GUILabel* title = new GUILabel("Controls", "sui_generis.ttf", 24);
+    title->setRelative(0.5, 0.25, 0.5, 0.25);
+    title->setTextColour(0xFF0000FF);
+    title->setAlignment(GUILabel::Alignment::CENTRE);
+    root->addElement(title);
+  }
+
+  int y = 0;
+  for (auto bind : controls::allBinds())
+  {
+    GUILabel* action = new GUILabel(controls::actionToString(bind.first), "sui_generis.ttf", 12);
+    action->setRelative(0.25, 0.4, 0.25, 0.4);
+    action->setPosition(0, y, 0, y);
+    root->addElement(action);
+    GUILabel* keycode = new GUILabel(keyCodeToString(bind.second), "sui_generis.ttf", 12);
+    keycode->setRelative(0.75, 0.4, 0.75, 0.4);
+    keycode->setPosition(0, y, 0, y);
+    root->addElement(keycode);
+    y += 16;
+  }
+
+  {
+    GUILabel* back = new GUILabel("Back", "sui_generis.ttf", 16);
+    back->setRelative(0.5, 0.8, 0.5, 0.8);
+    back->setTextColour(0xFF0000FF);
+    back->registerListener([back](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      if (!mouse::left())
+        return false;
+      int32_t a, b, c, d;
+      back->getPosition(a, b, c, d);
+      return (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d);
+    }, [back](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      showMenuMain();
+      return true;
+    });
+    back->registerListener([back](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ms;
+      (void)ks;
+      return true;
+    }, [back](const mouse::MouseState& ms, const keyboard::KeyboardState& ks) -> bool {
+      (void)ks;
+      int32_t a, b, c, d;
+      back->getPosition(a, b, c, d);
+      if (a <= ms.x && ms.x <= c && b <= ms.y && ms.y <= d)
+        back->setTextColour(0x00FF00FF);
+      else
+        back->setTextColour(0xFF0000FF);
+      return false;
+    });
+    root->addElement(back);
+  }
+}
+
 void GUIElement::showGameHud()
 {
-  if (!root)
-  {
-    root = new GUIWindow();
-    root->setRelative(0.0, 0.0, 1.0, 1.0);
-    root->setPosition(0, 0, 0, 0);
-    // root->setBackgroundColour(0x3f3f3FAF);
-  }
-  else
-  {
-    root->removeChildren();
-  }
+  setupRoot();
   root->setBackgroundColour(0x00000000);
 
   {

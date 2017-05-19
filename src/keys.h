@@ -136,4 +136,6 @@ enum class KeyModifier
   ALT   = GLUT_ACTIVE_ALT
 };
 
+std::string keyCodeToString(const KeyCode code);
+
 #endif

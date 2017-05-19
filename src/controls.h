@@ -1,6 +1,7 @@
 #ifndef CONTROLS_H_INCLUDE
 #define CONTROLS_H_INCLUDE
 
+#include <map>
 #include <string>
 
 #include "keys.h"
@@ -30,6 +31,7 @@ namespace controls
   Action actionFromString(const std::string& s);
 
   KeyCode bind(const Action a);
+  std::map<Action, KeyCode> allBinds();
   void save();
   void init();
 }

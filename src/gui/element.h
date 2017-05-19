@@ -15,7 +15,9 @@ public:
   typedef std::function<bool(const mouse::MouseState&, const keyboard::KeyboardState&)> Trigger;
   typedef std::function<bool(const mouse::MouseState&, const keyboard::KeyboardState&)> Callback;
 
+  static void setupRoot();
   static void showMenuMain();
+  static void showControlsMenu();
   static void showGameHud();
 
   GUIElement();

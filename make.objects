@@ -1,5 +1,6 @@
 MAIN=\
 src/main.o \
+src/keys.o \
 src/input.o \
 src/controls.o \
 src/scenegraph.o \
